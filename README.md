@@ -8,7 +8,7 @@ Plugin을 사용하여 Flutter 모바일 앱에서 배너 / 전면 / 보상형 �
 
 ### 1. Android Setting
 
-*1.0.0 이하 버전을 사용 중이시라면 [마이그레이션 가이드](https://github.com/bidmad/SDK/wiki/Flutter-Bidmad_Plugin-1.0.0-Migration-Guide)를 확인 부탁드립니다.
+*1.0.0 이하 버전을 사용 중이시라면 [마이그레이션 가이드](https://github.com/bidmad/Bidmad-Flutter/blob/main/README.md)를 확인 부탁드립니다.
 
 #### 1.1 gradle.properties Setting
 gradle.properties에 아래 옵션을 추가합니다.

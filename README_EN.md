@@ -8,7 +8,7 @@ You can use the plugin to serve banner/interstitial/reward ads in your flutter m
 
 ### 1. Android Setting
 
-*If you are using a version lower than 1.0.0, please check [here](https://github.com/bidmad/SDK/wiki/Flutter-Bidmad_Plugin-1.0.0-Migration-Guide) first before proceeding to the guide below.
+*If you are using a version lower than 1.0.0, please check [here](https://github.com/bidmad/Bidmad-Flutter/blob/main/README_EN.md) first before proceeding to the guide below.
 
 #### 1.1 gradle.properties Setting
 Add the options below to gradle.properties
