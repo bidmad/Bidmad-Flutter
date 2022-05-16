@@ -9,7 +9,7 @@
     },
     {
       "name": "bidmad_plugin",
-      "rootUri": "file:///Users/kenneth/.pub-cache/hosted/pub.dartlang.org/bidmad_plugin-1.1.0",
+      "rootUri": "file:///Users/kenneth/.pub-cache/hosted/pub.dartlang.org/bidmad_plugin-1.2.0",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -146,7 +146,7 @@
       "languageVersion": "2.12"
     }
   ],
-  "generated": "2022-03-31T05:23:02.017419Z",
+  "generated": "2022-05-16T05:04:25.097435Z",
   "generator": "pub",
   "generatorVersion": "2.14.2"
 }

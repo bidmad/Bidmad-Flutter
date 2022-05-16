@@ -4,8 +4,8 @@ file:///Users/kenneth/.pub-cache/hosted/pub.dartlang.org/async-2.8.1/
 file:///Users/kenneth/.pub-cache/hosted/pub.dartlang.org/async-2.8.1/lib/
 bidmad_plugin
 2.12
-file:///Users/kenneth/.pub-cache/hosted/pub.dartlang.org/bidmad_plugin-1.1.0/
-file:///Users/kenneth/.pub-cache/hosted/pub.dartlang.org/bidmad_plugin-1.1.0/lib/
+file:///Users/kenneth/.pub-cache/hosted/pub.dartlang.org/bidmad_plugin-1.2.0/
+file:///Users/kenneth/.pub-cache/hosted/pub.dartlang.org/bidmad_plugin-1.2.0/lib/
 boolean_selector
 2.12
 file:///Users/kenneth/.pub-cache/hosted/pub.dartlang.org/boolean_selector-2.1.0/
@@ -78,6 +78,10 @@ vector_math
 2.12
 file:///Users/kenneth/.pub-cache/hosted/pub.dartlang.org/vector_math-2.1.0/
 file:///Users/kenneth/.pub-cache/hosted/pub.dartlang.org/vector_math-2.1.0/lib/
+bidmad_flutter_sample
+2.12
+file:///Users/kenneth/Documents/MYWORK/Projects/Bidmad/Flutter/Bidmad-Flutter/
+file:///Users/kenneth/Documents/MYWORK/Projects/Bidmad/Flutter/Bidmad-Flutter/lib/
 sky_engine
 2.12
 file:///Users/kenneth/Documents/flutter/bin/cache/pkg/sky_engine/
@@ -90,8 +94,4 @@ flutter_test
 2.12
 file:///Users/kenneth/Documents/flutter/packages/flutter_test/
 file:///Users/kenneth/Documents/flutter/packages/flutter_test/lib/
-bidmad_flutter_sample
-2.12
-file:///Users/kenneth/Downloads/bidmad_flutter_sample_20211217%202/
-file:///Users/kenneth/Downloads/bidmad_flutter_sample_20211217%202/lib/
 2
