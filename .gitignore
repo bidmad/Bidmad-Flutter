@@ -45,6 +45,8 @@ analysis_benchmark.json
 
 # packages file containing multi-root paths
 .packages.generated
+.packages
+.flutter-plugins
 
 # Flutter/Dart/Pub related
 **/doc/api/
@@ -101,6 +103,9 @@ unlinked_spec.ds
 **/ios/Flutter/flutter_export_environment.sh
 **/ios/ServiceDefinitions.json
 **/ios/Runner/GeneratedPluginRegistrant.*
+**/ios/.symlinks/*
+**/ios/flutter_export_environment.sh
+**/ios/Generated.xcconfig
 
 # macOS
 **/Flutter/ephemeral/
@@ -122,3 +127,5 @@ app.*.symbols
 !**/ios/**/default.perspectivev3
 !/packages/flutter_tools/test/data/dart_dependencies_test/**/.packages
 !/dev/ci/**/Gemfile.lock
+
+.dart_tool/*
