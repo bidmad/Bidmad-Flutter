@@ -21,57 +21,48 @@ class BannerWidgetSample extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Container(
-                margin: const EdgeInsets.fromLTRB(0, 20, 0, 0),
-                child:BidmadBannerWidget(
-                  onBidmadBannerWidgetCreated: _onBidmadBannerWidgetCreated,
-                ),
-                height: 100,
+              margin: const EdgeInsets.fromLTRB(0, 20, 0, 0),
+              child: BidmadBannerWidget(
+                onBidmadBannerWidgetCreated: _onBidmadBannerWidgetCreated,
+              ),
+              height: 100,
             ),
             Container(
                 margin: const EdgeInsets.fromLTRB(0, 20, 0, 0),
-                child:
-                TextField(
+                child: TextField(
                   controller: textView,
                   textAlign: TextAlign.center,
-                  enabled : false,
+                  enabled: false,
                   decoration: InputDecoration(
                     border: OutlineInputBorder(),
                     hintText: 'Callback Print',
                   ),
-                )
-            ),
+                )),
             Container(
                 margin: const EdgeInsets.fromLTRB(0, 20, 0, 0),
-                child:
-                ElevatedButton(
+                child: ElevatedButton(
                     child: Text("Remove AD"),
-                    onPressed: (){
+                    onPressed: () {
                       removeBanner();
                     },
-                    style: ElevatedButton.styleFrom(
-                        minimumSize: Size(150,35)
-                    )
-                )
-            ),
+                    style:
+                        ElevatedButton.styleFrom(minimumSize: Size(150, 35)))),
             Container(
                 margin: const EdgeInsets.fromLTRB(0, 20, 0, 0),
-                child:
-                ElevatedButton(
+                child: ElevatedButton(
                     child: Text("Hide&Show AD"),
-                    onPressed: (){
+                    onPressed: () {
                       hideAndShowBanner();
                     },
-                    style: ElevatedButton.styleFrom(
-                        minimumSize: Size(150,35)
-                    )
-                )
-            ),
+                    style:
+                        ElevatedButton.styleFrom(minimumSize: Size(150, 35)))),
           ],
         ),
       ),
     );
   }
-  void _onBidmadBannerWidgetCreated(FlutterBaseBanner controller){
+
+  void _onBidmadBannerWidgetCreated(FlutterBaseBanner controller) {
     banner = controller;
 
     // Bidmad Banner Ads can be set with Custom User ID with the following method.
@@ -83,32 +74,29 @@ class BannerWidgetSample extends StatelessWidget {
       controller.setAdInfo("944fe870-fa3a-4d1b-9cc2-38e50b2aed43");
     }
 
-    controller.setCallbackListener(
-        onLoadAd: (String zoneId){
-          print("banner onLoadAd");
-          textView.text = "onLoadAd";
-        },
-        onFailAd: (String zoneId){
-          print("banner onFailAd");
-          textView.text = "onFailAd";
-        }
-    );
+    controller.setCallbackListener(onLoadAd: () {
+      print("banner onLoadAd");
+      textView.text = "onLoadAd";
+    }, onFailAd: (String error) {
+      print("banner onFailAd");
+      textView.text = "onFailAd";
+    });
 
     controller.loadWidget();
   }
 
-  void hideAndShowBanner(){
+  void hideAndShowBanner() {
     print("hideAndShowBanner : " + trigger.toString());
-    if(trigger){
+    if (trigger) {
       banner.showBanner();
       trigger = false;
-    }else{
+    } else {
       banner.hideBanner();
       trigger = true;
     }
   }
 
-  void removeBanner(){
+  void removeBanner() {
     banner.removeBanner();
   }
 }

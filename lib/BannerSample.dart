@@ -19,56 +19,42 @@ class BannerSample extends StatelessWidget {
           children: <Widget>[
             Container(
                 margin: const EdgeInsets.fromLTRB(0, 250, 0, 0),
-                child:
-                TextField(
-                    controller: banner.textView,
-                    textAlign: TextAlign.center,
-                    enabled : false,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      hintText: 'Callback Print',
-                    ),
-                )
-            ),
+                child: TextField(
+                  controller: banner.textView,
+                  textAlign: TextAlign.center,
+                  enabled: false,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    hintText: 'Callback Print',
+                  ),
+                )),
             Container(
                 margin: const EdgeInsets.fromLTRB(0, 20, 0, 0),
-                child:
-                ElevatedButton(
+                child: ElevatedButton(
                     child: Text("Load AD"),
-                    onPressed: (){
+                    onPressed: () {
                       banner.loadBannerAD();
                     },
-                    style: ElevatedButton.styleFrom(
-                        minimumSize: Size(150,35)
-                    )
-                )
-            ),
+                    style:
+                        ElevatedButton.styleFrom(minimumSize: Size(150, 35)))),
             Container(
                 margin: const EdgeInsets.fromLTRB(0, 20, 0, 0),
-                child:
-                ElevatedButton(
+                child: ElevatedButton(
                     child: Text("Remove AD"),
-                    onPressed: (){
+                    onPressed: () {
                       banner.removeBanner();
                     },
-                    style: ElevatedButton.styleFrom(
-                        minimumSize: Size(150,35)
-                    )
-                )
-            ),
+                    style:
+                        ElevatedButton.styleFrom(minimumSize: Size(150, 35)))),
             Container(
                 margin: const EdgeInsets.fromLTRB(0, 20, 0, 0),
-                child:
-                ElevatedButton(
+                child: ElevatedButton(
                     child: Text("Hide&Show AD"),
-                    onPressed: (){
+                    onPressed: () {
                       banner.hideAndShowBanner();
                     },
-                    style: ElevatedButton.styleFrom(
-                        minimumSize: Size(150,35)
-                    )
-                )
-            ),
+                    style:
+                        ElevatedButton.styleFrom(minimumSize: Size(150, 35)))),
           ],
         ),
       ),
@@ -83,31 +69,26 @@ class BidmadBannerSample {
 
   bool trigger = false;
 
-  BidmadBannerSample(){
+  BidmadBannerSample() {
     common.setDebugging(true);
     common.initBannerChannel().then((value) {
       print("initBannerChannel then : " + value);
       String _channelNm = value;
-      banner = FlutterBaseBanner(
-          channelName: _channelNm
-      );
-      
+      banner = FlutterBaseBanner(channelName: _channelNm);
+
       if (foundation.defaultTargetPlatform == foundation.TargetPlatform.iOS) {
         banner.setAdInfo("1c3e3085-333f-45af-8427-2810c26a72fc");
       } else {
         banner.setAdInfo("944fe870-fa3a-4d1b-9cc2-38e50b2aed43");
       }
 
-      banner.setCallbackListener(
-          onLoadAd: (String zoneId){
-            print("banner onLoadAd : " + zoneId);
-            textView.text = "onLoadAd";
-          },
-          onFailAd: (String zoneId){
-            print("banner onFailAd : " + zoneId);
-            textView.text = "onFailAd";
-          }
-      );
+      banner.setCallbackListener(onLoadAd: () {
+        print("banner onLoadAd : ");
+        textView.text = "onLoadAd";
+      }, onFailAd: (String error) {
+        print("banner onFailAd : " + error);
+        textView.text = "onFailAd";
+      });
 
       banner.setInterval(60);
 
@@ -116,22 +97,22 @@ class BidmadBannerSample {
     });
   }
 
-  void loadBannerAD(){
+  void loadBannerAD() {
     banner.load(350);
   }
 
-  void hideAndShowBanner(){
+  void hideAndShowBanner() {
     print("hideAndShowBanner : " + trigger.toString());
-    if(trigger){
+    if (trigger) {
       banner.showBanner();
       trigger = false;
-    }else{
+    } else {
       banner.hideBanner();
       trigger = true;
     }
   }
 
-  void removeBanner(){
+  void removeBanner() {
     banner.removeBanner();
   }
 }

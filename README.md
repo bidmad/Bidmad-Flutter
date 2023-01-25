@@ -23,6 +23,8 @@ Proguard를 사용하는 경우 아래 규칙을 추가합니다.
 ...
 -keep class com.adop.sdk.** { *; }
 -keep class ad.helper.openbidding.** { *; }
+-keep class com.adop.adapter.fc.** { *; }
+-keep class com.adop.adapter.fnc.** { *; }
 -keepnames class * implements java.io.Serializable
 -keepclassmembers class * implements java.io.Serializable {
     static final long serialVersionUID;
@@ -33,6 +35,16 @@ Proguard를 사용하는 경우 아래 규칙을 추가합니다.
     java.lang.Object writeReplace();
     java.lang.Object readResolve();
 }
+-keepclassmembers class * {
+    @android.webkit.JavascriptInterface <methods>;
+}
+
+#prebid
+-keep class com.adop.prebid.** {*;}
+
+# Pangle
+-keep class com.bytedance.sdk.** { *; }
+-keep class com.bykv.vk.openvk.component.video.api.** { *; }
 
 # Tapjoy
 -keep class com.tapjoy.** { *; }
@@ -73,7 +85,12 @@ public static final ** CREATOR;
 #### 2.3 Setting SKAdNetwork
 BidmadSDK에서 제공하는 AdNetworks를 사용하려면 SKAdNetworkIdentifier를 Info.plist에 추가해야 합니다. <br>
 info.plist에 아래 SKAdNetworkItems를 추가하세요.
-```java
+
+<details markdown="1">
+<summary>SKAdNetworkItems List</summary>
+<br>
+
+```
 <key>SKAdNetworkItems</key>
 <array>
     <dict>
@@ -599,6 +616,8 @@ info.plist에 아래 SKAdNetworkItems를 추가하세요.
 </array>
 ```
 
+</details>
+
 또한 사용자 데이터를 추적하려는 이유(예: "앱이 추적 목적으로 IDFA에 액세스하려고 함")에 대한 설명과 함께 NSUserTrackingUsageDescription을 info.plist에 추가하세요.
 ```java
 ...
@@ -609,16 +628,18 @@ info.plist에 아래 SKAdNetworkItems를 추가하세요.
 
 ### 3. Using Plugin
 
-#### 3.1 InitializeSDK
-앱 시작 지점에서 initializeSdk()를 호출하세요.<br>
-initializeSdk 메소드가 호출되지 않은 경우 SDK는 첫 번째 로드 시 initializeSdk()를 수행하여 첫 번째 광고 로드가 지연될 수 있습니다.
-```
-FlutterBidmadCommon().initializeSdk();
-```
+#### 3.1 BidmadSDK 초기화
+BidmadSDK 실행에 필요한 작업을 수행합니다. SDK는 initializeSdk 메서드를 호출하지 않은 경우 광고 로드를 허용하지 않습니다.<br>
+initializeSdk 메서드는 ADOP Insight 에서 확인가능한 App Key 를 인자값으로 받고 있습니다. App Key 는 [App Key 찾기](https://github.com/bidmad/SDK/wiki/Find-your-app-key%5BKR%5D) 가이드를 참고해 가져올 수 있습니다.<br>
+광고를 로드하기 전, 앱 실행 초기에 다음 예시와 같이 initializeSdk 메서드를 호출해주십시오.
 
-전면 광고 및 보상형 광고의 경우 initializeSdk()를 호출하는 대신 <br>
-아래의 전면 광고 및 보상형 광고 로드 가이드에 따라 앱 시작 지점에 첫 번째 광고를 로드하고,<br>
-원하는 시점에 광고를 Show하세요.
+```
+if (foundation.defaultTargetPlatform == foundation.TargetPlatform.android) {
+    FlutterBidmadCommon().initializeSdk("ANDROID APP KEY");
+} else if (foundation.defaultTargetPlatform == foundation.TargetPlatform.iOS) {
+    FlutterBidmadCommon().initializeSdk("IOS APP KEY");
+}
+```
 
 #### 3.1 Banner AD
 다음은 배너 광고를 요청하는 예시입니다.
@@ -780,11 +801,84 @@ FlutterBidmadCommon().initializeSdk();
     });
 ```
 
-#### 3.4 ATT Functions
+#### 3.4 NativeAd Widget
+네이티브 광고는 앱 고유의 UI 구성요소를 통해 사용자에게 표시되는 광고 포맷입니다. 
+네이티브 광고를 표기하기 위해선 내부 앱 고유의 UI 디자인이 필요하기 때문에, 해당 기능을 사용하려면 Android 및 iOS에 대한 추가 설정이 필요합니다.
+
+<details markdown="1">
+<summary>Android 세팅</summary>
+<br>
+
+1. Android 를 위한 [XML 레이아웃 설정 가이드](https://github.com/adop-devel/Bidmad-Flutter/wiki/Android-NativeAd-Xml-Layout-%EC%9E%91%EC%84%B1-%EC%98%88%EC%8B%9C) 를 참고해 XML 파일을 제작하십시오.
+2. Resource 파일 아래 layout 폴더를 만들고 XML 파일을 넣어주세요.<br>
+   ![Android-NativeAd-1](https://i.imgur.com/q8nhvPf.png) <br>
+3. 만든 XML 파일의 확장자가 제외된 이름을 복사해 아래와 같이 BidmadNativeAdWidget 생성자 layoutName에 전달하십시오.
+    ```
+    BidmadNativeAdWidget(
+        onBidmadNativeAdWidgetCreated: _onBidmadNativeAdWidgetCreated,
+        layoutName: "nativead_layout"
+    ),
+    ```
+
+</details>
+
+
+<details markdown="1">
+<summary>iOS 세팅</summary>
+<br>
+
+1. iOS 를 위한 [XIB 레이아웃 설정 가이드](https://github.com/bidmad/Bidmad-iOS/wiki/Native-Ad-Layout-Setting-Guide-%5BKOR%5D) 를 참고해 XIB 파일을 제작하십시오.<br>
+2. Runner.xcworkspace 를 오픈합니다.<br>
+    ![iOS-Native-1](https://i.imgur.com/TS7b4vY.png)
+3. 만든 XIB 파일을 Navigation Area 내부 프로젝트 Runner 폴더 아래로 넣어주세요.<br>
+    ![iOS-Native-2](https://i.imgur.com/zAUopg7.gif)
+4. 만든 XIB 파일의 확장자가 제외된 이름을 복사해 아래와 같이 BidmadNativeAdWidget 생성자 layoutName에 전달하십시오.<br>
+    ```
+    BidmadNativeAdWidget(
+        onBidmadNativeAdWidgetCreated: _onBidmadNativeAdWidgetCreated,
+        layoutName: "IOSNativeAd"
+    ),
+    ```
+
+</details>
+
+
+다음은 네이티브 광고를 요청하는 예시입니다.
+```dart
+....// Banner Widget Init
+    Container(
+      child: BidmadNativeAdWidget(
+        onBidmadNativeAdWidgetCreated: _onBidmadNativeAdWidgetCreated,
+        layoutName:"YourXMLorXIBFileName", // Please enter the name of XIB or XML file
+      ),
+      height: 400,
+    ),
+    
+....// After Banner Widget is fully created, the _onBidmadNativeAdWidgetCreated callback will be called
+    void _onBidmadNativeAdWidgetCreated(FlutterBaseNativeAd controller) {
+        controller.setAdInfo("Your Zone ID");
+        
+        controller.setCallbackListener(
+          onLoadAd: () {
+            print("NativeAd onLoadAd");
+          },
+          onFailAd: (String error) {
+            print("NativeAd onFailAd" + error);
+          },
+          onClickAd: (() {
+            print("NativeAd onClickAd");
+          }),
+        );
+        
+        controller.loadWidget();
+    }
+```
+
+#### 3.5 ATT Functions
 reqAdTrackingAuthorization()은 사용자에게 앱 추적 동의를 요청하는 팝업을 표시합니다.<br>
 그리고 이 함수는 결과를 보여주는 일련의 숫자 문자열 값을 반환합니다.
-```java
-FlutterBidmadCommon common = FlutterBidmadCommon();
+```dart
+    FlutterBidmadCommon common = FlutterBidmadCommon();
     common.reqAdTrackingAuthorization().then(
       (value) {
         switch (value) {
@@ -842,8 +936,8 @@ void Function(String zoneId) onLoadAd|리스너가 등록되어 있으면 광고
 void Function(String zoneId) onFailAd|리스너가 등록되어 있으면 광고 로드 실패 시 등록된 함수가 호출됩니다.
 
 #### 4.2 BidmadBannerWidget
-*
-위젯 형태의 배너 광고의 경우 BidmadBannerWidget을 통해 처리되어야 하며 이에 대한 기능 목록입니다.
+
+*위젯 형태의 배너 광고의 경우 BidmadBannerWidget을 통해 처리되어야 하며 이에 대한 기능 목록입니다.
 
 Function|Description
 ---|---
@@ -887,14 +981,36 @@ void Function(String zoneId) onCloseAd|리스너가 등록되어 있으면 광�
 void Function(String zoneId) onClickAd|리스너가 등록되어 있으면 광고 클릭 시 등록된 함수가 호출됩니다.
 void Function(String zoneId) onSkipAd|리스너가 등록되어 있으면 광고 스킵 시 등록된 함수가 호출됩니다.
 
-#### 4.5 FlutterBidmadCommon
+#### 4.5 BidmadNativeAdWidget
+
+*네이티브 광고의 경우 Widget 형태로 제공하고 있으며 BidmadNativeAdWidget을 통해 처리됩니다. 아래는 해당 기능의 목록입니다.
+
+Function|Description
+---|---
+BidmadNativeAdWidget(layoutName, onBidmadNativeAdWidgetCreated)|BidmadNativeAdWidget 생성자입니다. 위젯 생성 후 처리를 위한 Callback을 Param으로 받습니다.
+onBidmadNativeAdWidgetCreated(FlutterBaseNativeAd controller)|FlutterBaseNativeAd를 수신하고 네이티브 광고 관련 처리를 처리할 수 있는 Callback입니다.
+
+#### 4.6 FlutterBaseNativeAd
+
+Function|Description
+---|---
+Future<void> setAdInfo(String zoneId)|발급받은 ZoneId를 셋팅합니다.
+Future<void> setCallbackListener(onLoadAd, onFailAd, onClickAd)|콜백을 세팅합니다
+void Function() onLoadAd|리스너가 등록되어 있으면 광고 로드 시 등록된 함수가 호출됩니다.
+void Function(String errorMsg) onFailAd|리스너가 등록되어 있으면 광고 로드 실패 시 등록된 함수가 호출됩니다.
+void Function() onClickAd|리스너가 등록되어 있으면 광고 클릭 시 등록된 함수가 호출됩니다.
+Future<void> loadWidget()|네이티브 광고 요청합니다.
+Future<void> removeWidget()|네이티브 광고를 제거합니다.
+
+#### 4.7 FlutterBidmadCommon
 *BidmadCommon을 통해 사용할 수 있는 기능 목록입니다.
 
 Function|Description
 ---|---
 FlutterBidmadCommon()|FlutterBidmadCommon 생성자입니다.
 Future(void) setDebugging(bool isDebug)|디버깅 로그 출력합니다.
-Future(void) initializeSdk()|BidmadSDK 지원 네트워크를 초기화합니다.
+Future(void) initializeSdk(String appKey)|BidmadSDK 지원 네트워크를 초기화합니다. <b>appKey를 입력하지 않으면 광고가 송출되지 않습니다.
+Future(void) setCUID(String cuid)|사용자 정의 ID를 입력합니다.
 Future(String) initBannerChannel()|배너 광고 제어를 위한 채널을 생성합니다.
 Future(String) initInterstitialChannel()|전면 광고를 제어하기 위한 채널을 생성합니다.
 Future(String) initRewardChannel()|리워드 광고 제어 채널을 생성합니다.

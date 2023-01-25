@@ -19,43 +19,33 @@ class InterstitialSample extends StatelessWidget {
           children: <Widget>[
             Container(
                 margin: const EdgeInsets.fromLTRB(0, 50, 0, 0),
-                child:
-                TextField(
+                child: TextField(
                   controller: interstitial.textView,
                   textAlign: TextAlign.center,
-                  enabled : false,
+                  enabled: false,
                   decoration: InputDecoration(
                     border: OutlineInputBorder(),
                     hintText: 'Callback Print',
                   ),
-                )
-            ),
+                )),
             Container(
                 margin: const EdgeInsets.fromLTRB(0, 20, 0, 0),
-                child:
-                ElevatedButton(
+                child: ElevatedButton(
                     child: Text("Load AD"),
-                    onPressed: (){
+                    onPressed: () {
                       interstitial.loadInterstitialAD();
                     },
-                    style: ElevatedButton.styleFrom(
-                        minimumSize: Size(150,35)
-                    )
-                )
-            ),
+                    style:
+                        ElevatedButton.styleFrom(minimumSize: Size(150, 35)))),
             Container(
                 margin: const EdgeInsets.fromLTRB(0, 20, 0, 0),
-                child:
-                ElevatedButton(
+                child: ElevatedButton(
                     child: Text("Show AD"),
-                    onPressed: (){
+                    onPressed: () {
                       interstitial.showInterstitialAD();
                     },
-                    style: ElevatedButton.styleFrom(
-                        minimumSize: Size(150,35)
-                    )
-                )
-            ),
+                    style:
+                        ElevatedButton.styleFrom(minimumSize: Size(150, 35)))),
           ],
         ),
       ),
@@ -68,14 +58,12 @@ class BidmadInterstitialSample {
   FlutterBidmadCommon common = FlutterBidmadCommon();
   TextEditingController textView = TextEditingController();
 
-  BidmadInterstitialSample(){
+  BidmadInterstitialSample() {
     common.setDebugging(true);
     common.initInterstitialChannel().then((value) {
       print("initInterstitialChannel then : " + value);
       String _channelNm = value;
-      interstitial = FlutterBaseInterstitial(
-          channelName: _channelNm
-      );
+      interstitial = FlutterBaseInterstitial(channelName: _channelNm);
 
       // Bidmad Interstitial Ads can be set with Custom User ID with the following method.
       // interstitial.setCUID("YOUR ENCRYPTED CUID");
@@ -86,35 +74,30 @@ class BidmadInterstitialSample {
         interstitial.setAdInfo("e9acd7fc-a962-40e4-aaad-9feab1b4f821");
       }
 
-      interstitial.setCallbackListener(
-          onLoadAd: (String zoneId){
-            print("interstitial onLoadAd : " + zoneId);
-            textView.text = "onLoadAd";
-          },
-          onShowAd: (String zoneId){
-            print("interstitial onShowAd : " + zoneId);
-            textView.text = "onShowAd";
-            interstitial.load();
-          },
-          onCloseAd: (String zoneId){
-            print("interstitial onCloseAd : " + zoneId);
-            textView.text = "onCloseAd";
-          },
-          onFailAd: (String zoneId){
-            print("interstitial onFailAd : " + zoneId);
-            textView.text = "onFailAd";
-          }
-      );
+      interstitial.setCallbackListener(onLoadAd: () {
+        print("interstitial onLoadAd : ");
+        textView.text = "onLoadAd";
+      }, onShowAd: () {
+        print("interstitial onShowAd : ");
+        textView.text = "onShowAd";
+        interstitial.load();
+      }, onCloseAd: () {
+        print("interstitial onCloseAd : ");
+        textView.text = "onCloseAd";
+      }, onFailAd: (String error) {
+        print("interstitial onFailAd : " + error);
+        textView.text = "onFailAd";
+      });
     });
   }
 
-  void loadInterstitialAD(){
+  void loadInterstitialAD() {
     interstitial.load();
   }
 
-  void showInterstitialAD(){
-    interstitial.isLoaded().then((value){
-      if(value){
+  void showInterstitialAD() {
+    interstitial.isLoaded().then((value) {
+      if (value) {
         interstitial.show();
       }
     });

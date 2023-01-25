@@ -23,6 +23,8 @@ If you are using Proguard, add the rule below.
 ...
 -keep class com.adop.sdk.** { *; }
 -keep class ad.helper.openbidding.** { *; }
+-keep class com.adop.adapter.fc.** { *; }
+-keep class com.adop.adapter.fnc.** { *; }
 -keepnames class * implements java.io.Serializable
 -keepclassmembers class * implements java.io.Serializable {
     static final long serialVersionUID;
@@ -33,7 +35,17 @@ If you are using Proguard, add the rule below.
     java.lang.Object writeReplace();
     java.lang.Object readResolve();
 }
+-keepclassmembers class * {
+@android.webkit.JavascriptInterface <methods>;
+}
 
+#prebid
+-keep class com.adop.prebid.** {*;}
+
+# Pangle
+-keep class com.bytedance.sdk.** { *; }
+-keep class com.bykv.vk.openvk.component.video.api.** { *; }
+        
 # Tapjoy
 -keep class com.tapjoy.** { *; }
 -keep class com.moat.** { *; }
@@ -72,7 +84,12 @@ Select "No" for Enable Bitcode under your Build Setting.
 
 #### 2.3 Setting SKAdNetwork
 To use AdNetworks provided by BidmadSDK, you need to add SKAdNetworkIdentifier to Info.plist. Please add SKAdNetworkItems below to info.plist.
-```java
+
+<details markdown="1">
+<summary>SKAdNetworkItems List</summary>
+<br>
+
+```
 <key>SKAdNetworkItems</key>
 <array>
     <dict>
@@ -598,6 +615,8 @@ To use AdNetworks provided by BidmadSDK, you need to add SKAdNetworkIdentifier t
 </array>
 ```
 
+</details>
+
 Also, please add NSUserTrackingUsageDescription with your own description of why you would like to track user data (e.g. "App would like to access IDFA for tracking purpose") into info.plist
 ```java
 ...
@@ -608,16 +627,18 @@ Also, please add NSUserTrackingUsageDescription with your own description of why
 
 ### 3. Using Plugin
 
-#### 3.1 InitializeSDK
-At the starting point of your app, please call initializeSdk().<br>
-If initializeSdk method is not called, SDK initializes itself on your first loading, which subsequently may delay your first ad loading.
-```
-FlutterBidmadCommon().initializeSdk();
-```
+#### 3.1 Initializing BidmadSDK
+Performs tasks required to run BidmadSDK. The SDK won't allow ads to load unless you call the initializeSdk method.<br>
+The initializeSdk method receives the App Key that can be checked in ADOP Insight as a parameter. You can import the App Key by referring to the [Find Your App Key](https://github.com/bidmad/SDK/wiki/Find-your-app-key%5BEN%5D) guide.<br>
+Before loading ads, call the initializeSdk method as shown in the following example at the beginning of app execution.
 
-For interstitial and rewarded ads, instead of calling initializeSdk(), <br>
-load your first ad at the starting point of your app by following the interstitial and rewarded ad loading guide below,<br>
-and show your ad at the point of your choice.
+```
+if (foundation.defaultTargetPlatform == foundation.TargetPlatform.android) {
+    FlutterBidmadCommon().initializeSdk("ANDROID APP KEY");
+} else if (foundation.defaultTargetPlatform == foundation.TargetPlatform.iOS) {
+    FlutterBidmadCommon().initializeSdk("IOS APP KEY");
+}
+```
 
 #### 3.1 Banner AD
 The following is an example of requesting a Banner ad.
@@ -779,11 +800,82 @@ The following is an example of requesting a Reward ad.
     });
 ```
 
-#### 3.4 ATT Functions
+#### 3.4 NativeAd Widget
+Native ads are ad formats that are displayed to users through app-specific UI components.
+Since the UI design unique to the internal app is required to display native ads, additional settings for Android and iOS are required to use this function.
+
+<details markdown="1">
+<summary>Android Settings</summary>
+<br>
+
+1. Create an XML file by referring to [XML Layout Setting Guide](https://github.com/adop-devel/Bidmad-Flutter/wiki/Andorid-NativeAd-Layout-Example) for Android.
+2. Create a layout folder under the resource file and put the XML file in it.<br>
+   ![Android-NativeAd-1](https://i.imgur.com/q8nhvPf.png) <br>
+3. Copy the name without the extension of the XML file you created and pass it to the BidmadNativeAdWidget constructor layoutName as shown below.
+    ```
+    BidmadNativeAdWidget(
+        onBidmadNativeAdWidgetCreated: _onBidmadNativeAdWidgetCreated,
+        layoutName: "nativead_layout"
+    ),
+    ```
+
+</details>
+
+<details markdown="1">
+<summary>iOS Settings</summary>
+<br>
+
+1. Create an XIB file by referring to [XIB Layout Setting Guide](https://github.com/bidmad/Bidmad-iOS/wiki/Native-Ad-Layout-Setting-Guide-%5BENG%5D) for iOS.<br>
+2. Open Runner.xcworkspace.<br>
+    ![iOS-Native-1](https://i.imgur.com/TS7b4vY.png)
+3. Put the created XIB file under the project Runner folder inside the Navigation Area.<br>
+    ![iOS-Native-2](https://i.imgur.com/zAUopg7.gif)
+4. Copy the name without the extension of the XIB file you created and pass it to the BidmadNativeAdWidget constructor layoutName as shown below.<br>
+     ```
+     BidmadNativeAdWidget(
+         onBidmadNativeAdWidgetCreated: _onBidmadNativeAdWidgetCreated,
+         layoutName: "IOSNativeAd"
+     ),
+     ```
+
+</details>
+
+Here's an example requesting native ads:
+```dart
+....// Banner Widget Init
+    Container(
+      child: BidmadNativeAdWidget(
+        onBidmadNativeAdWidgetCreated: _onBidmadNativeAdWidgetCreated,
+        layoutName:"YourXMLorXIBFileName", // Please enter the name of XIB or XML file
+      ),
+      height: 400,
+    ),
+    
+....// After Banner Widget is fully created, the _onBidmadNativeAdWidgetCreated callback will be called
+    void _onBidmadNativeAdWidgetCreated(FlutterBaseNativeAd controller) {
+        controller.setAdInfo("Your Zone ID");
+        
+        controller.setCallbackListener(
+          onLoadAd: () {
+            print("NativeAd onLoadAd");
+          },
+          onFailAd: (String error) {
+            print("NativeAd onFailAd" + error);
+          },
+          onClickAd: (() {
+            print("NativeAd onClickAd");
+          }),
+        );
+        
+        controller.loadWidget();
+    }
+```
+
+#### 3.5 ATT Functions
 reqAdTrackingAuthorization() displays a popup, requesting for App Tracking Consent from user.<br>
 And the function will return set of number string values, showing the result.
-```java
-FlutterBidmadCommon common = FlutterBidmadCommon();
+```dart
+    FlutterBidmadCommon common = FlutterBidmadCommon();
     common.reqAdTrackingAuthorization().then(
       (value) {
         switch (value) {
@@ -884,14 +976,36 @@ void Function(String zoneId) onCloseAd|If a listener is registered, the register
 void Function(String zoneId) onClickAd|If a listener is registered, the registered function is called when ad click.
 void Function(String zoneId) onSkipAd|If a listener is registered, the registered function is called when ad skip.
 
-#### 4.5 FlutterBidmadCommon
+#### 4.5 BidmadNativeAdWidget
+
+*Native ads are provided in the form of widgets and processed through BidmadNativeAdWidget. Below is a list of their features.
+
+Function|Description
+----|---
+BidmadNativeAdWidget(layoutName, onBidmadNativeAdWidgetCreated)|BidmadNativeAdWidget Constructor. After creating a widget, receive a callback for processing as a param.
+onBidmadNativeAdWidgetCreated(FlutterBaseNativeAd controller)|Callback that can receive FlutterBaseNativeAd and handle native ad-related processing.
+
+#### 4.6 FlutterBaseNativeAd
+
+Function|Description
+----|---
+Future<void> setAdInfo(String zoneId)|Set the issued ZoneId.
+Future<void> setCallbackListener(onLoadAd, onFailAd, onClickAd)|Set the callback
+void Function() onLoadAd|If a listener is registered, the registered function will be called when the ad loads.
+void Function(String errorMsg) onFailAd|If a listener is registered, the registered function will be called when the ad fails to load.
+void Function() onClickAd|If a listener is registered, the registered function will be called when the ad is clicked.
+Future<void> loadWidget()|Request a native ad.
+Future<void> removeWidget()|Remove native ads.
+
+#### 4.7 FlutterBidmadCommon
 *This is a list of functions available through BidmadCommon.
 
 Function|Description
 ---|---
 FlutterBidmadCommon()|This is the FlutterBidmadCommon constructor
 Future(void) setDebugging(bool isDebug)|Debugging log output
-Future(void) initializeSdk()|Initialize BidmadSDK's supported ad networks
+Future(void) initializeSdk(String appKey)|Initialize the BidmadSDK support network. <b>If you do not enter the appKey, advertisements will not be sent.
+Future(void) setCUID(String cuid)|Enter your custom ID.
 Future(String) initBannerChannel()|Creating a channel for controlling banner ad
 Future(String) initInterstitialChannel()|Creating a channel for controlling interstitial ad
 Future(String) initRewardChannel()|Creating a channel for controlling reward ad

@@ -19,43 +19,33 @@ class RewardSample extends StatelessWidget {
           children: <Widget>[
             Container(
                 margin: const EdgeInsets.fromLTRB(0, 50, 0, 0),
-                child:
-                TextField(
+                child: TextField(
                   controller: reward.textView,
                   textAlign: TextAlign.center,
-                  enabled : false,
+                  enabled: false,
                   decoration: InputDecoration(
                     border: OutlineInputBorder(),
                     hintText: 'Callback Print',
                   ),
-                )
-            ),
+                )),
             Container(
                 margin: const EdgeInsets.fromLTRB(0, 20, 0, 0),
-                child:
-                ElevatedButton(
+                child: ElevatedButton(
                     child: Text("Load AD"),
-                    onPressed: (){
+                    onPressed: () {
                       reward.loadRewardAD();
                     },
-                    style: ElevatedButton.styleFrom(
-                        minimumSize: Size(150,35)
-                    )
-                )
-            ),
+                    style:
+                        ElevatedButton.styleFrom(minimumSize: Size(150, 35)))),
             Container(
                 margin: const EdgeInsets.fromLTRB(0, 20, 0, 0),
-                child:
-                ElevatedButton(
+                child: ElevatedButton(
                     child: Text("Show AD"),
-                    onPressed: (){
+                    onPressed: () {
                       reward.showRewardAD();
                     },
-                    style: ElevatedButton.styleFrom(
-                        minimumSize: Size(150,35)
-                    )
-                )
-            ),
+                    style:
+                        ElevatedButton.styleFrom(minimumSize: Size(150, 35)))),
           ],
         ),
       ),
@@ -68,15 +58,13 @@ class BidmadRewardSample {
   FlutterBidmadCommon common = FlutterBidmadCommon();
   TextEditingController textView = TextEditingController();
 
-  BidmadRewardSample(){
+  BidmadRewardSample() {
     common.setDebugging(true);
     common.initRewardChannel().then((value) {
       print("initRewardChannel then : " + value);
       String _channelNm = value;
-      reward = FlutterBaseReward(
-          channelName: _channelNm
-      );
-      
+      reward = FlutterBaseReward(channelName: _channelNm);
+
       if (foundation.defaultTargetPlatform == foundation.TargetPlatform.iOS) {
         reward.setAdInfo("29e1ef67-98d2-47b3-9fa2-9192327dd75d");
       } else {
@@ -86,48 +74,40 @@ class BidmadRewardSample {
       // Bidmad Reward Ads can be set with Custom User ID with the following method.
       // reward.setCUID("YOUR ENCRYPTED CUID");
 
-      reward.setCallbackListener(
-          onLoadAd: (String zoneId){
-            print("reward onLoadAd : " + zoneId);
-            textView.text = "onLoadAd";
-          },
-          onShowAd: (String zoneId){
-            print("reward onShowAd : " + zoneId);
-            textView.text = "onShowAd";
+      reward.setCallbackListener(onLoadAd: () {
+        print("reward onLoadAd : ");
+        textView.text = "onLoadAd";
+      }, onShowAd: () {
+        print("reward onShowAd : ");
+        textView.text = "onShowAd";
 
-            reward.load();
-          },
-          onCompleteAd: (String zoneId){
-            print("reward onCompleteAd : " + zoneId);
-            textView.text = "onCompleteAd";
-          },
-          onSkipAd: (String zoneId){
-            print("reward onSkipAd : " + zoneId);
-            textView.text = "onSkipAd";
-          },
-          onCloseAd: (String zoneId){
-            print("reward onCloseAd : " + zoneId);
-            textView.text = "onCloseAd";
-          },
-          onClickAd: (String zoneId){
-            print("reward onClickAd : " + zoneId);
-            textView.text = "onClickAd";
-          },
-          onFailAd: (String zoneId){
-            print("reward onFailAd : " + zoneId);
-            textView.text = "onFailAd";
-          }
-      );
+        reward.load();
+      }, onCompleteAd: () {
+        print("reward onCompleteAd : ");
+        textView.text = "onCompleteAd";
+      }, onSkipAd: () {
+        print("reward onSkipAd : ");
+        textView.text = "onSkipAd";
+      }, onCloseAd: () {
+        print("reward onCloseAd : ");
+        textView.text = "onCloseAd";
+      }, onClickAd: () {
+        print("reward onClickAd : ");
+        textView.text = "onClickAd";
+      }, onFailAd: (String error) {
+        print("reward onFailAd : " + error);
+        textView.text = "onFailAd";
+      });
     });
   }
 
-  void loadRewardAD(){
+  void loadRewardAD() {
     reward.load();
   }
 
-  void showRewardAD(){
-    reward.isLoaded().then((value){
-      if(value){
+  void showRewardAD() {
+    reward.isLoaded().then((value) {
+      if (value) {
         reward.show();
       }
     });

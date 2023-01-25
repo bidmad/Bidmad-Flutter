@@ -1,9 +1,11 @@
+import 'package:bidmad_flutter_sample/NativeAdWidgetSample.dart';
 import 'package:flutter/material.dart';
 import 'package:bidmad_flutter_sample/BannerSample.dart';
 import 'package:bidmad_flutter_sample/BannerWidgetSample.dart';
 import 'package:bidmad_flutter_sample/InterstitialSample.dart';
 import 'package:bidmad_flutter_sample/RewardSample.dart';
 import 'package:bidmad_plugin/FlutterBidmadCommon.dart';
+import 'package:flutter/foundation.dart' as foundation;
 
 void main() {
   runApp(MyApp());
@@ -74,30 +76,34 @@ class _MyHomePageState extends State<MyHomePage> {
     // than having to individually change instances of widgets.
 
     // Please call initializeSdk method before calling Bidmad Ads.
-    FlutterBidmadCommon().initializeSdk();
-
     FlutterBidmadCommon common = FlutterBidmadCommon();
-    common.reqAdTrackingAuthorization().then(
-      (value) {
-        switch (value) {
-          case "0":
-            print("App Tracking Not Determined");
-            break;
-          case "1":
-            print("App Tracking Restricted Authoriziation Status");
-            break;
-          case "2":
-            print("App Tracking Denied Authorization Status");
-            break;
-          case "3":
-            print("App Tracking Authorized Authorization Status");
-            break;
-          case "4":
-            print("Lower Version than iOS 14");
-            break;
-        }
+
+    if (foundation.defaultTargetPlatform == foundation.TargetPlatform.android) {
+      common.initializeSdk("6933aab2-7f78-11ed-a117-026864a21938");
+    } else if (foundation.defaultTargetPlatform ==
+        foundation.TargetPlatform.iOS) {
+      common.initializeSdk("ff8090d3-3e28-11ed-a117-026864a21938");
+    }
+
+    common.reqAdTrackingAuthorization().then((value) {
+      switch (value) {
+        case "0":
+          print("App Tracking Not Determined");
+          break;
+        case "1":
+          print("App Tracking Restricted Authoriziation Status");
+          break;
+        case "2":
+          print("App Tracking Denied Authorization Status");
+          break;
+        case "3":
+          print("App Tracking Authorized Authorization Status");
+          break;
+        case "4":
+          print("Lower Version than iOS 14");
+          break;
       }
-    );
+    });
 
     common.setAdvertiserTrackingEnabled(false);
     print(common.getAdvertiserTrackingEnabled());
@@ -128,70 +134,70 @@ class _MyHomePageState extends State<MyHomePage> {
           // horizontal).
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            Spacer(),
             Container(
-              margin: const EdgeInsets.fromLTRB(0, 0, 0, 50), //this.left, this.top, this.right, this.bottom
-              child:
-              ElevatedButton(
+              child: ElevatedButton(
                   child: Text("Banner Sample"),
-                  onPressed: (){
+                  onPressed: () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => BannerSample()),
                     );
                   },
-                  style: ElevatedButton.styleFrom(
-                      minimumSize: Size(150,35)
-                  )
-                ),
+                  style: ElevatedButton.styleFrom(minimumSize: Size(150, 35))),
             ),
+            Spacer(),
             Container(
-              margin: const EdgeInsets.fromLTRB(0, 50, 0, 50), //this.left, this.top, this.right, this.bottom
-              child:
-              ElevatedButton(
+              child: ElevatedButton(
                   child: Text("Banner Widget Sample"),
-                  onPressed: (){
+                  onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => BannerWidgetSample()),
+                      MaterialPageRoute(
+                          builder: (context) => BannerWidgetSample()),
                     );
                   },
-                  style: ElevatedButton.styleFrom(
-                      minimumSize: Size(150,35)
-                  )
-              ),
+                  style: ElevatedButton.styleFrom(minimumSize: Size(150, 35))),
             ),
+            Spacer(),
             Container(
-              margin: const EdgeInsets.fromLTRB(0, 50, 0, 50),
-              child:
-              ElevatedButton(
+              child: ElevatedButton(
                   child: Text("Interstitial Sample"),
-                  onPressed: (){
+                  onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => InterstitialSample()),
+                      MaterialPageRoute(
+                          builder: (context) => InterstitialSample()),
                     );
                   },
-                  style: ElevatedButton.styleFrom(
-                      minimumSize: Size(150,35)
-                  )
-              ),
+                  style: ElevatedButton.styleFrom(minimumSize: Size(150, 35))),
             ),
+            Spacer(),
             Container(
-              margin: const EdgeInsets.fromLTRB(0, 50, 0, 0),
-              child:
-              ElevatedButton(
+              child: ElevatedButton(
                   child: Text("Reward Sample"),
-                  onPressed: (){
+                  onPressed: () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => RewardSample()),
                     );
                   },
-                  style: ElevatedButton.styleFrom(
-                      minimumSize: Size(150,35)
-                  )
-              ),
-            )
+                  style: ElevatedButton.styleFrom(minimumSize: Size(150, 35))),
+            ),
+            Spacer(),
+            Container(
+              child: ElevatedButton(
+                  child: Text("NativeAd Sample"),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => NativeAdWidgetSample()),
+                    );
+                  },
+                  style: ElevatedButton.styleFrom(minimumSize: Size(150, 35))),
+            ),
+            Spacer(),
           ],
         ),
       ),
