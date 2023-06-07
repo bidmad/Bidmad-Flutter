@@ -14,58 +14,70 @@ You can use the plugin to serve banner/interstitial/reward ads in your flutter m
 Add the options below to gradle.properties
 ```java
 ...
-android.enableDexingArtifactTransform=false
+        android.enableDexingArtifactTransform=false
 ```
 
 #### 1.2 Proguard Settings
 If you are using Proguard, add the rule below.
 ```java
 ...
--keep class com.adop.sdk.** { *; }
--keep class ad.helper.openbidding.** { *; }
--keep class com.adop.adapter.fc.** { *; }
--keep class com.adop.adapter.fnc.** { *; }
--keepnames class * implements java.io.Serializable
--keepclassmembers class * implements java.io.Serializable {
-    static final long serialVersionUID;
-    private static final java.io.ObjectStreamField[] serialPersistentFields;
-    !static !transient <fields>;
-    private void writeObject(java.io.ObjectOutputStream);
-    private void readObject(java.io.ObjectInputStream);
-    java.lang.Object writeReplace();
-    java.lang.Object readResolve();
-}
--keepclassmembers class * {
+        -keep class com.adop.sdk.** { *; }
+        -keep class ad.helper.openbidding.** { *; }
+        -keep class com.adop.adapter.fc.** { *; }
+        -keep class com.adop.adapter.fnc.** { *; }
+        -keepnames class * implements java.io.Serializable
+        -keepclassmembers class * implements java.io.Serializable {
+static final long serialVersionUID;
+private static final java.io.ObjectStreamField[] serialPersistentFields;
+        !static !transient <fields>;
+private void writeObject(java.io.ObjectOutputStream);
+private void readObject(java.io.ObjectInputStream);
+        java.lang.Object writeReplace();
+        java.lang.Object readResolve();
+        }
+        -keepclassmembers class * {
 @android.webkit.JavascriptInterface <methods>;
 }
 
-#prebid
--keep class com.adop.prebid.** {*;}
+        #prebid
+        -keep class com.adop.prebid.** {*;}
 
-# Pangle
--keep class com.bytedance.sdk.** { *; }
--keep class com.bykv.vk.openvk.component.video.api.** { *; }
-        
-# Tapjoy
--keep class com.tapjoy.** { *; }
--keep class com.moat.** { *; }
--keepattributes JavascriptInterface
--keepattributes *Annotation*
--keep class * extends java.util.ListResourceBundle {
+        # Pangle
+        -keep class com.bytedance.sdk.** { *; }
+        -keep class com.bykv.vk.openvk.component.video.api.** { *; }
+
+        # Tapjoy
+        -keep class com.tapjoy.** { *; }
+        -keep class com.moat.** { *; }
+        -keepattributes JavascriptInterface
+        -keepattributes *Annotation*
+        -keep class * extends java.util.ListResourceBundle {
 protected Object[][] getContents();
-}
--keep public class com.google.android.gms.common.internal.safeparcel.SafeParcelable {
+        }
+        -keep public class com.google.android.gms.common.internal.safeparcel.SafeParcelable {
 public static final *** NULL;
-}
--keepnames @com.google.android.gms.common.annotation.KeepName class *
--keepclassmembernames class * {
+        }
+        -keepnames @com.google.android.gms.common.annotation.KeepName class *
+        -keepclassmembernames class * {
 @com.google.android.gms.common.annotation.KeepName *;
-}
--keepnames class * implements android.os.Parcelable {
+        }
+        -keepnames class * implements android.os.Parcelable {
 public static final ** CREATOR;
-}
--keep class com.google.android.gms.ads.identifier.** { *; }
--dontwarn com.tapjoy.**
+        }
+        -keep class com.google.android.gms.ads.identifier.** { *; }
+        -dontwarn com.tapjoy.**
+```
+
+#### 1.3 Admob Application ID Settings
+Declare the code below under the application tag in AndroidManifest.xml inside the Android app module.([Guide](https://github.com/bidmad/SDK/wiki/Find-your-app-key%5BEN%5D#app-id-from-admob-dashboard))<br>
+*Check the value of com.google.android.gms.ads.APPLICATION_ID in the Admob dashboard.
+
+```xml
+<application>
+   ...
+   <meta-data android:name="com.google.android.gms.ads.APPLICATION_ID" android:value="APPLICATION_ID"/>
+   ...
+</application>
 ```
 
 ### 2. iOS Setting
@@ -80,7 +92,7 @@ After fetching our plugin into your app by "flutter pub get", a "Podfile" will b
     ![Bidmad-Guide-Flutter-3](https://i.imgur.com/UClvij3.png)<br>
 
 #### 2.2 Xcode Build Setting
-Select "No" for Enable Bitcode under your Build Setting. 
+Select "No" for Enable Bitcode under your Build Setting.
 
 #### 2.3 Setting SKAdNetwork
 To use AdNetworks provided by BidmadSDK, you need to add SKAdNetworkIdentifier to Info.plist. Please add SKAdNetworkItems below to info.plist.
@@ -640,6 +652,24 @@ if (foundation.defaultTargetPlatform == foundation.TargetPlatform.android) {
 }
 ```
 
+Also, for v1.6.0 or above, you can receive a callback, indicating whether the initialization is successfully or unsuccessfully done.
+
+```
+FlutterBidmadCommon common = FlutterBidmadCommon();
+
+if (foundation.defaultTargetPlatform == foundation.TargetPlatform.android) {
+  common.setInitializeCallbackListener(onInitialized: (bool isInitialized) {
+    print("Android Initialization Done: $isInitialized");
+  });
+  common.initializeSdkWithCallback("ANDROID APP KEY");
+} else if (foundation.defaultTargetPlatform == foundation.TargetPlatform.iOS) {
+  common.setInitializeCallbackListener(onInitialized: (bool isInitialized) {
+    print("IOS Initialization Done: $isInitialized");
+  });
+  common.initializeSdkWithCallback("IOS APP KEY");
+}
+```
+
 #### 3.1 Banner AD
 The following is an example of requesting a Banner ad.
 
@@ -703,7 +733,30 @@ The following is an example of requesting a Banner ad.
     controller.loadWidget();
   }
 ```
+##### 3.1.3 Load the ad first and show the banner widget later (Supported only in v1.6.0 or later versions)
+```dart
+....//Load the banner ad first
+  FlutterBidmadCommon common = FlutterBidmadCommon();
+  FlutterBaseBannerRefined bannerAd;
+  
+  common.initBannerAdChannel().then((chanNm) {
+    bannerAd = FlutterBaseBannerRefined(
+      channelNm: chanNm,
+      zoneId: "Your Zone Id");
+    bannerAd.setCallbackListener(onLoadAd: () {
+      print("bannerAdWidget onLoad");
+    }, onFailAd: (error) {
+      print("bannerAdWidget onFailAd : " + error);
+    });
+    bannerAd.load();
+  });
 
+....//Show the banner ad widget later by adding the Bidmad
+  Container(
+    child: BidmadBannerRefinedWidget(ad: bannerAd,),
+    height: 50, // banner can have the height of 50, 100, 250
+  ),
+```
 #### 3.2 Interstitial AD
 The following is an example of requesting a Interstitial ad.
 ```dart
@@ -827,9 +880,9 @@ Since the UI design unique to the internal app is required to display native ads
 
 1. Create an XIB file by referring to [XIB Layout Setting Guide](https://github.com/bidmad/Bidmad-iOS/wiki/Native-Ad-Layout-Setting-Guide-%5BENG%5D) for iOS.<br>
 2. Open Runner.xcworkspace.<br>
-    ![iOS-Native-1](https://i.imgur.com/TS7b4vY.png)
+   ![iOS-Native-1](https://i.imgur.com/TS7b4vY.png)
 3. Put the created XIB file under the project Runner folder inside the Navigation Area.<br>
-    ![iOS-Native-2](https://i.imgur.com/zAUopg7.gif)
+   ![iOS-Native-2](https://i.imgur.com/zAUopg7.gif)
 4. Copy the name without the extension of the XIB file you created and pass it to the BidmadNativeAdWidget constructor layoutName as shown below.<br>
      ```
      BidmadNativeAdWidget(
@@ -939,7 +992,28 @@ Function|Description
 BidmadBannerWidget(BidmadBannerWidgetCreatedCallback onBidmadBannerWidgetCreated)|This is the BidmadBannerWidget constructor. After creating the widget, it receives a callback for processing.
 onBidmadBannerWidgetCreated(FlutterBaseBanner controller)|It is a callback that can receive a FlutterBaseBanner and handle banner related processing.
 
-#### 4.3 FlutterBaseInterstitial
+#### 4.3 FlutterBaseBannerRefined
+
+*Preloaded banner ads are handled through FlutterBaseBannerRefined, and this is a list of features.
+
+Function|Description
+---|---
+FlutterBaseBannerRefined(String channelNm, String zoneId)|ZoneID, the constructor of the class that initializes the channel name.
+load|Call the "load" method.
+showBanner|Call the "showBanner" method on the loaded ad.
+hideBanner|Call the "hideBanner" method on the loaded ad.
+removeBanner|Call the "removeBanner" method on the loaded ad.
+setCallbackListener|Set a callback function when an ad loads successfully or fails to load.
+
+#### 4.4 BidmadBannerRefinedWidget
+
+*This is a widget class to show the loaded FlutterBaseBannerRefined instance in the form of a widget.
+
+Function|Description
+---|---
+BidmadBannerRefinedWidget(FlutterBaseBannerRefined ad)|FlutterBaseBannerRefined instance is passed and the loaded ad is added to the widget tree in the form of a widget.
+
+#### 4.5 FlutterBaseInterstitial
 
 *Interstitial ads are handled through FlutterBaseInterstitial and this is a list of functions for that.
 
@@ -956,7 +1030,7 @@ void Function(String zoneId) onShowAd|If a listener is registered, the registere
 void Function(String zoneId) onFailAd|If a listener is registered, the registered function is called when ad load fail.
 void Function(String zoneId) onCloseAd|If a listener is registered, the registered function is called when ad close.
 
-#### 4.4 FlutterBaseReward
+#### 4.6 FlutterBaseReward
 
 *Reward ads are handled through FlutterBaseReward and this is a list of functions for that.
 
@@ -976,7 +1050,7 @@ void Function(String zoneId) onCloseAd|If a listener is registered, the register
 void Function(String zoneId) onClickAd|If a listener is registered, the registered function is called when ad click.
 void Function(String zoneId) onSkipAd|If a listener is registered, the registered function is called when ad skip.
 
-#### 4.5 BidmadNativeAdWidget
+#### 4.7 BidmadNativeAdWidget
 
 *Native ads are provided in the form of widgets and processed through BidmadNativeAdWidget. Below is a list of their features.
 
@@ -985,7 +1059,7 @@ Function|Description
 BidmadNativeAdWidget(layoutName, onBidmadNativeAdWidgetCreated)|BidmadNativeAdWidget Constructor. After creating a widget, receive a callback for processing as a param.
 onBidmadNativeAdWidgetCreated(FlutterBaseNativeAd controller)|Callback that can receive FlutterBaseNativeAd and handle native ad-related processing.
 
-#### 4.6 FlutterBaseNativeAd
+#### 4.8 FlutterBaseNativeAd
 
 Function|Description
 ----|---
@@ -997,7 +1071,7 @@ void Function() onClickAd|If a listener is registered, the registered function w
 Future<void> loadWidget()|Request a native ad.
 Future<void> removeWidget()|Remove native ads.
 
-#### 4.7 FlutterBidmadCommon
+#### 4.9 FlutterBidmadCommon
 *This is a list of functions available through BidmadCommon.
 
 Function|Description
@@ -1005,6 +1079,8 @@ Function|Description
 FlutterBidmadCommon()|This is the FlutterBidmadCommon constructor
 Future(void) setDebugging(bool isDebug)|Debugging log output
 Future(void) initializeSdk(String appKey)|Initialize the BidmadSDK support network. <b>If you do not enter the appKey, advertisements will not be sent.
+Future(void) setInitializeCallbackListener(onInitialized)|set the callback listener
+Future(void) initializeSdkWithCallback(String appKey)|Initialize the BidmadSDK support network, receiving callback indicating the status
 Future(void) setCUID(String cuid)|Enter your custom ID.
 Future(String) initBannerChannel()|Creating a channel for controlling banner ad
 Future(String) initInterstitialChannel()|Creating a channel for controlling interstitial ad

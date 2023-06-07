@@ -1,3 +1,4 @@
+import 'package:bidmad_flutter_sample/BannerRefinedWidgetSample.dart';
 import 'package:bidmad_flutter_sample/NativeAdWidgetSample.dart';
 import 'package:flutter/material.dart';
 import 'package:bidmad_flutter_sample/BannerSample.dart';
@@ -78,10 +79,30 @@ class _MyHomePageState extends State<MyHomePage> {
     // Please call initializeSdk method before calling Bidmad Ads.
     FlutterBidmadCommon common = FlutterBidmadCommon();
 
+    /**
+     * For v1.6.0 or above, you can receive a callback, indicating whether the initialization is successfully or unsuccessfully done.
+     *
+     * common.setInitializeCallbackListener(
+        onInitialized : (isCompleted) {
+        print("Initialize callback : "+isCompleted.toString());
+        }
+        );
+        common.initializeSdkWithCallback("Your App Key");
+     *
+     * */
+
     if (foundation.defaultTargetPlatform == foundation.TargetPlatform.android) {
-      common.initializeSdk("6933aab2-7f78-11ed-a117-026864a21938");
+
+      common.setInitializeCallbackListener(
+          onInitialized : (isCompleted) {
+            print("Initialize callback : "+isCompleted.toString());
+          }
+      );
+      common.initializeSdkWithCallback("6933aab2-7f78-11ed-a117-026864a21938");
+      // common.initializeSdk("6933aab2-7f78-11ed-a117-026864a21938");
+
     } else if (foundation.defaultTargetPlatform ==
-        foundation.TargetPlatform.iOS) {
+      foundation.TargetPlatform.iOS) {
       common.initializeSdk("ff8090d3-3e28-11ed-a117-026864a21938");
     }
 
@@ -155,6 +176,32 @@ class _MyHomePageState extends State<MyHomePage> {
                       context,
                       MaterialPageRoute(
                           builder: (context) => BannerWidgetSample()),
+                    );
+                  },
+                  style: ElevatedButton.styleFrom(minimumSize: Size(150, 35))),
+            ),
+            Spacer(),
+            Container(
+              child: ElevatedButton(
+                  child: Text("Banner Widget Sample"),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => BannerWidgetSample()),
+                    );
+                  },
+                  style: ElevatedButton.styleFrom(minimumSize: Size(150, 35))),
+            ),
+            Spacer(),
+            Container(
+              child: ElevatedButton(
+                  child: Text("Banner Refined Widget Sample"),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => BannerRefinedWidgetSample()),
                     );
                   },
                   style: ElevatedButton.styleFrom(minimumSize: Size(150, 35))),
