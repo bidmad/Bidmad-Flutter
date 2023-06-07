@@ -740,7 +740,7 @@ if (foundation.defaultTargetPlatform == foundation.TargetPlatform.android) {
   FlutterBidmadCommon common = FlutterBidmadCommon();
   FlutterBaseBannerRefined bannerAd;
   
-  common.initBannerAdChannel().then((chanNm) {
+  common.initBannerRefinedChannel().then((chanNm) {
     bannerAd = FlutterBaseBannerRefined(
       channelNm: chanNm,
       zoneId: "Your Zone Id");

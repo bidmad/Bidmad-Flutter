@@ -739,7 +739,7 @@ The following is an example of requesting a Banner ad.
   FlutterBidmadCommon common = FlutterBidmadCommon();
   FlutterBaseBannerRefined bannerAd;
   
-  common.initBannerAdChannel().then((chanNm) {
+  common.initBannerRefinedChannel().then((chanNm) {
     bannerAd = FlutterBaseBannerRefined(
       channelNm: chanNm,
       zoneId: "Your Zone Id");
