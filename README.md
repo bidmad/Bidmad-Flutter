@@ -14,63 +14,63 @@ Plugin을 사용하여 Flutter 모바일 앱에서 배너 / 전면 / 보상형 �
 gradle.properties에 아래 옵션을 추가합니다.
 ```java
 ...
-        android.enableDexingArtifactTransform=false
+android.enableDexingArtifactTransform=false
 ```
 
 #### 1.2 Proguard Settings
 Proguard를 사용하는 경우 아래 규칙을 추가합니다.
 ```java
 ...
-        -keep class com.adop.sdk.** { *; }
-        -keep class ad.helper.openbidding.** { *; }
-        -keep class com.adop.adapter.fc.** { *; }
-        -keep class com.adop.adapter.fnc.** { *; }
-        -keepnames class * implements java.io.Serializable
-        -keepclassmembers class * implements java.io.Serializable {
-static final long serialVersionUID;
-private static final java.io.ObjectStreamField[] serialPersistentFields;
-        !static !transient <fields>;
-private void writeObject(java.io.ObjectOutputStream);
-private void readObject(java.io.ObjectInputStream);
-        java.lang.Object writeReplace();
-        java.lang.Object readResolve();
-        }
-        -keepclassmembers class * {
-@android.webkit.JavascriptInterface <methods>;
+-keep class com.adop.sdk.** { *; }
+-keep class ad.helper.openbidding.** { *; }
+-keep class com.adop.adapter.fc.** { *; }
+-keep class com.adop.adapter.fnc.** { *; }
+-keepnames class * implements java.io.Serializable
+-keepclassmembers class * implements java.io.Serializable {
+    static final long serialVersionUID;
+    private static final java.io.ObjectStreamField[] serialPersistentFields;
+    !static !transient <fields>;
+    private void writeObject(java.io.ObjectOutputStream);
+    private void readObject(java.io.ObjectInputStream);
+    java.lang.Object writeReplace();
+    java.lang.Object readResolve();
+}
+-keepclassmembers class * {
+    @android.webkit.JavascriptInterface <methods>;
 }
 
-        #prebid
-        -keep class com.adop.prebid.** {*;}
+#prebid
+-keep class com.adop.prebid.** {*;}
 
-        # Pangle
-        -keep class com.bytedance.sdk.** { *; }
-        -keep class com.bykv.vk.openvk.component.video.api.** { *; }
+# Pangle
+-keep class com.bytedance.sdk.** { *; }
+-keep class com.bykv.vk.openvk.component.video.api.** { *; }
 
-        # Tapjoy
-        -keep class com.tapjoy.** { *; }
-        -keep class com.moat.** { *; }
-        -keepattributes JavascriptInterface
-        -keepattributes *Annotation*
-        -keep class * extends java.util.ListResourceBundle {
+# Tapjoy
+-keep class com.tapjoy.** { *; }
+-keep class com.moat.** { *; }
+-keepattributes JavascriptInterface
+-keepattributes *Annotation*
+-keep class * extends java.util.ListResourceBundle {
 protected Object[][] getContents();
-        }
-        -keep public class com.google.android.gms.common.internal.safeparcel.SafeParcelable {
+}
+-keep public class com.google.android.gms.common.internal.safeparcel.SafeParcelable {
 public static final *** NULL;
-        }
-        -keepnames @com.google.android.gms.common.annotation.KeepName class *
-        -keepclassmembernames class * {
+}
+-keepnames @com.google.android.gms.common.annotation.KeepName class *
+-keepclassmembernames class * {
 @com.google.android.gms.common.annotation.KeepName *;
-        }
-        -keepnames class * implements android.os.Parcelable {
+}
+-keepnames class * implements android.os.Parcelable {
 public static final ** CREATOR;
-        }
-        -keep class com.google.android.gms.ads.identifier.** { *; }
-        -dontwarn com.tapjoy.**
+}
+-keep class com.google.android.gms.ads.identifier.** { *; }
+-dontwarn com.tapjoy.**
 ```
 
 #### 1.3 Admob Application ID Settings
 Android 앱 모듈 내 AndroidManifest.xml의 application 태그 안에 아래 코드를 선언합니다([가이드](https://github.com/bidmad/SDK/wiki/Find-your-app-key%5BEN%5D#app-id-from-admob-dashboard))<br>
-*com.google.android.gms.ads.APPLICATION_ID의 value는 Admob 대시보드에서 확인 바랍니다.
+   *com.google.android.gms.ads.APPLICATION_ID의 value는 Admob 대시보드에서 확인 바랍니다.
 
 ```xml
 <application>
@@ -92,7 +92,7 @@ Android 앱 모듈 내 AndroidManifest.xml의 application 태그 안에 아래 �
     ![Bidmad-Guide-Flutter-3](https://i.imgur.com/UClvij3.png)<br>
 
 #### 2.2 Xcode Build Setting
-빌드 설정에서 비트코드 활성화에 대해 "아니요"를 선택합니다.
+빌드 설정에서 비트코드 활성화에 대해 "아니요"를 선택합니다. 
 
 #### 2.3 Setting SKAdNetwork
 BidmadSDK에서 제공하는 AdNetworks를 사용하려면 SKAdNetworkIdentifier를 Info.plist에 추가해야 합니다. <br>
@@ -855,7 +855,7 @@ if (foundation.defaultTargetPlatform == foundation.TargetPlatform.android) {
 ```
 
 #### 3.4 NativeAd Widget
-네이티브 광고는 앱 고유의 UI 구성요소를 통해 사용자에게 표시되는 광고 포맷입니다.
+네이티브 광고는 앱 고유의 UI 구성요소를 통해 사용자에게 표시되는 광고 포맷입니다. 
 네이티브 광고를 표기하기 위해선 내부 앱 고유의 UI 디자인이 필요하기 때문에, 해당 기능을 사용하려면 Android 및 iOS에 대한 추가 설정이 필요합니다.
 
 <details markdown="1">
@@ -882,9 +882,9 @@ if (foundation.defaultTargetPlatform == foundation.TargetPlatform.android) {
 
 1. iOS 를 위한 [XIB 레이아웃 설정 가이드](https://github.com/bidmad/Bidmad-iOS/wiki/Native-Ad-Layout-Setting-Guide-%5BKOR%5D) 를 참고해 XIB 파일을 제작하십시오.<br>
 2. Runner.xcworkspace 를 오픈합니다.<br>
-   ![iOS-Native-1](https://i.imgur.com/TS7b4vY.png)
+    ![iOS-Native-1](https://i.imgur.com/TS7b4vY.png)
 3. 만든 XIB 파일을 Navigation Area 내부 프로젝트 Runner 폴더 아래로 넣어주세요.<br>
-   ![iOS-Native-2](https://i.imgur.com/zAUopg7.gif)
+    ![iOS-Native-2](https://i.imgur.com/zAUopg7.gif)
 4. 만든 XIB 파일의 확장자가 제외된 이름을 복사해 아래와 같이 BidmadNativeAdWidget 생성자 layoutName에 전달하십시오.<br>
     ```
     BidmadNativeAdWidget(
@@ -1016,7 +1016,7 @@ setCallbackListener|광고가 성공적으로 로드되거나 로드되지 않�
 
 Function|Description
 ---|---
-BidmadBannerRefinedWidget(FlutterBaseBannerRefined ad)|FlutterBaseBannerRefined 인스턴스를 전달해 로드한 광고를 위젯 형태로 위젯트리에 추가합니다.
+BidmadBannerRefinedWidget(FlutterBaseBannerRefined ad)|FlutterBaseBannerRefined 인스턴스를 전달해 로드한 광고를 위젯 형태로 위젯트리에 추가합니다. 
 
 #### 4.5 FlutterBaseInterstitial
 
@@ -1085,11 +1085,17 @@ FlutterBidmadCommon()|FlutterBidmadCommon 생성자입니다.
 Future(void) setDebugging(bool isDebug)|디버깅 로그 출력합니다.
 Future(void) initializeSdk(String appKey)|BidmadSDK 지원 네트워크를 초기화합니다. <b>appKey를 입력하지 않으면 광고가 송출되지 않습니다.
 Future(void) setInitializeCallbackListener(onInitialized)|콜백 리스너를 세팅합니다.
-Future(void) initializeSdkWithCallback(String appKey)|BidmadSDK 지원 네트워크를 초기화합니다. 해당 메서드 실행 시 콜백을 받을 수 있습니다.
+Future(void) initializeSdkWithCallback(String appKey)|BidmadSDK 지원 네트워크를 초기화합니다. 해당 메서드 실행 시 콜백을 받을 수 있습니다. 
+Future(void) setAdFreeEventListener(void Function(bool))|쿠팡 광고네트워크에 의한 광고차단 상태 변경 정보를 받기 위해 콜백 함수를 설정합니다.
+Future(bool) isAdFree()|쿠팡 광고네트워크에 의한 광고 차단 여부를 확인합니다.
 Future(void) setCUID(String cuid)|사용자 정의 ID를 입력합니다.
 Future(String) initBannerChannel()|배너 광고 제어를 위한 채널을 생성합니다.
 Future(String) initInterstitialChannel()|전면 광고를 제어하기 위한 채널을 생성합니다.
 Future(String) initRewardChannel()|리워드 광고 제어 채널을 생성합니다.
 Future(String) reqAdTrackingAuthorization()|BidmadSDK를 통해 사용자의 앱 추적 동의 팝업을 발생시킵니다.
-Future(void) setAdvertiserTrackingEnabled(bool enable)|reqAdTrackingAuthorization 이외의 함수로 앱 추적 투명성 승인 요청 팝업 동의/거절을 얻는 경우 이에 대한 결과를 설정합니다.
+Future(void) setAdvertiserTrackingEnabled(bool enable)|reqAdTrackingAuthorization 이외의 함수로 앱 추적 투명성 승인 요청 팝업 동의/거절을 얻는 경우 이에 대한 결과를 설정합니다. 
 Future(bool) getAdvertiserTrackingEnabled()|설정된 앱 추적 투명성 승인 요청 팝업 동의/거절에 대한 결과를 조회합니다.
+
+#### 참고사항
+
+- [쿠팡 네트워크 광고 차단 인터페이스 가이드](https://github.com/bidmad/Bidmad-Flutter/wiki/쿠팡-네트워크-광고-차단-인터페이스-가이드)

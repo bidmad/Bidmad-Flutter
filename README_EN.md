@@ -14,63 +14,63 @@ You can use the plugin to serve banner/interstitial/reward ads in your flutter m
 Add the options below to gradle.properties
 ```java
 ...
-        android.enableDexingArtifactTransform=false
+android.enableDexingArtifactTransform=false
 ```
 
 #### 1.2 Proguard Settings
 If you are using Proguard, add the rule below.
 ```java
 ...
-        -keep class com.adop.sdk.** { *; }
-        -keep class ad.helper.openbidding.** { *; }
-        -keep class com.adop.adapter.fc.** { *; }
-        -keep class com.adop.adapter.fnc.** { *; }
-        -keepnames class * implements java.io.Serializable
-        -keepclassmembers class * implements java.io.Serializable {
-static final long serialVersionUID;
-private static final java.io.ObjectStreamField[] serialPersistentFields;
-        !static !transient <fields>;
-private void writeObject(java.io.ObjectOutputStream);
-private void readObject(java.io.ObjectInputStream);
-        java.lang.Object writeReplace();
-        java.lang.Object readResolve();
-        }
-        -keepclassmembers class * {
+-keep class com.adop.sdk.** { *; }
+-keep class ad.helper.openbidding.** { *; }
+-keep class com.adop.adapter.fc.** { *; }
+-keep class com.adop.adapter.fnc.** { *; }
+-keepnames class * implements java.io.Serializable
+-keepclassmembers class * implements java.io.Serializable {
+    static final long serialVersionUID;
+    private static final java.io.ObjectStreamField[] serialPersistentFields;
+    !static !transient <fields>;
+    private void writeObject(java.io.ObjectOutputStream);
+    private void readObject(java.io.ObjectInputStream);
+    java.lang.Object writeReplace();
+    java.lang.Object readResolve();
+}
+-keepclassmembers class * {
 @android.webkit.JavascriptInterface <methods>;
 }
 
-        #prebid
-        -keep class com.adop.prebid.** {*;}
+#prebid
+-keep class com.adop.prebid.** {*;}
 
-        # Pangle
-        -keep class com.bytedance.sdk.** { *; }
-        -keep class com.bykv.vk.openvk.component.video.api.** { *; }
-
-        # Tapjoy
-        -keep class com.tapjoy.** { *; }
-        -keep class com.moat.** { *; }
-        -keepattributes JavascriptInterface
-        -keepattributes *Annotation*
-        -keep class * extends java.util.ListResourceBundle {
+# Pangle
+-keep class com.bytedance.sdk.** { *; }
+-keep class com.bykv.vk.openvk.component.video.api.** { *; }
+        
+# Tapjoy
+-keep class com.tapjoy.** { *; }
+-keep class com.moat.** { *; }
+-keepattributes JavascriptInterface
+-keepattributes *Annotation*
+-keep class * extends java.util.ListResourceBundle {
 protected Object[][] getContents();
-        }
-        -keep public class com.google.android.gms.common.internal.safeparcel.SafeParcelable {
+}
+-keep public class com.google.android.gms.common.internal.safeparcel.SafeParcelable {
 public static final *** NULL;
-        }
-        -keepnames @com.google.android.gms.common.annotation.KeepName class *
-        -keepclassmembernames class * {
+}
+-keepnames @com.google.android.gms.common.annotation.KeepName class *
+-keepclassmembernames class * {
 @com.google.android.gms.common.annotation.KeepName *;
-        }
-        -keepnames class * implements android.os.Parcelable {
+}
+-keepnames class * implements android.os.Parcelable {
 public static final ** CREATOR;
-        }
-        -keep class com.google.android.gms.ads.identifier.** { *; }
-        -dontwarn com.tapjoy.**
+}
+-keep class com.google.android.gms.ads.identifier.** { *; }
+-dontwarn com.tapjoy.**
 ```
 
 #### 1.3 Admob Application ID Settings
 Declare the code below under the application tag in AndroidManifest.xml inside the Android app module.([Guide](https://github.com/bidmad/SDK/wiki/Find-your-app-key%5BEN%5D#app-id-from-admob-dashboard))<br>
-*Check the value of com.google.android.gms.ads.APPLICATION_ID in the Admob dashboard.
+   *Check the value of com.google.android.gms.ads.APPLICATION_ID in the Admob dashboard.
 
 ```xml
 <application>
@@ -92,7 +92,7 @@ After fetching our plugin into your app by "flutter pub get", a "Podfile" will b
     ![Bidmad-Guide-Flutter-3](https://i.imgur.com/UClvij3.png)<br>
 
 #### 2.2 Xcode Build Setting
-Select "No" for Enable Bitcode under your Build Setting.
+Select "No" for Enable Bitcode under your Build Setting. 
 
 #### 2.3 Setting SKAdNetwork
 To use AdNetworks provided by BidmadSDK, you need to add SKAdNetworkIdentifier to Info.plist. Please add SKAdNetworkItems below to info.plist.
@@ -880,9 +880,9 @@ Since the UI design unique to the internal app is required to display native ads
 
 1. Create an XIB file by referring to [XIB Layout Setting Guide](https://github.com/bidmad/Bidmad-iOS/wiki/Native-Ad-Layout-Setting-Guide-%5BENG%5D) for iOS.<br>
 2. Open Runner.xcworkspace.<br>
-   ![iOS-Native-1](https://i.imgur.com/TS7b4vY.png)
+    ![iOS-Native-1](https://i.imgur.com/TS7b4vY.png)
 3. Put the created XIB file under the project Runner folder inside the Navigation Area.<br>
-   ![iOS-Native-2](https://i.imgur.com/zAUopg7.gif)
+    ![iOS-Native-2](https://i.imgur.com/zAUopg7.gif)
 4. Copy the name without the extension of the XIB file you created and pass it to the BidmadNativeAdWidget constructor layoutName as shown below.<br>
      ```
      BidmadNativeAdWidget(
