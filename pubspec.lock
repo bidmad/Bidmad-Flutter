@@ -13,10 +13,10 @@ packages:
     dependency: "direct main"
     description:
       name: bidmad_plugin
-      sha256: fd9a6f55fbba9f62f044c950b362ea0e436d3592b4952883fb6a5586a8849089
+      sha256: "79dcaefd0223c5abe13203558306fd191810d332d1d6a0cb30969acdd7b90c9a"
       url: "https://pub.dev"
     source: hosted
-    version: "1.7.1"
+    version: "1.7.2"
   boolean_selector:
     dependency: transitive
     description:
