@@ -183,19 +183,6 @@ class _MyHomePageState extends State<MyHomePage> {
             Spacer(),
             Container(
               child: ElevatedButton(
-                  child: Text("Banner Widget Sample"),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => BannerWidgetSample()),
-                    );
-                  },
-                  style: ElevatedButton.styleFrom(minimumSize: Size(150, 35))),
-            ),
-            Spacer(),
-            Container(
-              child: ElevatedButton(
                   child: Text("Banner Refined Widget Sample"),
                   onPressed: () {
                     Navigator.push(
