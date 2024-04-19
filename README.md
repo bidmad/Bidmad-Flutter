@@ -78,7 +78,11 @@ Android 앱 모듈 내 AndroidManifest.xml의 application 태그 안에 아래 �
 
 ### 2. iOS Setting
 
-#### 2.1 import BidmadSDK-iOS CocoaPods
+#### 2.1 Xcode Version & Privacy Manifest
+- Xcode 15.3 이상을 사용하십시오
+- App Store에 애플리케이션을 제출할 때 다음 가이드를 참고하여 개인정보 보호 정책 및 설문조사를 올바르게 설정하세요: [Guide for Privacy Manifest & Privacy Survey](https://github.com/bidmad/Bidmad-iOS/wiki/Guide-for-Privacy-Manifest-&-Privacy-Survey-%5BKR%5D)
+
+#### 2.2 import BidmadSDK-iOS CocoaPods
 "flutter pub get"으로 플러그인을 앱으로 가져오면 프로젝트의 iOS 폴더에 "Podfile"이 생성됩니다. <br>
 1.  Podfile에서 플랫폼 요구 사항을 iOS 12로 설정하세요.<br>
     ![Bidmad-Guide-Flutter-1](https://i.imgur.com/1uXp8jR.png)<br>
@@ -87,10 +91,10 @@ Android 앱 모듈 내 AndroidManifest.xml의 application 태그 안에 아래 �
 3.  이제 "Runner.xcworkspace"라는 이름의 Xcode Workspace 파일을 열고 아래 가이드 2.2를 진행합니다.
     ![Bidmad-Guide-Flutter-3](https://i.imgur.com/UClvij3.png)<br>
 
-#### 2.2 Xcode Build Setting
+#### 2.3 Xcode Build Setting
 빌드 설정에서 비트코드 활성화에 대해 "아니요"를 선택합니다. 
 
-#### 2.3 Setting SKAdNetwork
+#### 2.4 Setting SKAdNetwork
 BidmadSDK에서 제공하는 AdNetworks를 사용하려면 SKAdNetworkIdentifier를 Info.plist에 추가해야 합니다. <br>
 info.plist에 아래 SKAdNetworkItems를 추가하세요.
 
