@@ -849,15 +849,15 @@ The following is an example of requesting a Banner ad.
       banner.setAdInfo("Your Zone Id");
 
       banner.setCallbackListener(
-          onLoadAd: (String zoneId){
+          onLoadAd: (BidmadInfo? info){
             print("banner onLoadAd");
           },
-          onFailAd: (String zoneId){
+          onFailAd: (String error){
             print("banner onFailAd");
           }
       );
 
-      //option 
+      //option
       //banner.setInterval(120); //banner refresh time(60s~120s)
     });
 
@@ -877,15 +877,15 @@ The following is an example of requesting a Banner ad.
       height: 50.0, //Banner Height(50, 100, 250)
     ),
 
-....//onBidmadBannerWidgetCreated 
+....//onBidmadBannerWidgetCreated
   void _onWidgetTestCreated(FlutterBaseBanner controller){
     controller.setAdInfo("Your Zone Id");
 
     controller.setCallbackListener(
-        onLoadAd: (String zoneId){
+        onLoadAd: (BidmadInfo? info){
           print("banner onLoadAd");
         },
-        onFailAd: (String zoneId){
+        onFailAd: (String error){
           print("banner onFailAd");
         }
     );
@@ -898,22 +898,33 @@ The following is an example of requesting a Banner ad.
 ....//Load the banner ad first
   FlutterBidmadCommon common = FlutterBidmadCommon();
   FlutterBaseBannerRefined bannerAd;
-  
+
   common.initBannerRefinedChannel().then((chanNm) {
-    bannerAd = FlutterBaseBannerRefined(
-      channelNm: chanNm,
-      zoneId: "Your Zone Id");
-    bannerAd.setCallbackListener(onLoadAd: () {
-      print("bannerAdWidget onLoad");
-    }, onFailAd: (error) {
-      print("bannerAdWidget onFailAd : " + error);
+    FlutterBaseBannerRefined.create(channelNm: chanNm, zoneId: "Your Zone Id").then((ad) {
+      bannerAd = ad;
+      bannerAd.setCallbackListener(
+          onLoadAd: (BidmadInfo? info) {
+            print("bannerAdWidget onLoad");
+            textView.text = "onLoadAd";
+            setState(() {
+              isLoaded = true;
+            });
+          },
+          onFailAd: (String error) {
+            print("bannerAdWidget onFailAd : "+error);
+            textView.text = "onFailAd";
+          },
+          onClickAd: (BidmadInfo? info) {
+            print("bannerAdWidget onClickAd");
+            textView.text = "onClickAd";
+          });
+      bannerAd.load();
     });
-    bannerAd.load();
   });
 
 ....//Show the banner ad widget later by adding the Bidmad
   Container(
-    child: BidmadBannerRefinedWidget(ad: bannerAd,),
+    child:  isLoaded ? BidmadBannerRefinedWidget(ad: bannerAd) : Text("isLoading..."),
     height: 50, // banner can have the height of 50, 100, 250
   ),
 ```
@@ -934,17 +945,20 @@ The following is an example of requesting a Interstitial ad.
       interstitial.setAdInfo("Your Zone Id");
 
       interstitial.setCallbackListener(
-          onLoadAd: (String zoneId){
+          onLoadAd: (BidmadInfo? info){
             print("interstitial onLoadAd");
           },
-          onShowAd: (String zoneId){
+          onShowAd: (BidmadInfo? info){
             print("interstitial onShowAd" );
             interstitial.load(); //Ad Reload
           },
-          onCloseAd: (String zoneId){
+          onClickAd: (BidmadInfo? info){
+            print("interstitial onClickAd");
+          },
+          onCloseAd: (BidmadInfo? info){
             print("interstitial onCloseAd");
           },
-          onFailAd: (String zoneId){
+          onFailAd: (String error){
             print("interstitial onFailAd");
           }
       );
@@ -976,27 +990,27 @@ The following is an example of requesting a Reward ad.
       reward.setAdInfo("Your Zone Id");
 
       reward.setCallbackListener(
-          onLoadAd: (String zoneId){
+          onLoadAd: (BidmadInfo? info){
             print("reward onLoadAd");
           },
-          onShowAd: (String zoneId){
+          onShowAd: (BidmadInfo? info){
             print("reward onShowAd");
 
             reward.load();
           },
-          onCompleteAd: (String zoneId){
+          onCompleteAd: (BidmadInfo? info){
             print("reward onCompleteAd");
           },
-          onSkipAd: (String zoneId){
+          onSkipAd: (BidmadInfo? info){
             print("reward onSkippedAd");
           },
-          onCloseAd: (String zoneId){
+          onCloseAd: (BidmadInfo? info){
             print("reward onCloseAd");
           },
-          onClickAd: (String zoneId){
+          onClickAd: (BidmadInfo? info){
             print("reward onClickAd");
           },
-          onFailAd: (String zoneId){
+          onFailAd: (String error){
             print("reward onFailAd");
           }
       );
@@ -1028,7 +1042,9 @@ Since the UI design unique to the internal app is required to display native ads
     ```
     BidmadNativeAdWidget(
         onBidmadNativeAdWidgetCreated: _onBidmadNativeAdWidgetCreated,
-        layoutName: "nativead_layout"
+        layoutName: "nativead_layout",
+        width: 400,
+        height: 400
     ),
     ```
 
@@ -1047,7 +1063,9 @@ Since the UI design unique to the internal app is required to display native ads
      ```
      BidmadNativeAdWidget(
          onBidmadNativeAdWidgetCreated: _onBidmadNativeAdWidgetCreated,
-         layoutName: "IOSNativeAd"
+         layoutName: "IOSNativeAd",
+         width: 400,
+         height: 400
      ),
      ```
 
@@ -1060,26 +1078,27 @@ Here's an example requesting native ads:
       child: BidmadNativeAdWidget(
         onBidmadNativeAdWidgetCreated: _onBidmadNativeAdWidgetCreated,
         layoutName:"YourXMLorXIBFileName", // Please enter the name of XIB or XML file
+        width: 400,
+        height: 400
       ),
-      height: 400,
     ),
-    
+
 ....// After Banner Widget is fully created, the _onBidmadNativeAdWidgetCreated callback will be called
     void _onBidmadNativeAdWidgetCreated(FlutterBaseNativeAd controller) {
         controller.setAdInfo("Your Zone ID");
-        
+
         controller.setCallbackListener(
-          onLoadAd: () {
+          onLoadAd: (BidmadInfo? info) {
             print("NativeAd onLoadAd");
           },
           onFailAd: (String error) {
             print("NativeAd onFailAd" + error);
           },
-          onClickAd: (() {
+          onClickAd: (BidmadInfo? info) {
             print("NativeAd onClickAd");
-          }),
+          }
         );
-        
+
         controller.loadWidget();
     }
 ```
@@ -1132,25 +1151,25 @@ If the user agrees, True, and if rejected, pass False to setAdvertiserTrackingEn
 
 Function|Description
 ---|---
-FlutterBaseBanner(@required String channelName)|This is the FlutterBaseBanner constructor, Receives the Name for Channel creation as a Param.
-Future(void) load(int y)|Request a banner ad. When a banner ad is exposed, the banner is exposed at height y (center alignment).
-Future(void) loadWidget()|Request a banner ad. In order for the function to function properly, FlutterBaseBanner object must be obtained through the BidmadBannerWidget Class.
-Future(void) setInterval(int sec)|Set the banner refresh cycle.(60s~120s)
-Future(void) setAdInfo(String zoneId)|Set the issued ZoneId.
-Future(void) setCUID(String cuid)|Set the CUID property of each ad type. recommend encrypting text using sha256 or higher.
-Future(void) hideBanner()|Hide the banner View
-Future(void) showBanner()|Show the banner View.
-Future(void) removeBanner()|Remove the exposed banner.
-void Function(String zoneId) onLoadAd|If a listener is registered, the registered function is called when ad load.
-void Function(String zoneId) onFailAd|If a listener is registered, the registered function is called when ad load fail.
+FlutterBaseBanner(String channelName)|This is the FlutterBaseBanner constructor, Receives the Name for Channel creation as a Param.
+Future\<void> load(int y)|Request a banner ad. When a banner ad is exposed, the banner is exposed at height y (center alignment).
+Future\<void> loadWidget()|Request a banner ad. In order for the function to function properly, FlutterBaseBanner object must be obtained through the BidmadBannerWidget Class.
+Future\<void> setInterval(int sec)|Set the banner refresh cycle.(60s~120s)
+Future\<void> setAdInfo(String zoneId)|Set the issued ZoneId.
+Future\<void> setCUID(String cuid)|Set the CUID property of each ad type. recommend encrypting text using sha256 or higher.
+Future\<void> hideBanner()|Hide the banner View
+Future\<void> showBanner()|Show the banner View.
+Future\<void> removeBanner()|Remove the exposed banner.
+void Function(BidmadInfo? info) onLoadAd|If a listener is registered, the registered function is called when ad load.
+void Function(String error) onFailAd|If a listener is registered, the registered function is called when ad load fail.
 
 #### 4.2 BidmadBannerWidget
 *For banner ads in the form of a widget, it must be processed through BidmadBannerWidget, and this is a list of functions for that.
 
 Function|Description
 ---|---
-BidmadBannerWidget(BidmadBannerWidgetCreatedCallback onBidmadBannerWidgetCreated)|This is the BidmadBannerWidget constructor. After creating the widget, it receives a callback for processing.
-onBidmadBannerWidgetCreated(FlutterBaseBanner controller)|It is a callback that can receive a FlutterBaseBanner and handle banner related processing.
+BidmadBannerWidget(<br>&nbsp;&nbsp;&nbsp;&nbsp;void Function(FlutterBaseBanner) onBidmadBannerWidgetCreated<br>)|This is the BidmadBannerWidget constructor. After creating the widget, it receives a callback for processing.
+void Function(FlutterBaseBanner) onBidmadBannerWidgetCreated|It is a callback that can receive a FlutterBaseBanner and handle banner related processing.
 
 #### 4.3 FlutterBaseBannerRefined
 
@@ -1158,12 +1177,14 @@ onBidmadBannerWidgetCreated(FlutterBaseBanner controller)|It is a callback that 
 
 Function|Description
 ---|---
-FlutterBaseBannerRefined(String channelNm, String zoneId)|ZoneID, the constructor of the class that initializes the channel name.
-load|Call the "load" method.
-showBanner|Call the "showBanner" method on the loaded ad.
-hideBanner|Call the "hideBanner" method on the loaded ad.
-removeBanner|Call the "removeBanner" method on the loaded ad.
-setCallbackListener|Set a callback function when an ad loads successfully or fails to load.
+Future\<FlutterBaseBannerRefined> create(String channelNm, String zoneId)|ZoneID, the constructor of the class that initializes the channel name.
+void load()|Call the "load" method.
+void showBanner()|Call the "showBanner" method on the loaded ad.
+void hideBanner()|Call the "hideBanner" method on the loaded ad.
+void removeBanner()|Call the "removeBanner" method on the loaded ad.
+void Function(BidmadInfo? info) onLoadAd|If a listener is registered, the registered function is called when ad load.
+void Function(String error) onFailAd|If a listener is registered, the registered function is called when ad load fail.
+void Function(BidmadInfo? info) onClickAd|If a listener is registered, the registered function is called when ad click.
 
 #### 4.4 BidmadBannerRefinedWidget
 
@@ -1172,6 +1193,7 @@ setCallbackListener|Set a callback function when an ad loads successfully or fai
 Function|Description
 ---|---
 BidmadBannerRefinedWidget(FlutterBaseBannerRefined ad)|FlutterBaseBannerRefined instance is passed and the loaded ad is added to the widget tree in the form of a widget.
+void Function(Size)? onChangedSizeCallback|Returns the changed View size.
 
 #### 4.5 FlutterBaseInterstitial
 
@@ -1179,16 +1201,17 @@ BidmadBannerRefinedWidget(FlutterBaseBannerRefined ad)|FlutterBaseBannerRefined 
 
 Function|Description
 ---|---
-FlutterBaseInterstitial(@required String channelName)|This is the FlutterBaseInterstitial constructor, Receives the Name for Channel creation as a Param.
-Future(void) load()|Request a interstitial ad
-Future(void) show()|Display the loaded interstitial ad
-Future(bool) isLoaded()|Check if the ad is loaded.
-Future(void) setAdInfo(String zoneId)|Set the issued ZoneId.
-Future(void) setCUID(String cuid)|Set the CUID property of each ad type. recommend encrypting text using sha256 or higher.
-void Function(String zoneId) onLoadAd|If a listener is registered, the registered function is called when ad load.
-void Function(String zoneId) onShowAd|If a listener is registered, the registered function is called when ad show.
-void Function(String zoneId) onFailAd|If a listener is registered, the registered function is called when ad load fail.
-void Function(String zoneId) onCloseAd|If a listener is registered, the registered function is called when ad close.
+FlutterBaseInterstitial(String channelName)|This is the FlutterBaseInterstitial constructor, Receives the Name for Channel creation as a Param.
+Future\<void> load()|Request a interstitial ad
+Future\<void> show()|Display the loaded interstitial ad
+Future\<bool> isLoaded()|Check if the ad is loaded.
+Future\<void> setAdInfo(String zoneId)|Set the issued ZoneId.
+Future\<void> setCUID(String cuid)|Set the CUID property of each ad type. recommend encrypting text using sha256 or higher.
+void Function(BidmadInfo? info) onLoadAd|If a listener is registered, the registered function is called when ad load.
+void Function(BidmadInfo? info) onShowAd|If a listener is registered, the registered function is called when ad show.
+void Function(String error) onFailAd|If a listener is registered, the registered function is called when ad load fail.
+void Function(BidmadInfo? info) onClickAd|If a listener is registered, the registered function is called when ad click.
+void Function(BidmadInfo? info) onCloseAd|If a listener is registered, the registered function is called when ad close.
 
 #### 4.6 FlutterBaseReward
 
@@ -1196,19 +1219,19 @@ void Function(String zoneId) onCloseAd|If a listener is registered, the register
 
 Function|Description
 ---|---
-FlutterBaseReward(@required String channelName)|This is the FlutterBaseReward constructor, Receives the Name for Channel creation as a Param.
-Future(void) load()|Request a reward ad.
-Future(void) show()|Display the loaded reward ad.
-Future(bool) isLoaded()|Check if the ad is loaded.
-Future(void) setAdInfo(String zoneId)|Set the issued ZoneId.
-Future(void) setCUID(String cuid)|Set the CUID property of each ad type. recommend encrypting text using sha256 or higher.
-void Function(String zoneId) onLoadAd|If a listener is registered, the registered function is called when ad load.
-void Function(String zoneId) onShowAd|If a listener is registered, the registered function is called when ad show.
-void Function(String zoneId) onFailAd|If a listener is registered, the registered function is called when ad load fail.
-void Function(String zoneId) onCompleteAd|If a listener is registered, the registered function is called when ad complate.
-void Function(String zoneId) onCloseAd|If a listener is registered, the registered function is called when ad close.
-void Function(String zoneId) onClickAd|If a listener is registered, the registered function is called when ad click.
-void Function(String zoneId) onSkipAd|If a listener is registered, the registered function is called when ad skip.
+FlutterBaseReward(String channelName)|This is the FlutterBaseReward constructor, Receives the Name for Channel creation as a Param.
+Future\<void> load()|Request a reward ad.
+Future\<void> show()|Display the loaded reward ad.
+Future\<bool> isLoaded()|Check if the ad is loaded.
+Future\<void> setAdInfo(String zoneId)|Set the issued ZoneId.
+Future\<void> setCUID(String cuid)|Set the CUID property of each ad type. recommend encrypting text using sha256 or higher.
+void Function(BidmadInfo? info) onLoadAd|If a listener is registered, the registered function is called when ad load.
+void Function(BidmadInfo? info) onShowAd|If a listener is registered, the registered function is called when ad show.
+void Function(String error) onFailAd|If a listener is registered, the registered function is called when ad load fail.
+void Function(BidmadInfo? info) onCompleteAd|If a listener is registered, the registered function is called when ad complate.
+void Function(BidmadInfo? info) onCloseAd|If a listener is registered, the registered function is called when ad close.
+void Function(BidmadInfo? info) onClickAd|If a listener is registered, the registered function is called when ad click.
+void Function(BidmadInfo? info) onSkipAd|If a listener is registered, the registered function is called when ad skip.
 
 #### 4.7 BidmadNativeAdWidget
 
@@ -1216,20 +1239,19 @@ void Function(String zoneId) onSkipAd|If a listener is registered, the registere
 
 Function|Description
 ----|---
-BidmadNativeAdWidget(layoutName, onBidmadNativeAdWidgetCreated)|BidmadNativeAdWidget Constructor. After creating a widget, receive a callback for processing as a param.
-onBidmadNativeAdWidgetCreated(FlutterBaseNativeAd controller)|Callback that can receive FlutterBaseNativeAd and handle native ad-related processing.
+BidmadNativeAdWidget(<br>&nbsp;&nbsp;&nbsp;&nbsp;String layoutName,<br>&nbsp;&nbsp;&nbsp;&nbsp;void Function(FlutterBaseNativeAd) onBidmadNativeAdWidgetCreated,<br>&nbsp;&nbsp;&nbsp;&nbsp;double width,<br>&nbsp;&nbsp;&nbsp;&nbsp;double height<br>)|BidmadNativeAdWidget Constructor. After creating a widget, receive a callback for processing as a param.
+void Function(FlutterBaseNativeAd) onBidmadNativeAdWidgetCreated(FlutterBaseNativeAd controller)|Callback that can receive FlutterBaseNativeAd and handle native ad-related processing.
 
 #### 4.8 FlutterBaseNativeAd
 
 Function|Description
 ----|---
-Future<void> setAdInfo(String zoneId)|Set the issued ZoneId.
-Future<void> setCallbackListener(onLoadAd, onFailAd, onClickAd)|Set the callback
-void Function() onLoadAd|If a listener is registered, the registered function will be called when the ad loads.
-void Function(String errorMsg) onFailAd|If a listener is registered, the registered function will be called when the ad fails to load.
-void Function() onClickAd|If a listener is registered, the registered function will be called when the ad is clicked.
-Future<void> loadWidget()|Request a native ad.
-Future<void> removeWidget()|Remove native ads.
+Future\<void> setAdInfo(String zoneId)|Set the issued ZoneId.
+void Function(BidmadInfo? info) onLoadAd|If a listener is registered, the registered function will be called when the ad loads.
+void Function(String error) onFailAd|If a listener is registered, the registered function will be called when the ad fails to load.
+void Function(BidmadInfo? info) onClickAd|If a listener is registered, the registered function will be called when ad click.
+Future\<void> loadWidget()|Request a native ad.
+Future\<void> removeWidget()|Remove native ads.
 
 #### 4.9 FlutterBidmadCommon
 *This is a list of functions available through BidmadCommon.
@@ -1237,14 +1259,24 @@ Future<void> removeWidget()|Remove native ads.
 Function|Description
 ---|---
 FlutterBidmadCommon()|This is the FlutterBidmadCommon constructor
-Future(void) setDebugging(bool isDebug)|Debugging log output
-Future(void) initializeSdk(String appKey)|Initialize the BidmadSDK support network. <b>If you do not enter the appKey, advertisements will not be sent.
-Future(void) setInitializeCallbackListener(onInitialized)|set the callback listener
-Future(void) initializeSdkWithCallback(String appKey)|Initialize the BidmadSDK support network, receiving callback indicating the status
-Future(void) setCUID(String cuid)|Enter your custom ID.
-Future(String) initBannerChannel()|Creating a channel for controlling banner ad
-Future(String) initInterstitialChannel()|Creating a channel for controlling interstitial ad
-Future(String) initRewardChannel()|Creating a channel for controlling reward ad
-Future(String) reqAdTrackingAuthorization()|Requesting for App Tracking Consent from user
-Future(void) setAdvertiserTrackingEnabled(bool enable)|Setting ATT Setting manually
-Future(bool) getAdvertiserTrackingEnabled()|Getting ATT Setting, true if consent and false if not consent
+Future\<void> setDebugging(bool isDebug)|Debugging log output
+Future\<void> initializeSdk(String appKey)|Initialize the BidmadSDK support network. <b>If you do not enter the appKey, advertisements will not be sent.
+Future\<void> setInitializeCallbackListener(onInitialized)|set the callback listener
+Future\<void> initializeSdkWithCallback(String appKey)|Initialize the BidmadSDK support network, receiving callback indicating the status
+Future\<void> setCUID(String cuid)|Enter your custom ID.
+Future\<String> initBannerChannel()|Creating a channel for controlling banner ad
+Future\<String> initInterstitialChannel()|Creating a channel for controlling interstitial ad
+Future\<String> initRewardChannel()|Creating a channel for controlling reward ad
+Future\<String> reqAdTrackingAuthorization()|Requesting for App Tracking Consent from user
+Future\<void> setAdvertiserTrackingEnabled(bool enable)|Setting ATT Setting manually
+Future\<bool> getAdvertiserTrackingEnabled()|Getting ATT Setting, true if consent and false if not consent
+
+#### 4.10 BidmadInfo
+*Provide ad information about the ad through BidmadInfo returned from the callback.
+
+Member|Description
+---|---
+String adNetworkName|The advertising network name. For example, Admob
+String adType|The ad type. For example banner, interstitial, reward, native
+Size? requestedBannerAdSize|The requested banner ad size. Included only in banner ad type.
+Size? loadedBannerAdSize|The banner ad size that was actually loaded.

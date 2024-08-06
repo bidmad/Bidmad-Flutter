@@ -850,10 +850,10 @@ if (foundation.defaultTargetPlatform == foundation.TargetPlatform.android) {
       banner.setAdInfo("Your Zone Id");
 
       banner.setCallbackListener(
-          onLoadAd: (String zoneId){
+          onLoadAd: (BidmadInfo? info){
             print("banner onLoadAd");
           },
-          onFailAd: (String zoneId){
+          onFailAd: (String error){
             print("banner onFailAd");
           }
       );
@@ -883,10 +883,10 @@ if (foundation.defaultTargetPlatform == foundation.TargetPlatform.android) {
     controller.setAdInfo("Your Zone Id");
 
     controller.setCallbackListener(
-        onLoadAd: (String zoneId){
+        onLoadAd: (BidmadInfo? info){
           print("banner onLoadAd");
         },
-        onFailAd: (String zoneId){
+        onFailAd: (String error){
           print("banner onFailAd");
         }
     );
@@ -901,20 +901,31 @@ if (foundation.defaultTargetPlatform == foundation.TargetPlatform.android) {
   FlutterBaseBannerRefined bannerAd;
   
   common.initBannerRefinedChannel().then((chanNm) {
-    bannerAd = FlutterBaseBannerRefined(
-      channelNm: chanNm,
-      zoneId: "Your Zone Id");
-    bannerAd.setCallbackListener(onLoadAd: () {
-      print("bannerAdWidget onLoad");
-    }, onFailAd: (error) {
-      print("bannerAdWidget onFailAd : " + error);
+    FlutterBaseBannerRefined.create(channelNm: chanNm, zoneId: "Your Zone Id").then((ad) {
+      bannerAd = ad;
+      bannerAd.setCallbackListener(
+          onLoadAd: (BidmadInfo? info) {
+            print("bannerAdWidget onLoad");
+            textView.text = "onLoadAd";
+            setState(() {
+              isLoaded = true;
+            });
+          },
+          onFailAd: (String error) {
+            print("bannerAdWidget onFailAd : "+error);
+            textView.text = "onFailAd";
+          },
+          onClickAd: (BidmadInfo? info) {
+            print("bannerAdWidget onClickAd");
+            textView.text = "onClickAd";
+          });
+      bannerAd.load();
     });
-    bannerAd.load();
   });
 
 ....//Show the banner ad widget later by adding the Bidmad
   Container(
-    child: BidmadBannerRefinedWidget(ad: bannerAd,),
+    child:  isLoaded ? BidmadBannerRefinedWidget(ad: bannerAd) : Text("isLoading..."),
     height: 50, // banner can have the height of 50, 100, 250
   ),
 ```
@@ -935,17 +946,20 @@ if (foundation.defaultTargetPlatform == foundation.TargetPlatform.android) {
       interstitial.setAdInfo("Your Zone Id");
 
       interstitial.setCallbackListener(
-          onLoadAd: (String zoneId){
+          onLoadAd: (BidmadInfo? info){
             print("interstitial onLoadAd");
           },
-          onShowAd: (String zoneId){
+          onShowAd: (BidmadInfo? info){
             print("interstitial onShowAd" );
             interstitial.load(); //Ad Reload
           },
-          onCloseAd: (String zoneId){
+          onClickAd: (BidmadInfo? info){
+            print("interstitial onClickAd");
+          },
+          onCloseAd: (BidmadInfo? info){
             print("interstitial onCloseAd");
           },
-          onFailAd: (String zoneId){
+          onFailAd: (String error){
             print("interstitial onFailAd");
           }
       );
@@ -977,27 +991,27 @@ if (foundation.defaultTargetPlatform == foundation.TargetPlatform.android) {
       reward.setAdInfo("Your Zone Id");
 
       reward.setCallbackListener(
-          onLoadAd: (String zoneId){
+          onLoadAd: (BidmadInfo? info){
             print("reward onLoadAd");
           },
-          onShowAd: (String zoneId){
+          onShowAd: (BidmadInfo? info){
             print("reward onShowAd");
 
             reward.load();
           },
-          onCompleteAd: (String zoneId){
+          onCompleteAd: (BidmadInfo? info){
             print("reward onCompleteAd");
           },
-          onSkipAd: (String zoneId){
+          onSkipAd: (BidmadInfo? info){
             print("reward onSkippedAd");
           },
-          onCloseAd: (String zoneId){
+          onCloseAd: (BidmadInfo? info){
             print("reward onCloseAd");
           },
-          onClickAd: (String zoneId){
+          onClickAd: (BidmadInfo? info){
             print("reward onClickAd");
           },
-          onFailAd: (String zoneId){
+          onFailAd: (String error){
             print("reward onFailAd");
           }
       );
@@ -1029,7 +1043,9 @@ if (foundation.defaultTargetPlatform == foundation.TargetPlatform.android) {
     ```
     BidmadNativeAdWidget(
         onBidmadNativeAdWidgetCreated: _onBidmadNativeAdWidgetCreated,
-        layoutName: "nativead_layout"
+        layoutName: "nativead_layout",
+        width: 400,
+        height: 400
     ),
     ```
 
@@ -1049,7 +1065,9 @@ if (foundation.defaultTargetPlatform == foundation.TargetPlatform.android) {
     ```
     BidmadNativeAdWidget(
         onBidmadNativeAdWidgetCreated: _onBidmadNativeAdWidgetCreated,
-        layoutName: "IOSNativeAd"
+        layoutName: "IOSNativeAd",
+        width: 400,
+        height: 400
     ),
     ```
 
@@ -1064,6 +1082,7 @@ if (foundation.defaultTargetPlatform == foundation.TargetPlatform.android) {
         onBidmadNativeAdWidgetCreated: _onBidmadNativeAdWidgetCreated,
         layoutName:"YourXMLorXIBFileName", // Please enter the name of XIB or XML file
       ),
+      width: 400,
       height: 400,
     ),
     
@@ -1072,15 +1091,15 @@ if (foundation.defaultTargetPlatform == foundation.TargetPlatform.android) {
         controller.setAdInfo("Your Zone ID");
         
         controller.setCallbackListener(
-          onLoadAd: () {
+          onLoadAd: (BidmadInfo? info) {
             print("NativeAd onLoadAd");
           },
           onFailAd: (String error) {
             print("NativeAd onFailAd" + error);
           },
-          onClickAd: (() {
+          onClickAd: (BidmadInfo? info) {
             print("NativeAd onClickAd");
-          }),
+          }
         );
         
         controller.loadWidget();
@@ -1136,17 +1155,17 @@ Plugin에서 제공하지 않는 방법으로 앱 추적 동의를 받고자 하
 
 Function|Description
 ---|---
-FlutterBaseBanner(@required String channelName)|FlutterBaseBanner 생성자이며, 채널 생성을 위한 이름을 Param으로 받습니다.
-Future(void) load(int y)|배너 광고를 요청합니다. 배너 광고가 노출될 때 배너는 높이 y(중앙 정렬)에 노출됩니다.
-Future(void) loadWidget()|배너 광고를 요청합니다. 함수가 제대로 작동하려면 BidmadBannerWidget 클래스를 통해 FlutterBaseBanner 객체를 가져와야 합니다.
-Future(void) setInterval(int sec)|배너 새로고침 주기를 설정합니다.(60초~120초)
-Future(void) setAdInfo(String zoneId)|발급받은 ZoneId를 셋팅합니다.
-Future(void) setCUID(String cuid)|각 광고 유형의 CUID 속성을 설정합니다. sha256 이상을 사용하여 텍스트 암호화 권장합니다.
-Future(void) hideBanner()|배너 View를 숨깁니다.
-Future(void) showBanner()|배너 View를 노출시킵니다.
-Future(void) removeBanner()|Load된 배너를 제거합니다.
-void Function(String zoneId) onLoadAd|리스너가 등록되어 있으면 광고 로드 시 등록된 함수가 호출됩니다.
-void Function(String zoneId) onFailAd|리스너가 등록되어 있으면 광고 로드 실패 시 등록된 함수가 호출됩니다.
+FlutterBaseBanner(String channelName)|FlutterBaseBanner 생성자이며, 채널 생성을 위한 이름을 Param으로 받습니다.
+Future\<void> load(int y)|배너 광고를 요청합니다. 배너 광고가 노출될 때 배너는 높이 y(중앙 정렬)에 노출됩니다.
+Future\<void> loadWidget()|배너 광고를 요청합니다. 함수가 제대로 작동하려면 BidmadBannerWidget 클래스를 통해 FlutterBaseBanner 객체를 가져와야 합니다.
+Future\<void> setInterval(int sec)|배너 새로고침 주기를 설정합니다.(60초~120초)
+Future\<void> setAdInfo(String zoneId)|발급받은 ZoneId를 셋팅합니다.
+Future\<void> setCUID(String cuid)|각 광고 유형의 CUID 속성을 설정합니다. sha256 이상을 사용하여 텍스트 암호화 권장합니다.
+Future\<void> hideBanner()|배너 View를 숨깁니다.
+Future\<void> showBanner()|배너 View를 노출시킵니다.
+Future\<void> removeBanner()|Load된 배너를 제거합니다.
+void Function(BidmadInfo? info) onLoadAd|리스너가 등록되어 있으면 광고 로드 시 등록된 함수가 호출됩니다.
+void Function(String error) onFailAd|리스너가 등록되어 있으면 광고 로드 실패 시 등록된 함수가 호출됩니다.
 
 #### 4.2 BidmadBannerWidget
 
@@ -1154,8 +1173,8 @@ void Function(String zoneId) onFailAd|리스너가 등록되어 있으면 광고
 
 Function|Description
 ---|---
-BidmadBannerWidget(BidmadBannerWidgetCreatedCallback onBidmadBannerWidgetCreated)| BidmadBannerWidget 생성자입니다. 위젯 생성 후 처리를 위한 Callback을 Param으로 받습니다.
-onBidmadBannerWidgetCreated(FlutterBaseBanner controller)|FlutterBaseBanner를 수신하고 배너 관련 처리를 처리할 수 있는 Callback입니다.
+BidmadBannerWidget(<br>&nbsp;&nbsp;&nbsp;&nbsp;void Function(FlutterBaseBanner) onBidmadBannerWidgetCreated<br>)| BidmadBannerWidget 생성자입니다. 위젯 생성 후 처리를 위한 Callback을 Param으로 받습니다.
+void Function(FlutterBaseBanner) onBidmadBannerWidgetCreated|FlutterBaseBanner를 수신하고 배너 관련 처리를 처리할 수 있는 Callback입니다.
 
 #### 4.3 FlutterBaseBannerRefined
 
@@ -1163,12 +1182,14 @@ onBidmadBannerWidgetCreated(FlutterBaseBanner controller)|FlutterBaseBanner를 �
 
 Function|Description
 ---|---
-FlutterBaseBannerRefined(String channelNm, String zoneId)|ZoneID, 채널 이름을 초기화하는 클래스의 생성자.
-load|"로드" 메서드를 호출합니다.
-showBanner|로드된 광고에서 "showBanner" 메소드를 호출합니다.
-hideBanner|로드된 광고에서 "hideBanner" 메소드를 호출합니다.
-removeBanner|로드된 광고에서 "removeBanner" 메소드를 호출합니다.
-setCallbackListener|광고가 성공적으로 로드되거나 로드되지 않을 때 콜백 함수를 설정합니다.
+Future\<FlutterBaseBannerRefined> create(String channelNm, String zoneId)|ZoneID, 채널 이름을 초기화하는 클래스의 생성자.
+void load()|"로드" 메서드를 호출합니다.
+void showBanner()|로드된 광고에서 "showBanner" 메소드를 호출합니다.
+void hideBanner()|로드된 광고에서 "hideBanner" 메소드를 호출합니다.
+void removeBanner()|로드된 광고에서 "removeBanner" 메소드를 호출합니다.
+void Function(BidmadInfo? info) onLoadAd|리스너가 등록되어 있으면 광고 로드 시 등록된 함수가 호출됩니다.
+void Function(String error) onFailAd|리스너가 등록되어 있으면 광고 로드 실패 시 등록된 함수가 호출됩니다.
+void Function(BidmadInfo? info) onClickAd|리스너가 등록되어 있으면 광고 클릭 시 등록된 함수가 호출됩니다.
 
 #### 4.4 BidmadBannerRefinedWidget
 
@@ -1177,6 +1198,7 @@ setCallbackListener|광고가 성공적으로 로드되거나 로드되지 않�
 Function|Description
 ---|---
 BidmadBannerRefinedWidget(FlutterBaseBannerRefined ad)|FlutterBaseBannerRefined 인스턴스를 전달해 로드한 광고를 위젯 형태로 위젯트리에 추가합니다. 
+void Function(Size)? onChangedSizeCallback|변경된 View 크기를 반환합니다.
 
 #### 4.5 FlutterBaseInterstitial
 
@@ -1184,16 +1206,17 @@ BidmadBannerRefinedWidget(FlutterBaseBannerRefined ad)|FlutterBaseBannerRefined 
 
 Function|Description
 ---|---
-FlutterBaseInterstitial(@required String channelName)|FlutterBaseInterstitial 생성자이며, 채널 생성을 위한 이름을 Param으로 받습니다.
-Future(void) load()|전면 광고 요청합니다.
-Future(void) show()|로드된 전면 광고를 송출합니다.
-Future(bool) isLoaded()|광고 로드 여부를 반환합니다.
-Future(void) setAdInfo(String zoneId)|발급받은 ZoneId를 셋팅합니다.
-Future(void) setCUID(String cuid)|각 광고 유형의 CUID 속성을 설정합니다. sha256 이상을 사용하여 텍스트 암호화 권장합니다.
-void Function(String zoneId) onLoadAd|리스너가 등록되어 있으면 광고 로드 시 등록된 함수가 호출됩니다.
-void Function(String zoneId) onShowAd|리스너가 등록되어 있으면 광고 송출 시 등록된 함수가 호출됩니다.
-void Function(String zoneId) onFailAd|리스너가 등록되어 있으면 광고 요청 실패 시 등록된 함수가 호출됩니다.
-void Function(String zoneId) onCloseAd|리스너가 등록되어 있으면 광고를 닫을 때 등록된 함수가 호출됩니다.
+FlutterBaseInterstitial(String channelName)|FlutterBaseInterstitial 생성자이며, 채널 생성을 위한 이름을 Param으로 받습니다.
+Future\<void> load()|전면 광고 요청합니다.
+Future\<void> show()|로드된 전면 광고를 송출합니다.
+Future\<bool> isLoaded()|광고 로드 여부를 반환합니다.
+Future\<void> setAdInfo(String zoneId)|발급받은 ZoneId를 셋팅합니다.
+Future\<void> setCUID(String cuid)|각 광고 유형의 CUID 속성을 설정합니다. sha256 이상을 사용하여 텍스트 암호화 권장합니다.
+void Function(BidmadInfo? info) onLoadAd|리스너가 등록되어 있으면 광고 로드 시 등록된 함수가 호출됩니다.
+void Function(BidmadInfo? info) onShowAd|리스너가 등록되어 있으면 광고 송출 시 등록된 함수가 호출됩니다.
+void Function(String error) onFailAd|리스너가 등록되어 있으면 광고 요청 실패 시 등록된 함수가 호출됩니다.
+void Function(BidmadInfo? info) onClickAd|리스너가 등록되어 있으면 광고 클릭 시 등록된 함수가 호출됩니다.
+void Function(BidmadInfo? info) onCloseAd|리스너가 등록되어 있으면 광고를 닫을 때 등록된 함수가 호출됩니다.
 
 #### 4.6 FlutterBaseReward
 
@@ -1201,19 +1224,19 @@ void Function(String zoneId) onCloseAd|리스너가 등록되어 있으면 광�
 
 Function|Description
 ---|---
-FlutterBaseReward(@required String channelName)|FlutterBaseReward 생성자이며, 채널 생성을 위한 이름을 Param으로 받습니다.
-Future(void) load()|보상형 광고 요청합니다.
-Future(void) show()|로드된 보상형 광고를 노출합니다.
-Future(bool) isLoaded()|광고 로드 여부를 반환합니다.
-Future(void) setAdInfo(String zoneId)|발급받은 ZoneId를 셋팅합니다.
-Future(void) setCUID(String cuid)|각 광고 유형의 CUID 속성을 설정합니다. sha256 이상을 사용하여 텍스트 암호화 권장합니다.
-void Function(String zoneId) onLoadAd|리스너가 등록되어 있으면 광고 로드 시 등록된 함수가 호출됩니다.
-void Function(String zoneId) onShowAd|리스너가 등록되어 있으면 광고 송출 시 등록된 함수가 호출됩니다.
-void Function(String zoneId) onFailAd|리스너가 등록되어 있으면 광고 요청 실패 시 등록된 함수가 호출됩니다.
-void Function(String zoneId) onCompleteAd|리스너가 등록되어 있으면 광고의 보상지급 조건이 충족 된 경우 등록된 함수가 호출됩니다.
-void Function(String zoneId) onCloseAd|리스너가 등록되어 있으면 광고를 닫을 때 등록된 함수가 호출됩니다.
-void Function(String zoneId) onClickAd|리스너가 등록되어 있으면 광고 클릭 시 등록된 함수가 호출됩니다.
-void Function(String zoneId) onSkipAd|리스너가 등록되어 있으면 광고 스킵 시 등록된 함수가 호출됩니다.
+FlutterBaseReward(String channelName)|FlutterBaseReward 생성자이며, 채널 생성을 위한 이름을 Param으로 받습니다.
+Future\<void> load()|보상형 광고 요청합니다.
+Future\<void> show()|로드된 보상형 광고를 노출합니다.
+Future\<bool> isLoaded()|광고 로드 여부를 반환합니다.
+Future\<void> setAdInfo(String zoneId)|발급받은 ZoneId를 셋팅합니다.
+Future\<void> setCUID(String cuid)|각 광고 유형의 CUID 속성을 설정합니다. sha256 이상을 사용하여 텍스트 암호화 권장합니다.
+void Function(BidmadInfo? info) onLoadAd|리스너가 등록되어 있으면 광고 로드 시 등록된 함수가 호출됩니다.
+void Function(BidmadInfo? info) onShowAd|리스너가 등록되어 있으면 광고 송출 시 등록된 함수가 호출됩니다.
+void Function(String error) onFailAd|리스너가 등록되어 있으면 광고 요청 실패 시 등록된 함수가 호출됩니다.
+void Function(BidmadInfo? info) onCompleteAd|리스너가 등록되어 있으면 광고의 보상지급 조건이 충족 된 경우 등록된 함수가 호출됩니다.
+void Function(BidmadInfo? info) onCloseAd|리스너가 등록되어 있으면 광고를 닫을 때 등록된 함수가 호출됩니다.
+void Function(BidmadInfo? info) onClickAd|리스너가 등록되어 있으면 광고 클릭 시 등록된 함수가 호출됩니다.
+void Function(BidmadInfo? info) onSkipAd|리스너가 등록되어 있으면 광고 스킵 시 등록된 함수가 호출됩니다.
 
 #### 4.7 BidmadNativeAdWidget
 
@@ -1221,20 +1244,20 @@ void Function(String zoneId) onSkipAd|리스너가 등록되어 있으면 광고
 
 Function|Description
 ---|---
-BidmadNativeAdWidget(layoutName, onBidmadNativeAdWidgetCreated)|BidmadNativeAdWidget 생성자입니다. 위젯 생성 후 처리를 위한 Callback을 Param으로 받습니다.
-onBidmadNativeAdWidgetCreated(FlutterBaseNativeAd controller)|FlutterBaseNativeAd를 수신하고 네이티브 광고 관련 처리를 처리할 수 있는 Callback입니다.
+BidmadNativeAdWidget(<br>&nbsp;&nbsp;&nbsp;&nbsp;String layoutName,<br>&nbsp;&nbsp;&nbsp;&nbsp;void Function(FlutterBaseNativeAd) onBidmadNativeAdWidgetCreated,<br>&nbsp;&nbsp;&nbsp;&nbsp;double width,<br>&nbsp;&nbsp;&nbsp;&nbsp;double height<br>)|BidmadNativeAdWidget 생성자입니다. 위젯 생성 후 처리를 위한 Callback을 Param으로 받습니다.
+void Function(FlutterBaseNativeAd) onBidmadNativeAdWidgetCreated(FlutterBaseNativeAd controller)|FlutterBaseNativeAd를 수신하고 네이티브 광고 관련 처리를 처리할 수 있는 Callback입니다.
 
 #### 4.8 FlutterBaseNativeAd
 
 Function|Description
 ---|---
-Future<void> setAdInfo(String zoneId)|발급받은 ZoneId를 셋팅합니다.
-Future<void> setCallbackListener(onLoadAd, onFailAd, onClickAd)|콜백을 세팅합니다
-void Function() onLoadAd|리스너가 등록되어 있으면 광고 로드 시 등록된 함수가 호출됩니다.
+Future\<void> setAdInfo(String zoneId)|발급받은 ZoneId를 셋팅합니다.
+Future\<void> setCallbackListener(onLoadAd, onFailAd, onClickAd)|콜백을 세팅합니다
+void Function(BidmadInfo? info) onLoadAd|리스너가 등록되어 있으면 광고 로드 시 등록된 함수가 호출됩니다.
 void Function(String errorMsg) onFailAd|리스너가 등록되어 있으면 광고 로드 실패 시 등록된 함수가 호출됩니다.
-void Function() onClickAd|리스너가 등록되어 있으면 광고 클릭 시 등록된 함수가 호출됩니다.
-Future<void> loadWidget()|네이티브 광고 요청합니다.
-Future<void> removeWidget()|네이티브 광고를 제거합니다.
+void Function(BidmadInfo? info) onClickAd|리스너가 등록되어 있으면 광고 클릭 시 등록된 함수가 호출됩니다.
+Future\<void> loadWidget()|네이티브 광고 요청합니다.
+Future\<void> removeWidget()|네이티브 광고를 제거합니다.
 
 #### 4.9 FlutterBidmadCommon
 *BidmadCommon을 통해 사용할 수 있는 기능 목록입니다.
@@ -1242,19 +1265,29 @@ Future<void> removeWidget()|네이티브 광고를 제거합니다.
 Function|Description
 ---|---
 FlutterBidmadCommon()|FlutterBidmadCommon 생성자입니다.
-Future(void) setDebugging(bool isDebug)|디버깅 로그 출력합니다.
-Future(void) initializeSdk(String appKey)|BidmadSDK 지원 네트워크를 초기화합니다. <b>appKey를 입력하지 않으면 광고가 송출되지 않습니다.
-Future(void) setInitializeCallbackListener(onInitialized)|콜백 리스너를 세팅합니다.
-Future(void) initializeSdkWithCallback(String appKey)|BidmadSDK 지원 네트워크를 초기화합니다. 해당 메서드 실행 시 콜백을 받을 수 있습니다. 
-Future(void) setAdFreeEventListener(void Function(bool))|쿠팡 광고네트워크에 의한 광고차단 상태 변경 정보를 받기 위해 콜백 함수를 설정합니다.
-Future(bool) isAdFree()|쿠팡 광고네트워크에 의한 광고 차단 여부를 확인합니다.
-Future(void) setCUID(String cuid)|사용자 정의 ID를 입력합니다.
-Future(String) initBannerChannel()|배너 광고 제어를 위한 채널을 생성합니다.
-Future(String) initInterstitialChannel()|전면 광고를 제어하기 위한 채널을 생성합니다.
-Future(String) initRewardChannel()|리워드 광고 제어 채널을 생성합니다.
-Future(String) reqAdTrackingAuthorization()|BidmadSDK를 통해 사용자의 앱 추적 동의 팝업을 발생시킵니다.
-Future(void) setAdvertiserTrackingEnabled(bool enable)|reqAdTrackingAuthorization 이외의 함수로 앱 추적 투명성 승인 요청 팝업 동의/거절을 얻는 경우 이에 대한 결과를 설정합니다. 
-Future(bool) getAdvertiserTrackingEnabled()|설정된 앱 추적 투명성 승인 요청 팝업 동의/거절에 대한 결과를 조회합니다.
+Future\<void> setDebugging(bool isDebug)|디버깅 로그 출력합니다.
+Future\<void> initializeSdk(String appKey)|BidmadSDK 지원 네트워크를 초기화합니다. <b>appKey를 입력하지 않으면 광고가 송출되지 않습니다.
+Future\<void> setInitializeCallbackListener(onInitialized)|콜백 리스너를 세팅합니다.
+Future\<void> initializeSdkWithCallback(String appKey)|BidmadSDK 지원 네트워크를 초기화합니다. 해당 메서드 실행 시 콜백을 받을 수 있습니다. 
+Future\<void> setAdFreeEventListener(void Function\<bool>)|쿠팡 광고네트워크에 의한 광고차단 상태 변경 정보를 받기 위해 콜백 함수를 설정합니다.
+Future\<bool> isAdFree()|쿠팡 광고네트워크에 의한 광고 차단 여부를 확인합니다.
+Future\<void> setCUID(String cuid)|사용자 정의 ID를 입력합니다.
+Future\<String> initBannerChannel()|배너 광고 제어를 위한 채널을 생성합니다.
+Future\<String> initInterstitialChannel()|전면 광고를 제어하기 위한 채널을 생성합니다.
+Future\<String> initRewardChannel()|리워드 광고 제어 채널을 생성합니다.
+Future\<String> reqAdTrackingAuthorization()|BidmadSDK를 통해 사용자의 앱 추적 동의 팝업을 발생시킵니다.
+Future\<void> setAdvertiserTrackingEnabled(bool enable)|reqAdTrackingAuthorization 이외의 함수로 앱 추적 투명성 승인 요청 팝업 동의/거절을 얻는 경우 이에 대한 결과를 설정합니다. 
+Future\<bool> getAdvertiserTrackingEnabled()|설정된 앱 추적 투명성 승인 요청 팝업 동의/거절에 대한 결과를 조회합니다.
+
+#### 4.10 BidmadInfo
+*BidmadInfo는 Callback에서 반환받는 클래스로 광고 정보를 포함하고 있습니다.
+
+Member|Description
+---|---
+String adNetworkName|예를들면, Admob과 같은 광고 네트워크 이름입니다.
+String adType|banner, interstitial, reward, native로 표현되는 광고 타입입니다.
+Size? requestedBannerAdSize|요청한 배너광고 사이즈입니다. 배너광고에만 반환됩니다.
+Size? loadedBannerAdSize|요청한 배너광고 사이즈입니다. 배너광고에만 반환됩니다.
 
 #### 참고사항
 

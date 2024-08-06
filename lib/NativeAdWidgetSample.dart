@@ -1,4 +1,5 @@
 import 'package:bidmad_plugin/BidmadFlutterPlugin.dart';
+import 'package:bidmad_plugin/BidmadInfo.dart';
 import 'package:flutter/material.dart';
 import 'package:bidmad_plugin/BidmadNativeAdWidget.dart';
 
@@ -23,8 +24,9 @@ class NativeAdWidgetSample extends StatelessWidget {
               child: BidmadNativeAdWidget(
                 layoutName: "nativead",
                 onBidmadNativeAdWidgetCreated: _onBidmadNativeAdWidgetCreated,
+                width: 400,
+                height: 400
               ),
-              height: 400,
             ),
             Container(
               child: TextField(
@@ -61,18 +63,19 @@ class NativeAdWidgetSample extends StatelessWidget {
       controller.setAdInfo("2d04afb5-99e9-4739-9970-2303da2be24c");
     }
 
-    controller.setCallbackListener(onLoadAd: () {
-      print("nativeAd onLoadAd");
-      textView.text = "onLoadAd";
-    },
-    onClickAd : (){
-      print("nativeAd onClickAd");
-      textView.text = "onClickAd";
-    },
-    onFailAd: (String error) {
-      print("nativeAd onFailAd");
-      textView.text = "onFailAd";
-    }
+    controller.setCallbackListener(
+      onLoadAd: (BidmadInfo? info) {
+        print("nativeAd onLoadAd");
+        textView.text = "onLoadAd";
+      },
+      onClickAd : (BidmadInfo? info){
+        print("nativeAd onClickAd");
+        textView.text = "onClickAd";
+      },
+      onFailAd: (String error) {
+        print("nativeAd onFailAd");
+        textView.text = "onFailAd";
+      }
     );
 
     controller.loadWidget();

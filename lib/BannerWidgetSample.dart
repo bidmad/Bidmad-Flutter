@@ -1,3 +1,4 @@
+import 'package:bidmad_plugin/BidmadInfo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:bidmad_plugin/FlutterBaseBanner.dart';
@@ -25,7 +26,7 @@ class BannerWidgetSample extends StatelessWidget {
               child: BidmadBannerWidget(
                 onBidmadBannerWidgetCreated: _onBidmadBannerWidgetCreated,
               ),
-              height: 100,
+              height: 50,
             ),
             Container(
                 margin: const EdgeInsets.fromLTRB(0, 20, 0, 0),
@@ -74,13 +75,15 @@ class BannerWidgetSample extends StatelessWidget {
       controller.setAdInfo("944fe870-fa3a-4d1b-9cc2-38e50b2aed43");
     }
 
-    controller.setCallbackListener(onLoadAd: () {
-      print("banner onLoadAd");
-      textView.text = "onLoadAd";
-    }, onFailAd: (String error) {
-      print("banner onFailAd");
-      textView.text = "onFailAd";
-    });
+    controller.setCallbackListener(
+      onLoadAd: (BidmadInfo? info) {
+        print("banner onLoadAd");
+        textView.text = "onLoadAd";
+      }, onFailAd: (String error) {
+        print("banner onFailAd");
+        textView.text = "onFailAd";
+      }
+    );
 
     controller.loadWidget();
   }

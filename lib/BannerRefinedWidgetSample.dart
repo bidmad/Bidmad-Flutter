@@ -1,3 +1,4 @@
+import 'package:bidmad_plugin/BidmadInfo.dart';
 import 'package:bidmad_plugin/FlutterBaseBannerRefined.dart';
 import 'package:bidmad_plugin/BidmadBannerRefinedWidget.dart';
 import 'package:bidmad_plugin/FlutterBidmadCommon.dart';
@@ -34,9 +35,8 @@ class _BannerRefinedWidgetState extends State<BannerRefinedWidgetSample> {
             Container(
               margin: const EdgeInsets.fromLTRB(0, 20, 0, 0),
               child:  isLoaded ? BidmadBannerRefinedWidget(
-                ad: bannerAd,
+                ad: bannerAd
               ) : Text("isLoading..."),
-              width: double.infinity,
               height: 50,
             ),
             Container(
@@ -72,32 +72,39 @@ class _BannerRefinedWidgetState extends State<BannerRefinedWidgetSample> {
     );
   }
 
+  String get zoneId {
+    if (foundation.defaultTargetPlatform == TargetPlatform.iOS) {
+      return "1c3e3085-333f-45af-8427-2810c26a72fc";
+    } else {
+      return "944fe870-fa3a-4d1b-9cc2-38e50b2aed43";
+    }
+  }
+
   void loadBannerAd(){
     common.initBannerRefinedChannel().then((chanNm) {
-      if (foundation.defaultTargetPlatform == foundation.TargetPlatform.iOS) {
-        bannerAd = FlutterBaseBannerRefined(
-            channelNm: chanNm,
-            zoneId: "1c3e3085-333f-45af-8427-2810c26a72fc");
-      } else {
-        bannerAd = FlutterBaseBannerRefined(
-            channelNm: chanNm,
-            zoneId: "944fe870-fa3a-4d1b-9cc2-38e50b2aed43");
-      }
-      bannerAd.setCallbackListener(
-          onLoadAd: () {
-            print("bannerAdWidget onLoad");
-            textView.text = "onLoadAd";
-            isLoaded = true;
-            setState(() {
+      FlutterBaseBannerRefined.create(channelNm: chanNm, zoneId: zoneId).then((ad) {
+        bannerAd = ad;
+        bannerAd.setCallbackListener(
+            onLoadAd: (BidmadInfo? info) {
+              print("bannerAdWidget onLoad");
+              textView.text = "onLoadAd";
+              setState(() {
+                isLoaded = true;
+              });
+            },
+            onFailAd: (String error) {
+              print("bannerAdWidget onFailAd : "+error);
+              textView.text = "onFailAd";
+            },
+            onClickAd: (BidmadInfo? info) {
+              print("bannerAdWidget onClickAd");
+              textView.text = "onClickAd";
             });
-          },
-          onFailAd: (error) {
-            print("bannerAdWidget onFailAd : "+error);
-            textView.text = "onFailAd";
-          });
-      bannerAd.load();
+        bannerAd.load();
+      });
     });
   }
+
   void hideAndShowBanner() {
     print("hideAndShowBanner : " + trigger.toString());
     if (trigger) {
@@ -108,6 +115,7 @@ class _BannerRefinedWidgetState extends State<BannerRefinedWidgetSample> {
       trigger = true;
     }
   }
+
   void removeBanner() {
     bannerAd.removeBanner();
   }

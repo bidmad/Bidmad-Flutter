@@ -1,3 +1,4 @@
+import 'package:bidmad_plugin/BidmadInfo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:bidmad_plugin/FlutterBidmadCommon.dart';
@@ -82,13 +83,15 @@ class BidmadBannerSample {
         banner.setAdInfo("944fe870-fa3a-4d1b-9cc2-38e50b2aed43");
       }
 
-      banner.setCallbackListener(onLoadAd: () {
-        print("banner onLoadAd : ");
-        textView.text = "onLoadAd";
-      }, onFailAd: (String error) {
-        print("banner onFailAd : " + error);
-        textView.text = "onFailAd";
-      });
+      banner.setCallbackListener(
+        onLoadAd: (BidmadInfo? info) {
+          print("banner onLoadAd : ");
+          textView.text = "onLoadAd";
+        }, onFailAd: (String error) {
+          print("banner onFailAd : " + error);
+          textView.text = "onFailAd";
+        }
+      );
 
       banner.setInterval(60);
 

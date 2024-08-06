@@ -1,3 +1,4 @@
+import 'package:bidmad_plugin/BidmadInfo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:bidmad_plugin/FlutterBidmadCommon.dart';
@@ -74,20 +75,25 @@ class BidmadInterstitialSample {
         interstitial.setAdInfo("e9acd7fc-a962-40e4-aaad-9feab1b4f821");
       }
 
-      interstitial.setCallbackListener(onLoadAd: () {
-        print("interstitial onLoadAd : ");
-        textView.text = "onLoadAd";
-      }, onShowAd: () {
-        print("interstitial onShowAd : ");
-        textView.text = "onShowAd";
-        interstitial.load();
-      }, onCloseAd: () {
-        print("interstitial onCloseAd : ");
-        textView.text = "onCloseAd";
-      }, onFailAd: (String error) {
-        print("interstitial onFailAd : " + error);
-        textView.text = "onFailAd";
-      });
+      interstitial.setCallbackListener(
+        onLoadAd: (BidmadInfo? info) {
+          print("interstitial onLoadAd : ");
+          textView.text = "onLoadAd";
+        }, onShowAd: (BidmadInfo? info) {
+          print("interstitial onShowAd : ");
+          textView.text = "onShowAd";
+          interstitial.load();
+        }, onClickAd: (BidmadInfo? info) {
+          print("interstitial onClickAd : ");
+          textView.text = "onClickAd";
+        }, onCloseAd: (BidmadInfo? info) {
+          print("interstitial onCloseAd : ");
+          textView.text = "onCloseAd";
+        }, onFailAd: (String error) {
+          print("interstitial onFailAd : " + error);
+          textView.text = "onFailAd";
+        }
+      );
     });
   }
 

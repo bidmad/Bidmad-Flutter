@@ -1,3 +1,4 @@
+import 'package:bidmad_plugin/BidmadInfo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:bidmad_plugin/FlutterBidmadCommon.dart';
@@ -74,30 +75,32 @@ class BidmadRewardSample {
       // Bidmad Reward Ads can be set with Custom User ID with the following method.
       // reward.setCUID("YOUR ENCRYPTED CUID");
 
-      reward.setCallbackListener(onLoadAd: () {
-        print("reward onLoadAd : ");
-        textView.text = "onLoadAd";
-      }, onShowAd: () {
-        print("reward onShowAd : ");
-        textView.text = "onShowAd";
+      reward.setCallbackListener(
+        onLoadAd: (BidmadInfo? info) {
+          print("reward onLoadAd : ");
+          textView.text = "onLoadAd";
+        }, onShowAd: (BidmadInfo? info) {
+          print("reward onShowAd : ");
+          textView.text = "onShowAd";
 
-        reward.load();
-      }, onCompleteAd: () {
-        print("reward onCompleteAd : ");
-        textView.text = "onCompleteAd";
-      }, onSkipAd: () {
-        print("reward onSkipAd : ");
-        textView.text = "onSkipAd";
-      }, onCloseAd: () {
-        print("reward onCloseAd : ");
-        textView.text = "onCloseAd";
-      }, onClickAd: () {
-        print("reward onClickAd : ");
-        textView.text = "onClickAd";
-      }, onFailAd: (String error) {
-        print("reward onFailAd : " + error);
-        textView.text = "onFailAd";
-      });
+          reward.load();
+        }, onCompleteAd: (BidmadInfo? info) {
+          print("reward onCompleteAd : ");
+          textView.text = "onCompleteAd";
+        }, onSkipAd: (BidmadInfo? info) {
+          print("reward onSkipAd : ");
+          textView.text = "onSkipAd";
+        }, onCloseAd: (BidmadInfo? info) {
+          print("reward onCloseAd : ");
+          textView.text = "onCloseAd";
+        }, onClickAd: (BidmadInfo? info) {
+          print("reward onClickAd : ");
+          textView.text = "onClickAd";
+        }, onFailAd: (String error) {
+          print("reward onFailAd : " + error);
+          textView.text = "onFailAd";
+        }
+      );
     });
   }
 
