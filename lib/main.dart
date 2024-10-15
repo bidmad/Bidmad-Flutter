@@ -87,23 +87,14 @@ class _MyHomePageState extends State<MyHomePage> {
         print("Initialize callback : "+isCompleted.toString());
         }
         );
-        common.initializeSdkWithCallback("Your App Key");
+        common.initializeSdkWithCallback("Your App Domain");
      *
      * */
 
     if (foundation.defaultTargetPlatform == foundation.TargetPlatform.android) {
-
-      common.setInitializeCallbackListener(
-          onInitialized : (isCompleted) {
-            print("Initialize callback : "+isCompleted.toString());
-          }
-      );
-      common.initializeSdkWithCallback("6933aab2-7f78-11ed-a117-026864a21938");
-      // common.initializeSdk("6933aab2-7f78-11ed-a117-026864a21938");
-
-    } else if (foundation.defaultTargetPlatform ==
-      foundation.TargetPlatform.iOS) {
-      common.initializeSdk("ff8090d3-3e28-11ed-a117-026864a21938");
+      common.initializeSdk("Your Android App Domain");
+    } else if (foundation.defaultTargetPlatform == foundation.TargetPlatform.iOS) {
+      common.initializeSdk("Your iOS App Domain");
     }
 
     common.reqAdTrackingAuthorization().then((value) {

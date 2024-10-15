@@ -1,3 +1,8 @@
+> [!IMPORTANT]
+> 3.18.0 버전부터는 기존에 사용하던 **Appkey가 AppDomain으로 변경**되었습니다.<br>
+> **AppDomain은 기존 Appkey와 호환이 되지 않아 initiaize를 위해서는 AppDomain을 새로 발급받으셔야 합니다.**<br>
+> 3.18.0 버전으로 업데이트 하시는 경우에는 **테크랩스 플랫폼 사업부 운영팀에 연락 부탁 드립니다.**<br>
+
 ## Introduce
 BidmadPlugin은 모바일 앱 광고 SDK인 Bidmad를 Unity에서 사용하기 위한 Plugin입니다.<br>
 Plugin을 사용하여 Flutter 모바일 앱에서 배너 / 전면 / 보상형 광고를 게재 할 수 있습니다.<br>
@@ -802,14 +807,15 @@ info.plist에 아래 SKAdNetworkItems를 추가하세요.
 
 #### 3.1 BidmadSDK 초기화
 BidmadSDK 실행에 필요한 작업을 수행합니다. SDK는 initializeSdk 메서드를 호출하지 않은 경우 광고 로드를 허용하지 않습니다.<br>
-initializeSdk 메서드는 ADOP Insight 에서 확인가능한 App Key 를 인자값으로 받고 있습니다. App Key 는 [App Key 찾기](https://github.com/bidmad/SDK/wiki/Find-your-app-key%5BKR%5D) 가이드를 참고해 가져올 수 있습니다.<br>
-광고를 로드하기 전, 앱 실행 초기에 다음 예시와 같이 initializeSdk 메서드를 호출해주십시오.
+initializeSdk 메서드는 App Domain를 인자값으로 받고 있으며 광고를 로드하기 전, 앱 실행 초기에 다음 예시와 같이 initializeSdk 메서드를 호출해주십시오.<br>
+(*App Domain을 발급받으시려면 테크랩스 플랫폼 운영팀으로 연락 부탁 드립니다.)
+
 
 ```
 if (foundation.defaultTargetPlatform == foundation.TargetPlatform.android) {
-    FlutterBidmadCommon().initializeSdk("ANDROID APP KEY");
+    FlutterBidmadCommon().initializeSdk("ANDROID App Domain");
 } else if (foundation.defaultTargetPlatform == foundation.TargetPlatform.iOS) {
-    FlutterBidmadCommon().initializeSdk("IOS APP KEY");
+    FlutterBidmadCommon().initializeSdk("IOS App Domain");
 }
 ```
 
@@ -822,12 +828,12 @@ if (foundation.defaultTargetPlatform == foundation.TargetPlatform.android) {
   common.setInitializeCallbackListener(onInitialized: (bool isInitialized) {
     print("Android Initialization Done: $isInitialized");
   });
-  common.initializeSdkWithCallback("ANDROID APP KEY");
+  common.initializeSdkWithCallback("ANDROID App Domain");
 } else if (foundation.defaultTargetPlatform == foundation.TargetPlatform.iOS) {
   common.setInitializeCallbackListener(onInitialized: (bool isInitialized) {
     print("IOS Initialization Done: $isInitialized");
   });
-  common.initializeSdkWithCallback("IOS APP KEY");
+  common.initializeSdkWithCallback("IOS App Domain");
 }
 ```
 
@@ -1266,9 +1272,9 @@ Function|Description
 ---|---
 FlutterBidmadCommon()|FlutterBidmadCommon 생성자입니다.
 Future\<void> setDebugging(bool isDebug)|디버깅 로그 출력합니다.
-Future\<void> initializeSdk(String appKey)|BidmadSDK 지원 네트워크를 초기화합니다. <b>appKey를 입력하지 않으면 광고가 송출되지 않습니다.
+Future\<void> initializeSdk(String appDomain)|BidmadSDK 지원 네트워크를 초기화합니다. <b>appDomain를 입력하지 않으면 광고가 송출되지 않습니다.
 Future\<void> setInitializeCallbackListener(onInitialized)|콜백 리스너를 세팅합니다.
-Future\<void> initializeSdkWithCallback(String appKey)|BidmadSDK 지원 네트워크를 초기화합니다. 해당 메서드 실행 시 콜백을 받을 수 있습니다. 
+Future\<void> initializeSdkWithCallback(String appDomain)|BidmadSDK 지원 네트워크를 초기화합니다. 해당 메서드 실행 시 콜백을 받을 수 있습니다.
 Future\<void> setAdFreeEventListener(void Function\<bool>)|쿠팡 광고네트워크에 의한 광고차단 상태 변경 정보를 받기 위해 콜백 함수를 설정합니다.
 Future\<bool> isAdFree()|쿠팡 광고네트워크에 의한 광고 차단 여부를 확인합니다.
 Future\<void> setCUID(String cuid)|사용자 정의 ID를 입력합니다.

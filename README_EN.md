@@ -1,3 +1,8 @@
+> [!IMPORTANT]
+> Starting with version 1.11.0, the previously used Appkey has been changed to AppDomain.<br>
+> **AppDomain is not compatible with existing Appkeys, so a new AppDomain must be issued to initiaize.**<br>
+> If you are updating to version 1.11.0, please contact **Techlabs Platform Operations Team.**<br>
+
 ## Introduce
 BidmadPlugin is a plugin for using Bidmad, a mobile app advertisement SDK, in Flutter.<br>
 You can use the plugin to serve banner/interstitial/reward ads in your flutter mobile app.<br>
@@ -92,7 +97,7 @@ After fetching our plugin into your app by "flutter pub get", a "Podfile" will b
     ![Bidmad-Guide-Flutter-3](https://i.imgur.com/UClvij3.png)<br>
 
 #### 2.3 Xcode Build Setting
-Select "No" for Enable Bitcode under your Build Setting. 
+Select "No" for Enable Bitcode under your Build Setting.
 
 #### 2.4 Setting SKAdNetwork
 To use AdNetworks provided by BidmadSDK, you need to add SKAdNetworkIdentifier to Info.plist. Please add SKAdNetworkItems below to info.plist.
@@ -801,14 +806,15 @@ Also, please add NSUserTrackingUsageDescription with your own description of why
 
 #### 3.1 Initializing BidmadSDK
 Performs tasks required to run BidmadSDK. The SDK won't allow ads to load unless you call the initializeSdk method.<br>
-The initializeSdk method receives the App Key that can be checked in ADOP Insight as a parameter. You can import the App Key by referring to the [Find Your App Key](https://github.com/bidmad/SDK/wiki/Find-your-app-key%5BEN%5D) guide.<br>
-Before loading ads, call the initializeSdk method as shown in the following example at the beginning of app execution.
+The initializeSdk method receives App Domain as a parameter.<br>
+Before loading ads, call the initializeSdk method as shown in the following example at the beginning of app execution.<br>
+(*To check the App Domain, please contact the Techlabs platform operation team.)
 
 ```
 if (foundation.defaultTargetPlatform == foundation.TargetPlatform.android) {
-    FlutterBidmadCommon().initializeSdk("ANDROID APP KEY");
+    FlutterBidmadCommon().initializeSdk("ANDROID APP Domain");
 } else if (foundation.defaultTargetPlatform == foundation.TargetPlatform.iOS) {
-    FlutterBidmadCommon().initializeSdk("IOS APP KEY");
+    FlutterBidmadCommon().initializeSdk("IOS APP Domain");
 }
 ```
 
@@ -821,12 +827,12 @@ if (foundation.defaultTargetPlatform == foundation.TargetPlatform.android) {
   common.setInitializeCallbackListener(onInitialized: (bool isInitialized) {
     print("Android Initialization Done: $isInitialized");
   });
-  common.initializeSdkWithCallback("ANDROID APP KEY");
+  common.initializeSdkWithCallback("ANDROID APP Domain");
 } else if (foundation.defaultTargetPlatform == foundation.TargetPlatform.iOS) {
   common.setInitializeCallbackListener(onInitialized: (bool isInitialized) {
     print("IOS Initialization Done: $isInitialized");
   });
-  common.initializeSdkWithCallback("IOS APP KEY");
+  common.initializeSdkWithCallback("IOS APP Domain");
 }
 ```
 
@@ -1260,9 +1266,9 @@ Function|Description
 ---|---
 FlutterBidmadCommon()|This is the FlutterBidmadCommon constructor
 Future\<void> setDebugging(bool isDebug)|Debugging log output
-Future\<void> initializeSdk(String appKey)|Initialize the BidmadSDK support network. <b>If you do not enter the appKey, advertisements will not be sent.
+Future\<void> initializeSdk(String appDomain)|Initialize the BidmadSDK support network. <b>If you do not enter the appDomain, advertisements will not be sent.
 Future\<void> setInitializeCallbackListener(onInitialized)|set the callback listener
-Future\<void> initializeSdkWithCallback(String appKey)|Initialize the BidmadSDK support network, receiving callback indicating the status
+Future\<void> initializeSdkWithCallback(String appDomain)|Initialize the BidmadSDK support network, receiving callback indicating the status
 Future\<void> setCUID(String cuid)|Enter your custom ID.
 Future\<String> initBannerChannel()|Creating a channel for controlling banner ad
 Future\<String> initInterstitialChannel()|Creating a channel for controlling interstitial ad
