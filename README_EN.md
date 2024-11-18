@@ -99,8 +99,15 @@ After fetching our plugin into your app by "flutter pub get", a "Podfile" will b
 #### 2.3 Xcode Build Setting
 Select "No" for Enable Bitcode under your Build Setting.
 
-#### 2.4 Setting SKAdNetwork
-To use AdNetworks provided by BidmadSDK, you need to add SKAdNetworkIdentifier to Info.plist. Please add SKAdNetworkItems below to info.plist.
+#### 2.4 Info.plist Setting
+- In order for ad networks to properly control the UI, please add the following key / value to Info.plist settings
+
+```
+<key>UIViewControllerBasedStatusBarAppearance</key>
+<true/>
+```
+
+- To use AdNetworks provided by BidmadSDK, you need to add SKAdNetworkIdentifier to Info.plist. Please add SKAdNetworkItems below to info.plist.
 
 <details markdown="1">
 <summary>SKAdNetworkItems List</summary>
@@ -794,7 +801,7 @@ To use AdNetworks provided by BidmadSDK, you need to add SKAdNetworkIdentifier t
 
 </details>
 
-Also, please add NSUserTrackingUsageDescription with your own description of why you would like to track user data (e.g. "App would like to access IDFA for tracking purpose") into info.plist
+- Also, please add NSUserTrackingUsageDescription with your own description of why you would like to track user data (e.g. "App would like to access IDFA for tracking purpose") into info.plist
 ```java
 ...
 <key>NSUserTrackingUsageDescription</key>
@@ -806,7 +813,7 @@ Also, please add NSUserTrackingUsageDescription with your own description of why
 
 #### 3.1 Initializing BidmadSDK
 Performs tasks required to run BidmadSDK. The SDK won't allow ads to load unless you call the initializeSdk method.<br>
-The initializeSdk method receives App Domain as a parameter.<br>
+The initializeSdk method receives App Domain as a parameter.<br> 
 Before loading ads, call the initializeSdk method as shown in the following example at the beginning of app execution.<br>
 (*To check the App Domain, please contact the Techlabs platform operation team.)
 

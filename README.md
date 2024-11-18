@@ -99,9 +99,15 @@ Android 앱 모듈 내 AndroidManifest.xml의 application 태그 안에 아래 �
 #### 2.3 Xcode Build Setting
 빌드 설정에서 비트코드 활성화에 대해 "아니요"를 선택합니다. 
 
-#### 2.4 Setting SKAdNetwork
-BidmadSDK에서 제공하는 AdNetworks를 사용하려면 SKAdNetworkIdentifier를 Info.plist에 추가해야 합니다. <br>
-info.plist에 아래 SKAdNetworkItems를 추가하세요.
+#### 2.4 Info.plist 세팅
+- 광고 네트워크가 UI를 제어할 수 있도록 다음 키/값을 Info.plist 설정에 추가하세요.
+
+```
+<key>UIViewControllerBasedStatusBarAppearance</key>
+<true/>
+```
+
+- BidmadSDK에서 제공하는 AdNetworks를 사용하려면 SKAdNetworkIdentifier를 Info.plist에 추가해야 합니다. info.plist에 아래 SKAdNetworkItems를 추가하세요.
 
 <details markdown="1">
 <summary>SKAdNetworkItems List</summary>
@@ -795,7 +801,7 @@ info.plist에 아래 SKAdNetworkItems를 추가하세요.
 
 </details>
 
-또한 사용자 데이터를 추적하려는 이유(예: "앱이 추적 목적으로 IDFA에 액세스하려고 함")에 대한 설명과 함께 NSUserTrackingUsageDescription을 info.plist에 추가하세요.
+- 또한 사용자 데이터를 추적하려는 이유(예: "앱이 추적 목적으로 IDFA에 액세스하려고 함")에 대한 설명과 함께 NSUserTrackingUsageDescription을 info.plist에 추가하세요.
 ```java
 ...
 <key>NSUserTrackingUsageDescription</key>
