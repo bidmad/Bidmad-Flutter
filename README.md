@@ -1048,7 +1048,7 @@ if (foundation.defaultTargetPlatform == foundation.TargetPlatform.android) {
 <summary>Android 세팅</summary>
 <br>
 
-1. Android 를 위한 [XML 레이아웃 설정 가이드](https://github.com/adop-devel/Bidmad-Flutter/wiki/Android-NativeAd-Xml-Layout-%EC%9E%91%EC%84%B1-%EC%98%88%EC%8B%9C) 를 참고해 XML 파일을 제작하십시오.
+1. Android 를 위한 [XML 레이아웃 설정 가이드](https://github.com/bidmad/Bidmad-Flutter/wiki/Android-NativeAd-Xml-Layout-%EC%9E%91%EC%84%B1-%EC%98%88%EC%8B%9C) 를 참고해 XML 파일을 제작하십시오.
 2. Resource 파일 아래 layout 폴더를 만들고 XML 파일을 넣어주세요.<br>
    ![Android-NativeAd-1](https://i.imgur.com/q8nhvPf.png) <br>
 3. 만든 XML 파일의 확장자가 제외된 이름을 복사해 아래와 같이 BidmadNativeAdWidget 생성자 layoutName에 전달하십시오.
