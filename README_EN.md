@@ -1048,7 +1048,7 @@ Since the UI design unique to the internal app is required to display native ads
 <summary>Android Settings</summary>
 <br>
 
-1. Create an XML file by referring to [XML Layout Setting Guide](https://github.com/adop-devel/Bidmad-Flutter/wiki/Andorid-NativeAd-Layout-Example) for Android.
+1. Create an XML file by referring to [XML Layout Setting Guide](https://github.com/bidmad/Bidmad-Flutter/wiki/Andorid-NativeAd-Layout-Example) for Android.
 2. Create a layout folder under the resource file and put the XML file in it.<br>
    ![Android-NativeAd-1](https://i.imgur.com/q8nhvPf.png) <br>
 3. Copy the name without the extension of the XML file you created and pass it to the BidmadNativeAdWidget constructor layoutName as shown below.
