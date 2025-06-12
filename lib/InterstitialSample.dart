@@ -6,10 +6,23 @@ import 'package:bidmad_plugin/FlutterBaseInterstitial.dart';
 
 import 'package:flutter/foundation.dart' as foundation;
 
-class InterstitialSample extends StatelessWidget {
+class InterstitialSample extends StatefulWidget {
+  @override
+  State<InterstitialSample> createState() => _InterstitialSampleState();
+}
+
+class _InterstitialSampleState extends State<InterstitialSample> {
+  BidmadInterstitialSample interstitial = BidmadInterstitialSample();
+
+  @override
+  void dispose() {
+    // 광고 인스턴스를 해제합니다.
+    interstitial.release();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    BidmadInterstitialSample interstitial = BidmadInterstitialSample();
     return Scaffold(
       appBar: AppBar(
         title: Text("InterstitialSample"),
@@ -59,21 +72,18 @@ class BidmadInterstitialSample {
   FlutterBidmadCommon common = FlutterBidmadCommon();
   TextEditingController textView = TextEditingController();
 
+  String get _zoneId {
+    if (foundation.defaultTargetPlatform == foundation.TargetPlatform.iOS) {
+      return "228b95a9-6f42-46d8-a40d-60f17f751eb1";
+    } else {
+      return "e9acd7fc-a962-40e4-aaad-9feab1b4f821";
+    }
+  }
+
   BidmadInterstitialSample() {
     common.setDebugging(true);
-    common.initInterstitialChannel().then((value) {
-      print("initInterstitialChannel then : " + value);
-      String _channelNm = value;
-      interstitial = FlutterBaseInterstitial(channelName: _channelNm);
-
-      // Bidmad Interstitial Ads can be set with Custom User ID with the following method.
-      // interstitial.setCUID("YOUR ENCRYPTED CUID");
-
-      if (foundation.defaultTargetPlatform == foundation.TargetPlatform.iOS) {
-        interstitial.setAdInfo("228b95a9-6f42-46d8-a40d-60f17f751eb1");
-      } else {
-        interstitial.setAdInfo("e9acd7fc-a962-40e4-aaad-9feab1b4f821");
-      }
+    FlutterBaseInterstitial.create(_zoneId).then((interstitial) {
+      this.interstitial = interstitial;
 
       interstitial.setCallbackListener(
         onLoadAd: (BidmadInfo? info) {
@@ -107,5 +117,9 @@ class BidmadInterstitialSample {
         interstitial.show();
       }
     });
+  }
+
+  void release() {
+    interstitial.release();
   }
 }

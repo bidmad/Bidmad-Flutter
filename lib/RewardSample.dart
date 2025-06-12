@@ -6,10 +6,23 @@ import 'package:bidmad_plugin/FlutterBaseReward.dart';
 
 import 'package:flutter/foundation.dart' as foundation;
 
-class RewardSample extends StatelessWidget {
+class RewardSample extends StatefulWidget {
+  @override
+  State<RewardSample> createState() => _RewardSampleState();
+}
+
+class _RewardSampleState extends State<RewardSample> {
+  BidmadRewardSample reward = BidmadRewardSample();
+
+  @override
+  void dispose() {
+    // 광고 인스턴스를 해제합니다.
+    reward.release();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    BidmadRewardSample reward = BidmadRewardSample();
     return Scaffold(
       appBar: AppBar(
         title: Text("RewardSample"),
@@ -59,21 +72,18 @@ class BidmadRewardSample {
   FlutterBidmadCommon common = FlutterBidmadCommon();
   TextEditingController textView = TextEditingController();
 
+  String get _zoneId {
+    if (foundation.defaultTargetPlatform == foundation.TargetPlatform.iOS) {
+      return "29e1ef67-98d2-47b3-9fa2-9192327dd75d";
+    } else {
+      return "7d9a2c9e-5755-4022-85f1-6d4fc79e4418";
+    }
+  }
+
   BidmadRewardSample() {
     common.setDebugging(true);
-    common.initRewardChannel().then((value) {
-      print("initRewardChannel then : " + value);
-      String _channelNm = value;
-      reward = FlutterBaseReward(channelName: _channelNm);
-
-      if (foundation.defaultTargetPlatform == foundation.TargetPlatform.iOS) {
-        reward.setAdInfo("29e1ef67-98d2-47b3-9fa2-9192327dd75d");
-      } else {
-        reward.setAdInfo("7d9a2c9e-5755-4022-85f1-6d4fc79e4418");
-      }
-
-      // Bidmad Reward Ads can be set with Custom User ID with the following method.
-      // reward.setCUID("YOUR ENCRYPTED CUID");
+    FlutterBaseReward.create(_zoneId).then((reward) {
+      this.reward = reward;
 
       reward.setCallbackListener(
         onLoadAd: (BidmadInfo? info) {
@@ -114,5 +124,9 @@ class BidmadRewardSample {
         reward.show();
       }
     });
+  }
+
+  void release() {
+    reward.release();
   }
 }
