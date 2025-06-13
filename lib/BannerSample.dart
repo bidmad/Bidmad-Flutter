@@ -95,8 +95,8 @@ class BidmadBannerSample {
 
       banner.setInterval(60);
 
-      // Bidmad Banner Ads can be set with Custom User ID with the following method.
-      // banner.setCUID("YOUR ENCRYPTED CUID");
+      // Ads can be set with Custom User ID with the following method.
+      // common.setCUID("YOUR ENCRYPTED CUID");
     });
   }
 

@@ -66,8 +66,8 @@ class BannerWidgetSample extends StatelessWidget {
   void _onBidmadBannerWidgetCreated(FlutterBaseBanner controller) {
     banner = controller;
 
-    // Bidmad Banner Ads can be set with Custom User ID with the following method.
-    // banner.setCUID("YOUR ENCRYPTED CUID");
+    // Ads can be set with Custom User ID with the following method.
+    // common.setCUID("YOUR ENCRYPTED CUID");
 
     if (foundation.defaultTargetPlatform == foundation.TargetPlatform.iOS) {
       controller.setAdInfo("1c3e3085-333f-45af-8427-2810c26a72fc");
