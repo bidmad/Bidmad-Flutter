@@ -1,7 +1,7 @@
-import 'package:bidmad_plugin/BidmadFlutterPlugin.dart';
-import 'package:bidmad_plugin/BidmadInfo.dart';
+import 'package:bidmad_plugin_for_myb/BidmadFlutterPlugin.dart';
+import 'package:bidmad_plugin_for_myb/BidmadInfo.dart';
 import 'package:flutter/material.dart';
-import 'package:bidmad_plugin/BidmadNativeAdWidget.dart';
+import 'package:bidmad_plugin_for_myb/BidmadNativeAdWidget.dart';
 
 import 'package:flutter/foundation.dart' as foundation;
 

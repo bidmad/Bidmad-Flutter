@@ -1,8 +1,8 @@
-import 'package:bidmad_plugin/BidmadInfo.dart';
+import 'package:bidmad_plugin_for_myb/BidmadInfo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:bidmad_plugin/FlutterBaseBanner.dart';
-import 'package:bidmad_plugin/BidmadBannerWidget.dart';
+import 'package:bidmad_plugin_for_myb/FlutterBaseBanner.dart';
+import 'package:bidmad_plugin_for_myb/BidmadBannerWidget.dart';
 
 import 'package:flutter/foundation.dart' as foundation;
 

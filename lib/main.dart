@@ -5,7 +5,7 @@ import 'package:bidmad_flutter_sample/BannerSample.dart';
 import 'package:bidmad_flutter_sample/BannerWidgetSample.dart';
 import 'package:bidmad_flutter_sample/InterstitialSample.dart';
 import 'package:bidmad_flutter_sample/RewardSample.dart';
-import 'package:bidmad_plugin/FlutterBidmadCommon.dart';
+import 'package:bidmad_plugin_for_myb/FlutterBidmadCommon.dart';
 import 'package:flutter/foundation.dart' as foundation;
 
 void main() {

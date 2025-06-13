@@ -7,7 +7,7 @@
 BidmadPlugin은 모바일 앱 광고 SDK인 Bidmad를 Unity에서 사용하기 위한 Plugin입니다.<br>
 Plugin을 사용하여 Flutter 모바일 앱에서 배너 / 전면 / 보상형 광고를 게재 할 수 있습니다.<br>
 
-[Bidmad Flutter Plugin Pub.dev](https://pub.dev/packages/bidmad_plugin)
+[Bidmad Flutter Plugin Pub.dev](https://pub.dev/packages/bidmad_plugin_for_myb)
 
 ## Programming Guide
 

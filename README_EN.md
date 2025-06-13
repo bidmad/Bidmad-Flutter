@@ -7,7 +7,7 @@
 BidmadPlugin is a plugin for using Bidmad, a mobile app advertisement SDK, in Flutter.<br>
 You can use the plugin to serve banner/interstitial/reward ads in your flutter mobile app.<br>
 
-[Bidmad Flutter Plugin Pub.dev](https://pub.dev/packages/bidmad_plugin)
+[Bidmad Flutter Plugin Pub.dev](https://pub.dev/packages/bidmad_plugin_for_myb)
 
 ## Programming Guide
 

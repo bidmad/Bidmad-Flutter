@@ -9,14 +9,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.13.0"
-  bidmad_plugin:
+  bidmad_plugin_for_myb:
     dependency: "direct main"
     description:
-      name: bidmad_plugin
-      sha256: b71abce3fc282a7f73381174283c66392d4b39b2d3491464c289b3075997c81f
+      name: bidmad_plugin_for_myb
+      sha256: "0aa27b43eec6b6857c742aae5c21f5a1849e3dd0a77660ef919276e4566e7723"
       url: "https://pub.dev"
     source: hosted
-    version: "1.11.4"
+    version: "2.0.0"
   boolean_selector:
     dependency: transitive
     description:
