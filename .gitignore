@@ -129,3 +129,6 @@ app.*.symbols
 !/dev/ci/**/Gemfile.lock
 
 .dart_tool/*
+
+# FVM Version Cache
+.fvm/
