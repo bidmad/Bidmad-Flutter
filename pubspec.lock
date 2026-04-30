@@ -9,14 +9,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.13.0"
-  bidmad_plugin:
-    dependency: "direct main"
-    description:
-      name: bidmad_plugin
-      sha256: "7f50e0dcd19a72caecb2f4fc0d500c9b4c18980981a441e1fb47ead247ec9b26"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.11.8"
   bidmad_plugin_newscash:
     dependency: "direct main"
     description:
