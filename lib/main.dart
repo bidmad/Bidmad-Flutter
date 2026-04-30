@@ -5,7 +5,7 @@ import 'package:bidmad_flutter_sample/BannerSample.dart';
 import 'package:bidmad_flutter_sample/BannerWidgetSample.dart';
 import 'package:bidmad_flutter_sample/InterstitialSample.dart';
 import 'package:bidmad_flutter_sample/RewardSample.dart';
-import 'package:bidmad_plugin/FlutterBidmadCommon.dart';
+import 'package:bidmad_plugin_newscash/FlutterBidmadCommon.dart';
 import 'package:flutter/foundation.dart' as foundation;
 
 void main() {
@@ -92,9 +92,10 @@ class _MyHomePageState extends State<MyHomePage> {
      * */
 
     if (foundation.defaultTargetPlatform == foundation.TargetPlatform.android) {
-      common.initializeSdk("Your Android App Domain");
-    } else if (foundation.defaultTargetPlatform == foundation.TargetPlatform.iOS) {
-      common.initializeSdk("Your iOS App Domain");
+      common.initializeSdk("16075-serving-bidmad.adop.co.kr");
+    } else if (foundation.defaultTargetPlatform ==
+        foundation.TargetPlatform.iOS) {
+      common.initializeSdk("16075-serving-bidmad.adop.co.kr");
     }
 
     common.reqAdTrackingAuthorization().then((value) {

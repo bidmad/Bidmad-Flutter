@@ -1,8 +1,8 @@
-import 'package:bidmad_plugin/BidmadInfo.dart';
+import 'package:bidmad_plugin_newscash/BidmadInfo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:bidmad_plugin/FlutterBidmadCommon.dart';
-import 'package:bidmad_plugin/FlutterBaseReward.dart';
+import 'package:bidmad_plugin_newscash/FlutterBidmadCommon.dart';
+import 'package:bidmad_plugin_newscash/FlutterBaseReward.dart';
 
 import 'package:flutter/foundation.dart' as foundation;
 

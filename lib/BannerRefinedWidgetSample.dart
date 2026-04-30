@@ -1,7 +1,7 @@
-import 'package:bidmad_plugin/BidmadInfo.dart';
-import 'package:bidmad_plugin/FlutterBaseBannerRefined.dart';
-import 'package:bidmad_plugin/BidmadBannerRefinedWidget.dart';
-import 'package:bidmad_plugin/FlutterBidmadCommon.dart';
+import 'package:bidmad_plugin_newscash/BidmadInfo.dart';
+import 'package:bidmad_plugin_newscash/FlutterBaseBannerRefined.dart';
+import 'package:bidmad_plugin_newscash/BidmadBannerRefinedWidget.dart';
+import 'package:bidmad_plugin_newscash/FlutterBidmadCommon.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart' as foundation;
 
