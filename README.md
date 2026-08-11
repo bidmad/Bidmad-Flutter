@@ -84,7 +84,7 @@ Android 앱 모듈 내 AndroidManifest.xml의 application 태그 안에 아래 �
 ### 2. iOS Setting
 
 #### 2.1 Xcode Version & Privacy Manifest
-- Xcode 15.3 이상을 사용하십시오
+- Xcode 26.0 이상을 사용하십시오
 - App Store에 애플리케이션을 제출할 때 다음 가이드를 참고하여 개인정보 보호 정책 및 설문조사를 올바르게 설정하세요: [Guide for Privacy Manifest & Privacy Survey](https://github.com/bidmad/Bidmad-iOS/wiki/Guide-for-Privacy-Manifest-&-Privacy-Survey-%5BKR%5D)
 
 #### 2.2 import BidmadSDK-iOS CocoaPods

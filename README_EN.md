@@ -84,7 +84,7 @@ Declare the code below under the application tag in AndroidManifest.xml inside t
 ### 2. iOS Setting
 
 #### 2.1 Xcode Version & Privacy Manifest
-- Please use Xcode 15.3 or higher for app builds & distribution.
+- Please use Xcode 26.0 or higher for app builds & distribution.
 - When submitting your application to the App Store, use the following guide to properly set up your privacy survey: [Guide for Privacy Manifest & Privacy Survey](https://github.com/bidmad/Bidmad-iOS/wiki/Guide-for-Privacy-Manifest-&-Privacy-Survey-%5BEN%5D)
 
 #### 2.2 import BidmadSDK-iOS CocoaPods
