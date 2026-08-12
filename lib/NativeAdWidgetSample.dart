@@ -72,8 +72,8 @@ class NativeAdWidgetSample extends StatelessWidget {
         print("nativeAd onClickAd");
         textView.text = "onClickAd";
       },
-      onFailAd: (String error) {
-        print("nativeAd onFailAd");
+      onFailAd: (String error, int errorCode) {
+        print("nativeAd onFailAd : $error ($errorCode)");
         textView.text = "onFailAd";
       }
     );

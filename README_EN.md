@@ -7,7 +7,16 @@
 BidmadPlugin is a plugin for using Bidmad, a mobile app advertisement SDK, in Flutter.<br>
 You can use the plugin to serve banner/interstitial/reward ads in your flutter mobile app.<br>
 
-[Bidmad Flutter Plugin Pub.dev](https://pub.dev/packages/bidmad_plugin)
+[Bidmad Flutter Plugin Pub.dev](https://pub.dev/packages/bidmad_plugin)<br>
+[Flutter Sample Download](https://github.com/bidmad/Bidmad-Flutter)
+
+> **⚠️ Changed in 1.13.0**
+>
+> - `BidmadBannerRefinedWidget` now always renders the ad at the **full width** of its parent constraint. A height no longer shrinks the ad to fit; it only clips whatever does not fit. The rule is: **if the width is dynamic, do not set a height** and let the widget derive its own height; **if the width is decided, you may set a height.** For example, a fixed 320dp-wide box with `height: 50` still renders a 320x50 creative in full.
+>
+>   ![Before and after 1.13.0: previously the ad was nested inside the container, shrunk to fit and leaving empty space at both ends; now it scales to the width of the container and the bottom is clipped by the height of the container](https://i.imgur.com/0b9FgSr.jpg)
+>
+> - Every `onFailAd` callback now receives an error code as its second argument. The signature changed from `void Function(String errorMsg)` to `void Function(String errorMsg, int errorCode)`, and this applies to banner, refined banner, interstitial, reward and native ads. Handlers written against the previous signature will no longer compile, so add the second parameter when upgrading.
 
 ## Programming Guide
 
@@ -89,7 +98,7 @@ Declare the code below under the application tag in AndroidManifest.xml inside t
 
 #### 2.2 import BidmadSDK-iOS CocoaPods
 After fetching our plugin into your app by "flutter pub get", a "Podfile" will be generated in your project's iOS Folder. <br>
-1.  In Podfile, set the platform requirement to iOS 12.<br>
+1.  In Podfile, set the platform requirement to iOS 14.<br>
     ![Bidmad-Guide-Flutter-1](https://i.imgur.com/1uXp8jR.png)<br>
 2.  Install our CocoaPods iOS Framework with command "pod install"<br>
     ![Bidmad-Guide-Flutter-2](https://i.imgur.com/BgmCdA3.png)<br>
@@ -99,7 +108,7 @@ After fetching our plugin into your app by "flutter pub get", a "Podfile" will b
 #### 2.3 Xcode Build Setting
 Select "No" for Enable Bitcode under your Build Setting.
 
-#### 2.4 Info.plist Setting
+#### 2.4 Info.plist Settings
 - In order for ad networks to properly control the UI, please add the following key / value to Info.plist settings
 
 ```
@@ -175,7 +184,7 @@ The following is an example of requesting a Banner ad.
           onLoadAd: (BidmadInfo? info){
             print("banner onLoadAd");
           },
-          onFailAd: (String error){
+          onFailAd: (String error, int errorCode){
             print("banner onFailAd");
           }
       );
@@ -208,7 +217,7 @@ The following is an example of requesting a Banner ad.
         onLoadAd: (BidmadInfo? info){
           print("banner onLoadAd");
         },
-        onFailAd: (String error){
+        onFailAd: (String error, int errorCode){
           print("banner onFailAd");
         }
     );
@@ -233,7 +242,7 @@ The following is an example of requesting a Banner ad.
               isLoaded = true;
             });
           },
-          onFailAd: (String error) {
+          onFailAd: (String error, int errorCode) {
             print("bannerAdWidget onFailAd : "+error);
             textView.text = "onFailAd";
           },
@@ -281,7 +290,7 @@ The following is an example of requesting a Interstitial ad.
           onCloseAd: (BidmadInfo? info){
             print("interstitial onCloseAd");
           },
-          onFailAd: (String error){
+          onFailAd: (String error, int errorCode){
             print("interstitial onFailAd");
           }
       );
@@ -333,7 +342,7 @@ The following is an example of requesting a Reward ad.
           onClickAd: (BidmadInfo? info){
             print("reward onClickAd");
           },
-          onFailAd: (String error){
+          onFailAd: (String error, int errorCode){
             print("reward onFailAd");
           }
       );
@@ -414,7 +423,7 @@ Here's an example requesting native ads:
           onLoadAd: (BidmadInfo? info) {
             print("NativeAd onLoadAd");
           },
-          onFailAd: (String error) {
+          onFailAd: (String error, int errorCode) {
             print("NativeAd onFailAd" + error);
           },
           onClickAd: (BidmadInfo? info) {
@@ -484,7 +493,7 @@ Future\<void> hideBanner()|Hide the banner View
 Future\<void> showBanner()|Show the banner View.
 Future\<void> removeBanner()|Remove the exposed banner.
 void Function(BidmadInfo? info) onLoadAd|If a listener is registered, the registered function is called when ad load.
-void Function(String error) onFailAd|If a listener is registered, the registered function is called when ad load fail.
+void Function(String errorMsg, int errorCode) onFailAd|If a listener is registered, the registered function is called when ad load fail.
 
 #### 4.2 BidmadBannerWidget
 *For banner ads in the form of a widget, it must be processed through BidmadBannerWidget, and this is a list of functions for that.
@@ -506,7 +515,7 @@ void showBanner()|Call the "showBanner" method on the loaded ad.
 void hideBanner()|Call the "hideBanner" method on the loaded ad.
 void removeBanner()|Call the "removeBanner" method on the loaded ad.
 void Function(BidmadInfo? info) onLoadAd|If a listener is registered, the registered function is called when ad load.
-void Function(String error) onFailAd|If a listener is registered, the registered function is called when ad load fail.
+void Function(String errorMsg, int errorCode) onFailAd|If a listener is registered, the registered function is called when ad load fail.
 void Function(BidmadInfo? info) onClickAd|If a listener is registered, the registered function is called when ad click.
 
 #### 4.4 BidmadBannerRefinedWidget
@@ -532,7 +541,7 @@ Future\<void> setAdInfo(String zoneId)|Set the issued ZoneId.
 Future\<void> setCUID(String cuid)|Set the CUID property of each ad type. recommend encrypting text using sha256 or higher.
 void Function(BidmadInfo? info) onLoadAd|If a listener is registered, the registered function is called when ad load.
 void Function(BidmadInfo? info) onShowAd|If a listener is registered, the registered function is called when ad show.
-void Function(String error) onFailAd|If a listener is registered, the registered function is called when ad load fail.
+void Function(String errorMsg, int errorCode) onFailAd|If a listener is registered, the registered function is called when ad load fail.
 void Function(BidmadInfo? info) onClickAd|If a listener is registered, the registered function is called when ad click.
 void Function(BidmadInfo? info) onCloseAd|If a listener is registered, the registered function is called when ad close.
 
@@ -550,7 +559,7 @@ Future\<void> setAdInfo(String zoneId)|Set the issued ZoneId.
 Future\<void> setCUID(String cuid)|Set the CUID property of each ad type. recommend encrypting text using sha256 or higher.
 void Function(BidmadInfo? info) onLoadAd|If a listener is registered, the registered function is called when ad load.
 void Function(BidmadInfo? info) onShowAd|If a listener is registered, the registered function is called when ad show.
-void Function(String error) onFailAd|If a listener is registered, the registered function is called when ad load fail.
+void Function(String errorMsg, int errorCode) onFailAd|If a listener is registered, the registered function is called when ad load fail.
 void Function(BidmadInfo? info) onCompleteAd|If a listener is registered, the registered function is called when ad complate.
 void Function(BidmadInfo? info) onCloseAd|If a listener is registered, the registered function is called when ad close.
 void Function(BidmadInfo? info) onClickAd|If a listener is registered, the registered function is called when ad click.
@@ -571,7 +580,7 @@ Function|Description
 ----|---
 Future\<void> setAdInfo(String zoneId)|Set the issued ZoneId.
 void Function(BidmadInfo? info) onLoadAd|If a listener is registered, the registered function will be called when the ad loads.
-void Function(String error) onFailAd|If a listener is registered, the registered function will be called when the ad fails to load.
+void Function(String errorMsg, int errorCode) onFailAd|If a listener is registered, the registered function will be called when the ad fails to load.
 void Function(BidmadInfo? info) onClickAd|If a listener is registered, the registered function will be called when ad click.
 Future\<void> loadWidget()|Request a native ad.
 Future\<void> removeWidget()|Remove native ads.
@@ -590,6 +599,8 @@ Future\<void> setCUID(String cuid)|Enter your custom ID.
 Future\<String> initBannerChannel()|Creating a channel for controlling banner ad
 Future\<String> initInterstitialChannel()|Creating a channel for controlling interstitial ad
 Future\<String> initRewardChannel()|Creating a channel for controlling reward ad
+Future\<void> setAdFreeEventListener(void Function(bool) onAdStatus)|Set a callback function to receive ad-block status changes caused by the Coupang ad network.
+Future\<bool> isAdFree()|Check whether ads are blocked by the Coupang ad network.
 Future\<String> reqAdTrackingAuthorization()|Requesting for App Tracking Consent from user
 Future\<void> setAdvertiserTrackingEnabled(bool enable)|Setting ATT Setting manually
 Future\<bool> getAdvertiserTrackingEnabled()|Getting ATT Setting, true if consent and false if not consent
@@ -603,3 +614,7 @@ String adNetworkName|The advertising network name. For example, Admob
 String adType|The ad type. For example banner, interstitial, reward, native
 Size? requestedBannerAdSize|The requested banner ad size. Included only in banner ad type.
 Size? loadedBannerAdSize|The banner ad size that was actually loaded.
+
+#### References
+
+- [Coupang Network Ad-Block Interface Guide](https://github.com/bidmad/Bidmad-Flutter/wiki/%EC%BF%A0%ED%8C%A1-%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%81%AC-%EA%B4%91%EA%B3%A0-%EC%B0%A8%EB%8B%A8-%EC%9D%B8%ED%84%B0%ED%8E%98%EC%9D%B4%EC%8A%A4-%EA%B0%80%EC%9D%B4%EB%93%9C)

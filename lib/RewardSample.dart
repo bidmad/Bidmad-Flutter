@@ -96,8 +96,8 @@ class BidmadRewardSample {
         }, onClickAd: (BidmadInfo? info) {
           print("reward onClickAd : ");
           textView.text = "onClickAd";
-        }, onFailAd: (String error) {
-          print("reward onFailAd : " + error);
+        }, onFailAd: (String error, int errorCode) {
+          print("reward onFailAd : $error ($errorCode)");
           textView.text = "onFailAd";
         }
       );

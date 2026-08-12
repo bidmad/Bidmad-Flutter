@@ -34,10 +34,11 @@ class _BannerRefinedWidgetState extends State<BannerRefinedWidgetSample> {
           children: <Widget>[
             Container(
               margin: const EdgeInsets.fromLTRB(0, 20, 0, 0),
+              // No height: the width is dynamic, so BidmadBannerRefinedWidget
+              // derives its own height. Setting one would clip the ad. (1.13.0)
               child:  isLoaded ? BidmadBannerRefinedWidget(
                 ad: bannerAd
               ) : Text("isLoading..."),
-              height: 50,
             ),
             Container(
                 margin: const EdgeInsets.fromLTRB(0, 20, 0, 0),
@@ -92,8 +93,8 @@ class _BannerRefinedWidgetState extends State<BannerRefinedWidgetSample> {
                 isLoaded = true;
               });
             },
-            onFailAd: (String error) {
-              print("bannerAdWidget onFailAd : "+error);
+            onFailAd: (String error, int errorCode) {
+              print("bannerAdWidget onFailAd : $error ($errorCode)");
               textView.text = "onFailAd";
             },
             onClickAd: (BidmadInfo? info) {

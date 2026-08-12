@@ -79,8 +79,8 @@ class BannerWidgetSample extends StatelessWidget {
       onLoadAd: (BidmadInfo? info) {
         print("banner onLoadAd");
         textView.text = "onLoadAd";
-      }, onFailAd: (String error) {
-        print("banner onFailAd");
+      }, onFailAd: (String error, int errorCode) {
+        print("banner onFailAd : $error ($errorCode)");
         textView.text = "onFailAd";
       }
     );
