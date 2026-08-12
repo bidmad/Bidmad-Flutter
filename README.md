@@ -2,14 +2,7 @@
 > 1.11.0 버전부터 기존에 사용하던 Appkey가 AppDomain으로 변경되었습니다.<br>
 > **AppDomain은 기존 Appkey와 호환되지 않으므로, 초기화를 위해서는 새로운 AppDomain을 발급받아야 합니다.**<br>
 > 1.11.0 버전으로 업데이트하시는 경우 **테크랩스 플랫폼 운영팀**으로 문의 부탁드립니다.<br>
-
-## Introduce
-BidmadPlugin은 모바일 앱 광고 SDK인 Bidmad를 Flutter에서 사용하기 위한 Plugin입니다.<br>
-Plugin을 사용하여 Flutter 모바일 앱에서 배너 / 전면 / 보상형 광고를 게재 할 수 있습니다.<br>
-
-[Bidmad Flutter Plugin Pub.dev](https://pub.dev/packages/bidmad_plugin)<br>
-[Flutter 샘플 다운로드](https://github.com/bidmad/Bidmad-Flutter)
-
+>
 > **⚠️ 1.13.0 변경사항**
 >
 > - `BidmadBannerRefinedWidget`은 이제 항상 부모 제약조건의 **너비를 가득 채워** 광고를 표기합니다. 높이를 지정해도 더 이상 광고가 축소되지 않고, 높이를 넘어가는 부분이 잘립니다. 기준은 다음과 같습니다. **너비가 가변적이라면 높이를 지정하지 마시고** 위젯이 스스로 높이를 계산하도록 하십시오. **너비가 고정되어 있다면 높이를 지정해도 무방합니다.** 예를 들어 너비를 320dp로 고정한 경우 `height: 50`으로도 320x50 소재가 온전히 표기됩니다.
@@ -17,6 +10,13 @@ Plugin을 사용하여 Flutter 모바일 앱에서 배너 / 전면 / 보상형 �
 >   ![1.13.0 전후 비교: 기존에는 광고가 높이가 정의된 컨테이너 내부에 위치해 좌우에 빈 공간이 생겼으나, 이제는 컨테이너 가로폭에 맞게 광고 크기를 키우고 하단이 컨테이너 높이에 맞게 잘립니다](https://i.imgur.com/poyKWyT.jpg)
 >
 > - 모든 `onFailAd` 콜백이 두 번째 인자로 에러 코드를 전달받습니다. 시그니처가 `void Function(String errorMsg)` 에서 `void Function(String errorMsg, int errorCode)` 로 변경되었으며, 배너 / 리파인드 배너 / 전면 / 보상형 / 네이티브 광고에 모두 적용됩니다. 기존 시그니처로 작성된 핸들러는 컴파일되지 않으므로, 업그레이드 시 두 번째 파라미터를 추가해 주십시오.
+
+## Introduce
+BidmadPlugin은 모바일 앱 광고 SDK인 Bidmad를 Flutter에서 사용하기 위한 Plugin입니다.<br>
+Plugin을 사용하여 Flutter 모바일 앱에서 배너 / 전면 / 보상형 광고를 게재 할 수 있습니다.<br>
+
+[Bidmad Flutter Plugin Pub.dev](https://pub.dev/packages/bidmad_plugin)<br>
+[Flutter 샘플 다운로드](https://github.com/bidmad/Bidmad-Flutter)
 
 ## Programming Guide
 

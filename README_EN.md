@@ -2,14 +2,7 @@
 > Starting with version 1.11.0, the previously used Appkey has been changed to AppDomain.<br>
 > **AppDomain is not compatible with existing Appkeys, so a new AppDomain must be issued to initiaize.**<br>
 > If you are updating to version 1.11.0, please contact **Techlabs Platform Operations Team.**<br>
-
-## Introduce
-BidmadPlugin is a plugin for using Bidmad, a mobile app advertisement SDK, in Flutter.<br>
-You can use the plugin to serve banner/interstitial/reward ads in your flutter mobile app.<br>
-
-[Bidmad Flutter Plugin Pub.dev](https://pub.dev/packages/bidmad_plugin)<br>
-[Flutter Sample Download](https://github.com/bidmad/Bidmad-Flutter)
-
+>
 > **⚠️ Changed in 1.13.0**
 >
 > - `BidmadBannerRefinedWidget` now always renders the ad at the **full width** of its parent constraint. A height no longer shrinks the ad to fit; it only clips whatever does not fit. The rule is: **if the width is dynamic, do not set a height** and let the widget derive its own height; **if the width is decided, you may set a height.** For example, a fixed 320dp-wide box with `height: 50` still renders a 320x50 creative in full.
@@ -17,6 +10,13 @@ You can use the plugin to serve banner/interstitial/reward ads in your flutter m
 >   ![Before and after 1.13.0: previously the ad was nested inside the container, shrunk to fit and leaving empty space at both ends; now it scales to the width of the container and the bottom is clipped by the height of the container](https://i.imgur.com/0b9FgSr.jpg)
 >
 > - Every `onFailAd` callback now receives an error code as its second argument. The signature changed from `void Function(String errorMsg)` to `void Function(String errorMsg, int errorCode)`, and this applies to banner, refined banner, interstitial, reward and native ads. Handlers written against the previous signature will no longer compile, so add the second parameter when upgrading.
+
+## Introduce
+BidmadPlugin is a plugin for using Bidmad, a mobile app advertisement SDK, in Flutter.<br>
+You can use the plugin to serve banner/interstitial/reward ads in your flutter mobile app.<br>
+
+[Bidmad Flutter Plugin Pub.dev](https://pub.dev/packages/bidmad_plugin)<br>
+[Flutter Sample Download](https://github.com/bidmad/Bidmad-Flutter)
 
 ## Programming Guide
 
