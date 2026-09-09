@@ -3,6 +3,10 @@
 > **AppDomain은 기존 Appkey와 호환되지 않으므로, 초기화를 위해서는 새로운 AppDomain을 발급받아야 합니다.**<br>
 > 1.11.0 버전으로 업데이트하시는 경우 **테크랩스 플랫폼 운영팀**으로 문의 부탁드립니다.<br>
 >
+> **⚠️ 1.14.0 변경사항**
+>
+> - 광고 네트워크 어댑터, AdMob 비딩, `BidmadPartners`가 **더 이상 플러그인에 포함되지 않습니다.** 이제 게재하실 광고 네트워크를 앱에서 직접 선언하셔야 합니다. Dart 인터페이스는 변경되지 않았으므로 Flutter 코드를 수정하실 필요는 없으나, 어댑터를 선언하지 않고 업그레이드하신 앱은 **입찰에 참여할 광고 네트워크가 없는 상태**가 됩니다. [1.14.0 마이그레이션 가이드](#1140-마이그레이션-가이드)를 확인하시고 네이티브 설정을 함께 반영해 주십시오.
+>
 > **⚠️ 1.13.0 변경사항**
 >
 > - `BidmadBannerRefinedWidget`은 이제 항상 부모 제약조건의 **너비를 가득 채워** 광고를 표기합니다. 높이를 지정해도 더 이상 광고가 축소되지 않고, 높이를 넘어가는 부분이 잘립니다. 기준은 다음과 같습니다. **너비가 가변적이라면 높이를 지정하지 마시고** 위젯이 스스로 높이를 계산하도록 하십시오. **너비가 고정되어 있다면 높이를 지정해도 무방합니다.** 예를 들어 너비를 320dp로 고정한 경우 `height: 50`으로도 320x50 소재가 온전히 표기됩니다.
@@ -17,6 +21,38 @@ Plugin을 사용하여 Flutter 모바일 앱에서 배너 / 전면 / 보상형 �
 
 [Bidmad Flutter Plugin Pub.dev](https://pub.dev/packages/bidmad_plugin)<br>
 [Flutter 샘플 다운로드](https://github.com/bidmad/Bidmad-Flutter)
+
+## 1.14.0 마이그레이션 가이드
+
+1.13.x까지는 모든 광고 네트워크 어댑터와 AdMob 비딩, `BidmadPartners`가 플러그인에 포함되어 있었습니다. 1.14.0부터 플러그인은 **코어만** 제공하며, 게재하실 어댑터는 앱에서 직접 선언하시게 됩니다. 이를 통해 광고 네트워크 구성을 직접 결정하실 수 있고, 게재하지 않는 네트워크가 빌드에 포함되지 않으며, 플러그인 릴리스를 기다리지 않고 개별 어댑터를 업데이트하실 수 있습니다.
+
+**Dart 인터페이스는 변경되지 않았습니다.** Dart / Flutter 코드는 수정하실 필요가 없으며, 마이그레이션은 모두 네이티브 빌드 파일에서 진행됩니다.
+
+### 플러그인이 계속 제공하는 항목
+
+| 플랫폼 | 플러그인에 유지되는 의존성 |
+| --- | --- |
+| Android | `ad.helper.openbidding:admob-obh`, `com.adop.sdk:bidmad-androidx` |
+| iOS | `BidmadSDK`, `OpenBiddingHelper`, `BidmadFlutterBridge`, `BidmadGoogleGDPRAdapter` |
+
+### 앱으로 이동된 항목
+
+| | Android | iOS |
+| --- | --- | --- |
+| 광고 네트워크 어댑터 | 모든 `com.adop.sdk.adapter:*` | 모든 `Bidmad*Adapter` 파드 |
+| AdMob 비딩 | `com.adop.sdk.partners:admobbidding` | `BidmadPartners/AdMobBidding` |
+
+Android의 경우 플러그인이 네트워크별 maven 저장소(Kakao, Pangle, Mintegral, Taboola, PremiumAds)를 프로젝트에 주입하지 않도록 변경되었습니다. 코어 의존성에 필요한 `google()`, `mavenCentral()`, Bidmad 저장소는 플러그인이 계속 주입합니다.
+
+### 마이그레이션 절차
+
+1. **플러그인 업데이트.** `pubspec.yaml`에 `bidmad_plugin: ^1.14.0`을 지정하시고 `flutter pub get`을 실행합니다.
+2. **Android.** 필요한 저장소와 게재하실 어댑터를 추가합니다. [1.4 광고 네트워크 어댑터](#14-광고-네트워크-어댑터)를 참고해 주십시오.
+3. **iOS.** 게재하실 어댑터 파드를 추가하신 후([2.5 광고 네트워크 어댑터](#25-광고-네트워크-어댑터) 참고), `ios` 폴더에서 `pod install --repo-update`를 실행합니다.
+4. **확인.** 양 플랫폼을 빌드하신 뒤 광고 요청 전에 `FlutterBidmadCommon().setDebugging(true)`를 호출하시고, 기대하시는 광고 네트워크가 디버그 로그에 모두 표기되는지 확인해 주십시오. 로그에 표기되지 않는 네트워크는 어댑터가 선언되지 않은 상태입니다.
+
+> [!TIP]
+> 업그레이드 전후 동작을 동일하게 유지하시려면, 먼저 [1.4](#14-광고-네트워크-어댑터) / [2.5](#25-광고-네트워크-어댑터)의 **전체 목록**을 그대로 선언해 주십시오. 이는 1.13.x에 포함되어 있던 구성과 정확히 동일합니다. 광고가 정상적으로 게재되는 것을 확인하신 후 게재하지 않는 네트워크를 제거하시는 것을 권장합니다.
 
 ## Programming Guide
 
@@ -90,6 +126,72 @@ Android 앱 모듈 내 AndroidManifest.xml의 application 태그 안에 아래 �
 </application>
 ```
 
+#### 1.4 광고 네트워크 어댑터
+1.14.0부터 플러그인은 광고 네트워크 어댑터를 포함하지 않습니다. 게재하실 광고 네트워크를 앱에서 직접 선언해 주십시오. 1.13.x에서 업그레이드하시는 경우 [1.14.0 마이그레이션 가이드](#1140-마이그레이션-가이드)를 먼저 확인 부탁드립니다.
+
+**1.4.1 저장소 설정**<br>
+`android/build.gradle`의 `allprojects.repositories`에 사용하실 네트워크의 저장소를 추가합니다. `google()`, `mavenCentral()`, Bidmad 저장소는 플러그인이 이미 주입하므로 네트워크별 항목만 추가하시면 됩니다.
+
+```groovy
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+        maven { url 'https://devrepo.kakao.com/nexus/content/groups/public/' }                        // AdFit
+        maven { url 'https://artifact.bytedance.com/repository/pangle/' }                             // Pangle
+        maven { url 'https://dl-maven-android.mintegral.com/repository/mbridge_android_sdk_oversea' } // AdMob 비딩
+        maven { url 'https://taboolapublic.jfrog.io/artifactory/mobile-release' }                     // Taboola
+        maven { url 'https://repo.premiumads.net/artifactory/mobile-ads-sdk/' }                       // PremiumAds
+    }
+}
+```
+
+<details>
+<summary>Kotlin DSL — 최신 Flutter 템플릿의 <code>android/build.gradle.kts</code></summary>
+
+```kotlin
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+        maven { url = uri("https://devrepo.kakao.com/nexus/content/groups/public/") }                        // AdFit
+        maven { url = uri("https://artifact.bytedance.com/repository/pangle/") }                             // Pangle
+        maven { url = uri("https://dl-maven-android.mintegral.com/repository/mbridge_android_sdk_oversea") } // AdMob 비딩
+        maven { url = uri("https://taboolapublic.jfrog.io/artifactory/mobile-release") }                     // Taboola
+        maven { url = uri("https://repo.premiumads.net/artifactory/mobile-ads-sdk/") }                       // PremiumAds
+    }
+}
+```
+
+</details>
+
+**1.4.2 어댑터 설정**<br>
+`android/app/build.gradle`의 `dependencies`에 게재하실 광고 네트워크를 추가합니다. 최신 Flutter 템플릿에서는 해당 파일이 `android/app/build.gradle.kts`이며, 동일한 항목을 `implementation("com.adop.sdk.adapter:admob:25.4.0.0")` 형식으로 작성합니다.
+
+```groovy
+dependencies {
+    implementation 'com.adop.sdk.adapter:adfit:3.21.17.1'      // AdFit
+    implementation 'com.adop.sdk.adapter:admob:25.4.0.0'       // AdMob
+    implementation 'com.adop.sdk.adapter:applovin:13.6.2.1'    // AppLovin
+    implementation 'com.adop.sdk.adapter:coupang:1.0.0.7'      // Coupang
+    implementation 'com.adop.sdk.adapter:fyber:8.4.6.0'        // Fyber (DT Exchange)
+    implementation 'com.adop.sdk.adapter:mobwith:2.0.3'        // MobWith
+    implementation 'com.adop.sdk.adapter:ortb:1.0.3'           // oRTB
+    implementation 'com.adop.sdk.adapter:pangle:8.1.0.3.0'     // Pangle
+    implementation 'com.adop.sdk.adapter:premiumads:1.0.10.0'  // PremiumAds
+    implementation 'com.adop.sdk.adapter:taboola:4.0.38.0'     // Taboola
+    implementation 'com.adop.sdk.adapter:unityads:4.19.0.0'    // Unity Ads
+    implementation 'com.adop.sdk.adapter:vungle:7.7.7.0'       // Vungle (Liftoff)
+
+    implementation 'com.adop.sdk.partners:admobbidding:1.1.6'  // AdMob 비딩
+}
+```
+
+> [!NOTE]
+> - **`compileSdk` 36.** `com.adop.sdk.partners:admobbidding`은 앱이 API 36으로 컴파일되어야 합니다. 최신 Flutter 템플릿은 `compileSdk = flutter.compileSdkVersion`을 통해 이미 36을 사용합니다. 빌드 시 `requires libraries and applications that depend on it to compile against version 36 or later` 오류가 발생하는 경우 `android/app/build.gradle`에 `compileSdk 36`을 명시해 주십시오.
+> - **AdMob Application ID.** AdMob 어댑터 또는 AdMob 비딩을 선언하시는 경우 [1.3](#13-admob-application-id-settings)의 `AndroidManifest.xml` 설정이 반드시 필요합니다.
+> - **Proguard / R8.** [1.2](#12-proguard-settings)의 규칙에 `com.adop.sdk.adapter.**`가 이미 포함되어 있으며 변경 사항은 없습니다. 한편 광고 네트워크 SDK는 의존하지 않는 라이브러리를 선택적으로 참조하는 경우가 있어, release APK 빌드 시 R8이 `Missing class ...` 오류를 보고할 수 있습니다. 이 경우 Android Gradle 플러그인이 `build/app/outputs/mapping/release/missing_rules.txt`에 생성한 규칙을 `proguard-rules.pro`에 추가해 주십시오. 정상적인 동작이며 어댑터가 누락된 것은 아닙니다.
+
 ### 2. iOS Setting
 
 #### 2.1 Xcode 버전 & Privacy Manifest
@@ -127,6 +229,42 @@ Android 앱 모듈 내 AndroidManifest.xml의 application 태그 안에 아래 �
 <string>App would like to access IDFA for tracking purpose</string>
 ...
 ```
+
+#### 2.5 광고 네트워크 어댑터
+1.14.0부터 플러그인은 광고 네트워크 어댑터를 포함하지 않습니다. `ios/Podfile`의 `target 'Runner'` 안에 게재하실 광고 네트워크를 선언하신 뒤, `ios` 폴더에서 `pod install --repo-update`를 실행해 주십시오. 1.13.x에서 업그레이드하시는 경우 [1.14.0 마이그레이션 가이드](#1140-마이그레이션-가이드)를 먼저 확인 부탁드립니다.
+
+모든 Bidmad 어댑터 파드는 공개 CocoaPods trunk에 배포되어 있으므로 별도의 `source` 선언은 필요하지 않습니다.
+
+```ruby
+target 'Runner' do
+  use_frameworks!
+
+  flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
+
+  pod 'BidmadAdFitAdapter', '3.18.3.14.1'            # AdFit
+  pod 'BidmadAppLovinAdapter', '13.6.2.14.1'         # AppLovin
+  pod 'BidmadFyberAdapter', '8.4.6.14.1'             # Fyber (DT Exchange)
+  pod 'BidmadGoogleAdManagerAdapter', '13.2.0.14.1'  # Google Ad Manager
+  pod 'BidmadGoogleAdMobAdapter', '13.2.0.14.1'      # AdMob
+  pod 'BidmadMobwithAdapter', '2.0.0.14.1'           # MobWith
+  pod 'BidmadORTBAdapter', '1.0.0.14.1'              # oRTB
+  pod 'BidmadPangleAdapter', '7.9.0.8.14.1'          # Pangle
+  pod 'BidmadPremiumAdsGoogleAdapter', '1.0.6.14.1'  # PremiumAds
+  pod 'BidmadTaboolaAdapter', '3.9.12.14.1'          # Taboola
+  pod 'BidmadTeadsAdapter', '6.1.0.14.1'             # Teads
+  pod 'BidmadUnityAdsAdapter', '4.17.0.14.1'         # Unity Ads
+  pod 'BidmadVungleAdapter', '7.7.2.14.1'            # Vungle (Liftoff)
+
+  pod 'BidmadPartners/AdMobBidding', '1.0.13'        # AdMob 비딩
+
+  target 'RunnerTests' do
+    inherit! :search_paths
+  end
+end
+```
+
+> [!NOTE]
+> 플랫폼별로 포함되어 있던 구성이 완전히 동일하지는 않았습니다. iOS는 AdMob과 Google Ad Manager를 별도 파드로 제공하지만, Android는 `admob` 어댑터 하나로 Google 수요를 처리합니다. Coupang은 Android에만, Teads는 iOS에만 포함되어 있었습니다. 목록에 없는 네트워크는 **테크랩스 플랫폼 운영팀**으로 문의 부탁드립니다.
 
 ### 3. Using Plugin
 

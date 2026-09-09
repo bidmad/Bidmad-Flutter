@@ -56,3 +56,22 @@ android {
 flutter {
     source '../..'
 }
+
+// As of bidmad_plugin 1.14.0 the ad network adapters are declared by the app
+// rather than bundled with the plugin.
+dependencies {
+    implementation 'com.adop.sdk.adapter:adfit:3.21.17.1'      // AdFit
+    implementation 'com.adop.sdk.adapter:admob:25.4.0.0'       // AdMob
+    implementation 'com.adop.sdk.adapter:applovin:13.6.2.1'    // AppLovin
+    implementation 'com.adop.sdk.adapter:coupang:1.0.0.7'      // Coupang
+    implementation 'com.adop.sdk.adapter:fyber:8.4.6.0'        // Fyber (DT Exchange)
+    implementation 'com.adop.sdk.adapter:mobwith:2.0.3'        // MobWith
+    implementation 'com.adop.sdk.adapter:ortb:1.0.3'           // oRTB
+    implementation 'com.adop.sdk.adapter:pangle:8.1.0.3.0'     // Pangle
+    implementation 'com.adop.sdk.adapter:premiumads:1.0.10.0'  // PremiumAds
+    implementation 'com.adop.sdk.adapter:taboola:4.0.38.0'     // Taboola
+    implementation 'com.adop.sdk.adapter:unityads:4.19.0.0'    // Unity Ads
+    implementation 'com.adop.sdk.adapter:vungle:7.7.7.0'       // Vungle (Liftoff)
+
+    implementation 'com.adop.sdk.partners:admobbidding:1.1.6'  // AdMob bidding
+}

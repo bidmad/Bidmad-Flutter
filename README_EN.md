@@ -3,6 +3,10 @@
 > **AppDomain is not compatible with existing Appkeys, so a new AppDomain must be issued to initiaize.**<br>
 > If you are updating to version 1.11.0, please contact **Techlabs Platform Operations Team.**<br>
 >
+> **⚠️ Changed in 1.14.0**
+>
+> - Ad network adapters, AdMob bidding and `BidmadPartners` are **no longer bundled with the plugin** — your app now declares the ad networks it serves. The Dart API is unchanged and no Flutter code needs editing, but an app upgraded without declaring adapters has **no ad network to fill from**. Please read [Migrating to 1.14.0](#migrating-to-1140) and apply the native changes in the same upgrade.
+>
 > **⚠️ Changed in 1.13.0**
 >
 > - `BidmadBannerRefinedWidget` now always renders the ad at the **full width** of its parent constraint. A height no longer shrinks the ad to fit; it only clips whatever does not fit. The rule is: **if the width is dynamic, do not set a height** and let the widget derive its own height; **if the width is decided, you may set a height.** For example, a fixed 320dp-wide box with `height: 50` still renders a 320x50 creative in full.
@@ -17,6 +21,38 @@ You can use the plugin to serve banner/interstitial/reward ads in your flutter m
 
 [Bidmad Flutter Plugin Pub.dev](https://pub.dev/packages/bidmad_plugin)<br>
 [Flutter Sample Download](https://github.com/bidmad/Bidmad-Flutter)
+
+## Migrating to 1.14.0
+
+Through 1.13.x the plugin bundled every ad network adapter, AdMob bidding and `BidmadPartners`. From 1.14.0 the plugin ships **core only**, and your app declares the adapters it serves. This lets you choose your own ad network list, keeps networks you never serve out of your build, and lets you update a single adapter without waiting for a plugin release.
+
+**The Dart API has not changed.** No Dart or Flutter code needs editing — the whole migration happens in your native build files.
+
+### What the plugin still provides
+
+| Platform | Kept in the plugin |
+| --- | --- |
+| Android | `ad.helper.openbidding:admob-obh`, `com.adop.sdk:bidmad-androidx` |
+| iOS | `BidmadSDK`, `OpenBiddingHelper`, `BidmadFlutterBridge`, `BidmadGoogleGDPRAdapter` |
+
+### What moved into your app
+
+| | Android | iOS |
+| --- | --- | --- |
+| Ad network adapters | every `com.adop.sdk.adapter:*` | every `Bidmad*Adapter` pod |
+| AdMob bidding | `com.adop.sdk.partners:admobbidding` | `BidmadPartners/AdMobBidding` |
+
+On Android the plugin also stopped injecting the network-specific maven repositories (Kakao, Pangle, Mintegral, Taboola, PremiumAds) into your project. It still injects `google()`, `mavenCentral()` and the Bidmad repository, which its own core dependencies need.
+
+### Migration steps
+
+1. **Update the plugin.** Set `bidmad_plugin: ^1.14.0` in `pubspec.yaml` and run `flutter pub get`.
+2. **Android.** Add the network repositories and the adapters you serve — see [1.4 Ad Network Adapters](#14-ad-network-adapters).
+3. **iOS.** Add the adapter pods you serve — see [2.5 Ad Network Adapters](#25-ad-network-adapters) — then run `pod install --repo-update` in the `ios` folder.
+4. **Verify.** Build both platforms, call `FlutterBidmadCommon().setDebugging(true)` before requesting an ad, and check that every ad network you expect appears in the debug log. A network missing from the log has no adapter declared.
+
+> [!TIP]
+> To make the upgrade behaviour-neutral, start by declaring the **full** list in [1.4](#14-ad-network-adapters) / [2.5](#25-ad-network-adapters) — that is exactly the set the plugin bundled through 1.13.x. Once you have confirmed that ads still fill, delete the networks you do not serve.
 
 ## Programming Guide
 
@@ -90,6 +126,72 @@ Declare the code below under the application tag in AndroidManifest.xml inside t
 </application>
 ```
 
+#### 1.4 Ad Network Adapters
+As of 1.14.0 the plugin does not bundle ad network adapters. Declare the ad networks you serve in your own app. If you are upgrading from 1.13.x, read [Migrating to 1.14.0](#migrating-to-1140) first.
+
+**1.4.1 Repositories**<br>
+Add the repositories your networks need to `allprojects.repositories` in `android/build.gradle`. `google()`, `mavenCentral()` and the Bidmad repository are already injected by the plugin, so only the network-specific entries are required.
+
+```groovy
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+        maven { url 'https://devrepo.kakao.com/nexus/content/groups/public/' }                        // AdFit
+        maven { url 'https://artifact.bytedance.com/repository/pangle/' }                             // Pangle
+        maven { url 'https://dl-maven-android.mintegral.com/repository/mbridge_android_sdk_oversea' } // AdMob bidding
+        maven { url 'https://taboolapublic.jfrog.io/artifactory/mobile-release' }                     // Taboola
+        maven { url 'https://repo.premiumads.net/artifactory/mobile-ads-sdk/' }                       // PremiumAds
+    }
+}
+```
+
+<details>
+<summary>Kotlin DSL — <code>android/build.gradle.kts</code> on newer Flutter templates</summary>
+
+```kotlin
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+        maven { url = uri("https://devrepo.kakao.com/nexus/content/groups/public/") }                        // AdFit
+        maven { url = uri("https://artifact.bytedance.com/repository/pangle/") }                             // Pangle
+        maven { url = uri("https://dl-maven-android.mintegral.com/repository/mbridge_android_sdk_oversea") } // AdMob bidding
+        maven { url = uri("https://taboolapublic.jfrog.io/artifactory/mobile-release") }                     // Taboola
+        maven { url = uri("https://repo.premiumads.net/artifactory/mobile-ads-sdk/") }                       // PremiumAds
+    }
+}
+```
+
+</details>
+
+**1.4.2 Adapters**<br>
+Add the ad networks you serve to `dependencies` in `android/app/build.gradle`. On newer Flutter templates the file is `android/app/build.gradle.kts`, where the same entries are written as `implementation("com.adop.sdk.adapter:admob:25.4.0.0")`.
+
+```groovy
+dependencies {
+    implementation 'com.adop.sdk.adapter:adfit:3.21.17.1'      // AdFit
+    implementation 'com.adop.sdk.adapter:admob:25.4.0.0'       // AdMob
+    implementation 'com.adop.sdk.adapter:applovin:13.6.2.1'    // AppLovin
+    implementation 'com.adop.sdk.adapter:coupang:1.0.0.7'      // Coupang
+    implementation 'com.adop.sdk.adapter:fyber:8.4.6.0'        // Fyber (DT Exchange)
+    implementation 'com.adop.sdk.adapter:mobwith:2.0.3'        // MobWith
+    implementation 'com.adop.sdk.adapter:ortb:1.0.3'           // oRTB
+    implementation 'com.adop.sdk.adapter:pangle:8.1.0.3.0'     // Pangle
+    implementation 'com.adop.sdk.adapter:premiumads:1.0.10.0'  // PremiumAds
+    implementation 'com.adop.sdk.adapter:taboola:4.0.38.0'     // Taboola
+    implementation 'com.adop.sdk.adapter:unityads:4.19.0.0'    // Unity Ads
+    implementation 'com.adop.sdk.adapter:vungle:7.7.7.0'       // Vungle (Liftoff)
+
+    implementation 'com.adop.sdk.partners:admobbidding:1.1.6'  // AdMob bidding
+}
+```
+
+> [!NOTE]
+> - **`compileSdk` 36.** `com.adop.sdk.partners:admobbidding` requires the app to compile against API 36. Recent Flutter templates already do, through `compileSdk = flutter.compileSdkVersion`. If your build fails with `requires libraries and applications that depend on it to compile against version 36 or later`, set `compileSdk 36` explicitly in `android/app/build.gradle`.
+> - **AdMob Application ID.** The `AndroidManifest.xml` entry in [1.3](#13-admob-application-id-settings) is required whenever you declare the AdMob adapter or AdMob bidding.
+> - **Proguard / R8.** The rules in [1.2](#12-proguard-settings) already cover `com.adop.sdk.adapter.**` and stay unchanged. Ad network SDKs also carry optional references to libraries they do not depend on, which R8 reports as `Missing class ...` when you build a release APK. Add the rules that the Android Gradle plugin writes to `build/app/outputs/mapping/release/missing_rules.txt` to your `proguard-rules.pro` — this is expected and does not mean an adapter is missing.
+
 ### 2. iOS Setting
 
 #### 2.1 Xcode Version & Privacy Manifest
@@ -127,6 +229,42 @@ Select "No" for Enable Bitcode under your Build Setting.
 <string>App would like to access IDFA for tracking purpose</string>
 ...
 ```
+
+#### 2.5 Ad Network Adapters
+As of 1.14.0 the plugin does not bundle ad network adapters. Declare the ad networks you serve inside `target 'Runner'` in `ios/Podfile`, then run `pod install --repo-update` in the `ios` folder. If you are upgrading from 1.13.x, read [Migrating to 1.14.0](#migrating-to-1140) first.
+
+Every Bidmad adapter pod is published on the public CocoaPods trunk, so no extra `source` line is needed.
+
+```ruby
+target 'Runner' do
+  use_frameworks!
+
+  flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
+
+  pod 'BidmadAdFitAdapter', '3.18.3.14.1'            # AdFit
+  pod 'BidmadAppLovinAdapter', '13.6.2.14.1'         # AppLovin
+  pod 'BidmadFyberAdapter', '8.4.6.14.1'             # Fyber (DT Exchange)
+  pod 'BidmadGoogleAdManagerAdapter', '13.2.0.14.1'  # Google Ad Manager
+  pod 'BidmadGoogleAdMobAdapter', '13.2.0.14.1'      # AdMob
+  pod 'BidmadMobwithAdapter', '2.0.0.14.1'           # MobWith
+  pod 'BidmadORTBAdapter', '1.0.0.14.1'              # oRTB
+  pod 'BidmadPangleAdapter', '7.9.0.8.14.1'          # Pangle
+  pod 'BidmadPremiumAdsGoogleAdapter', '1.0.6.14.1'  # PremiumAds
+  pod 'BidmadTaboolaAdapter', '3.9.12.14.1'          # Taboola
+  pod 'BidmadTeadsAdapter', '6.1.0.14.1'             # Teads
+  pod 'BidmadUnityAdsAdapter', '4.17.0.14.1'         # Unity Ads
+  pod 'BidmadVungleAdapter', '7.7.2.14.1'            # Vungle (Liftoff)
+
+  pod 'BidmadPartners/AdMobBidding', '1.0.13'        # AdMob bidding
+
+  target 'RunnerTests' do
+    inherit! :search_paths
+  end
+end
+```
+
+> [!NOTE]
+> The bundled sets were not identical across platforms. iOS ships AdMob and Google Ad Manager as separate pods, while Android serves Google demand through the single `admob` adapter. Coupang is Android-only, and Teads was bundled on iOS only. Contact the **Techlabs Platform Operations Team** for any network not listed here.
 
 ### 3. Using Plugin
 

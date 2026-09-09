@@ -1,7 +1,14 @@
 allprojects {
     repositories {
         google()
-        jcenter()
+        mavenCentral()
+        // Repositories for the ad network adapters declared in app/build.gradle.
+        // google() / mavenCentral() / the Bidmad repository are injected by the plugin.
+        maven { url 'https://devrepo.kakao.com/nexus/content/groups/public/' }                        // AdFit
+        maven { url 'https://artifact.bytedance.com/repository/pangle/' }                             // Pangle
+        maven { url 'https://dl-maven-android.mintegral.com/repository/mbridge_android_sdk_oversea' } // AdMob bidding
+        maven { url 'https://taboolapublic.jfrog.io/artifactory/mobile-release' }                     // Taboola
+        maven { url 'https://repo.premiumads.net/artifactory/mobile-ads-sdk/' }                       // PremiumAds
     }
 }
 
