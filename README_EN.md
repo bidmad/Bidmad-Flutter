@@ -424,7 +424,6 @@ The following is an example of requesting a Interstitial ad.
           },
           onShowFailAd: (BidmadInfo? info, String error, int errorCode){
             print("interstitial onShowFailAd : $error ($errorCode)");
-            interstitial.load(); //Ad Reload
           },
           onClickAd: (BidmadInfo? info){
             print("interstitial onClickAd");
@@ -474,8 +473,6 @@ The following is an example of requesting a Reward ad.
           },
           onShowFailAd: (BidmadInfo? info, String error, int errorCode){
             print("reward onShowFailAd : $error ($errorCode)");
-
-            reward.load();
           },
           onCompleteAd: (BidmadInfo? info){
             print("reward onCompleteAd");

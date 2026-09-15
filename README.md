@@ -424,7 +424,6 @@ if (foundation.defaultTargetPlatform == foundation.TargetPlatform.android) {
           },
           onShowFailAd: (BidmadInfo? info, String error, int errorCode){
             print("interstitial onShowFailAd : $error ($errorCode)");
-            interstitial.load(); //Ad Reload
           },
           onClickAd: (BidmadInfo? info){
             print("interstitial onClickAd");
@@ -474,8 +473,6 @@ if (foundation.defaultTargetPlatform == foundation.TargetPlatform.android) {
           },
           onShowFailAd: (BidmadInfo? info, String error, int errorCode){
             print("reward onShowFailAd : $error ($errorCode)");
-
-            reward.load();
           },
           onCompleteAd: (BidmadInfo? info){
             print("reward onCompleteAd");
