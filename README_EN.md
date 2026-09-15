@@ -422,6 +422,10 @@ The following is an example of requesting a Interstitial ad.
             print("interstitial onShowAd" );
             interstitial.load(); //Ad Reload
           },
+          onShowFailAd: (BidmadInfo? info, String error, int errorCode){
+            print("interstitial onShowFailAd : $error ($errorCode)");
+            interstitial.load(); //Ad Reload
+          },
           onClickAd: (BidmadInfo? info){
             print("interstitial onClickAd");
           },
@@ -465,6 +469,11 @@ The following is an example of requesting a Reward ad.
           },
           onShowAd: (BidmadInfo? info){
             print("reward onShowAd");
+
+            reward.load();
+          },
+          onShowFailAd: (BidmadInfo? info, String error, int errorCode){
+            print("reward onShowFailAd : $error ($errorCode)");
 
             reward.load();
           },
@@ -679,6 +688,7 @@ Future\<void> setAdInfo(String zoneId)|Set the issued ZoneId.
 Future\<void> setCUID(String cuid)|Set the CUID property of each ad type. recommend encrypting text using sha256 or higher.
 void Function(BidmadInfo? info) onLoadAd|If a listener is registered, the registered function is called when ad load.
 void Function(BidmadInfo? info) onShowAd|If a listener is registered, the registered function is called when ad show.
+void Function(BidmadInfo? info, String errorMsg, int errorCode) onShowFailAd|If a listener is registered, the registered function is called when a loaded ad fails to show.
 void Function(String errorMsg, int errorCode) onFailAd|If a listener is registered, the registered function is called when ad load fail.
 void Function(BidmadInfo? info) onClickAd|If a listener is registered, the registered function is called when ad click.
 void Function(BidmadInfo? info) onCloseAd|If a listener is registered, the registered function is called when ad close.
@@ -697,6 +707,7 @@ Future\<void> setAdInfo(String zoneId)|Set the issued ZoneId.
 Future\<void> setCUID(String cuid)|Set the CUID property of each ad type. recommend encrypting text using sha256 or higher.
 void Function(BidmadInfo? info) onLoadAd|If a listener is registered, the registered function is called when ad load.
 void Function(BidmadInfo? info) onShowAd|If a listener is registered, the registered function is called when ad show.
+void Function(BidmadInfo? info, String errorMsg, int errorCode) onShowFailAd|If a listener is registered, the registered function is called when a loaded ad fails to show.
 void Function(String errorMsg, int errorCode) onFailAd|If a listener is registered, the registered function is called when ad load fail.
 void Function(BidmadInfo? info) onCompleteAd|If a listener is registered, the registered function is called when ad complate.
 void Function(BidmadInfo? info) onCloseAd|If a listener is registered, the registered function is called when ad close.
