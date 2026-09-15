@@ -422,6 +422,9 @@ if (foundation.defaultTargetPlatform == foundation.TargetPlatform.android) {
             print("interstitial onShowAd" );
             interstitial.load(); //Ad Reload
           },
+          onShowFailAd: (BidmadInfo? info, String error, int errorCode){
+            print("interstitial onShowFailAd : $error ($errorCode)");
+          },
           onClickAd: (BidmadInfo? info){
             print("interstitial onClickAd");
           },
@@ -467,6 +470,9 @@ if (foundation.defaultTargetPlatform == foundation.TargetPlatform.android) {
             print("reward onShowAd");
 
             reward.load();
+          },
+          onShowFailAd: (BidmadInfo? info, String error, int errorCode){
+            print("reward onShowFailAd : $error ($errorCode)");
           },
           onCompleteAd: (BidmadInfo? info){
             print("reward onCompleteAd");
@@ -679,6 +685,7 @@ Future\<void> setAdInfo(String zoneId)|발급받은 ZoneId를 셋팅합니다.
 Future\<void> setCUID(String cuid)|각 광고 유형의 CUID 속성을 설정합니다. sha256 이상을 사용하여 텍스트 암호화 권장합니다.
 void Function(BidmadInfo? info) onLoadAd|리스너가 등록되어 있으면 광고 로드 시 등록된 함수가 호출됩니다.
 void Function(BidmadInfo? info) onShowAd|리스너가 등록되어 있으면 광고 송출 시 등록된 함수가 호출됩니다.
+void Function(BidmadInfo? info, String errorMsg, int errorCode) onShowFailAd|리스너가 등록되어 있으면 로드된 광고의 송출에 실패한 경우 등록된 함수가 호출됩니다.
 void Function(String errorMsg, int errorCode) onFailAd|리스너가 등록되어 있으면 광고 요청 실패 시 등록된 함수가 호출됩니다.
 void Function(BidmadInfo? info) onClickAd|리스너가 등록되어 있으면 광고 클릭 시 등록된 함수가 호출됩니다.
 void Function(BidmadInfo? info) onCloseAd|리스너가 등록되어 있으면 광고를 닫을 때 등록된 함수가 호출됩니다.
@@ -697,6 +704,7 @@ Future\<void> setAdInfo(String zoneId)|발급받은 ZoneId를 셋팅합니다.
 Future\<void> setCUID(String cuid)|각 광고 유형의 CUID 속성을 설정합니다. sha256 이상을 사용하여 텍스트 암호화 권장합니다.
 void Function(BidmadInfo? info) onLoadAd|리스너가 등록되어 있으면 광고 로드 시 등록된 함수가 호출됩니다.
 void Function(BidmadInfo? info) onShowAd|리스너가 등록되어 있으면 광고 송출 시 등록된 함수가 호출됩니다.
+void Function(BidmadInfo? info, String errorMsg, int errorCode) onShowFailAd|리스너가 등록되어 있으면 로드된 광고의 송출에 실패한 경우 등록된 함수가 호출됩니다.
 void Function(String errorMsg, int errorCode) onFailAd|리스너가 등록되어 있으면 광고 요청 실패 시 등록된 함수가 호출됩니다.
 void Function(BidmadInfo? info) onCompleteAd|리스너가 등록되어 있으면 광고의 보상지급 조건이 충족 된 경우 등록된 함수가 호출됩니다.
 void Function(BidmadInfo? info) onCloseAd|리스너가 등록되어 있으면 광고를 닫을 때 등록된 함수가 호출됩니다.

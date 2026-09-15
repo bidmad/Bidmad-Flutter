@@ -83,6 +83,10 @@ class BidmadInterstitialSample {
           print("interstitial onShowAd : ");
           textView.text = "onShowAd";
           interstitial.load();
+        }, onShowFailAd: (BidmadInfo? info, String error, int errorCode) {
+          print("interstitial onShowFailAd : $error ($errorCode)");
+          textView.text = "onShowFailAd";
+          interstitial.load();
         }, onClickAd: (BidmadInfo? info) {
           print("interstitial onClickAd : ");
           textView.text = "onClickAd";
