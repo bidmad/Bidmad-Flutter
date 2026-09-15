@@ -87,8 +87,6 @@ class BidmadRewardSample {
         }, onShowFailAd: (BidmadInfo? info, String error, int errorCode) {
           print("reward onShowFailAd : $error ($errorCode)");
           textView.text = "onShowFailAd";
-
-          reward.load();
         }, onCompleteAd: (BidmadInfo? info) {
           print("reward onCompleteAd : ");
           textView.text = "onCompleteAd";
