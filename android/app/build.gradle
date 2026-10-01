@@ -70,6 +70,7 @@ dependencies {
     implementation 'com.adop.sdk.adapter:pangle:8.1.0.3.0'     // Pangle
     implementation 'com.adop.sdk.adapter:premiumads:1.0.10.0'  // PremiumAds
     implementation 'com.adop.sdk.adapter:taboola:4.0.38.0'     // Taboola
+    implementation 'com.adop.sdk.adapter:teads:6.2.0.0'        // Teads
     implementation 'com.adop.sdk.adapter:unityads:4.19.0.0'    // Unity Ads
     implementation 'com.adop.sdk.adapter:vungle:7.7.7.0'       // Vungle (Liftoff)
 

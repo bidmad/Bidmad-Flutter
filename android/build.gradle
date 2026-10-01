@@ -8,6 +8,7 @@ allprojects {
         maven { url 'https://artifact.bytedance.com/repository/pangle/' }                             // Pangle
         maven { url 'https://dl-maven-android.mintegral.com/repository/mbridge_android_sdk_oversea' } // AdMob bidding
         maven { url 'https://taboolapublic.jfrog.io/artifactory/mobile-release' }                     // Taboola
+        maven { url 'https://teads.jfrog.io/artifactory/SDKAndroid-maven-prod' }                      // Teads
         maven { url 'https://repo.premiumads.net/artifactory/mobile-ads-sdk/' }                       // PremiumAds
     }
 }

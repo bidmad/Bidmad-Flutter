@@ -141,6 +141,7 @@ allprojects {
         maven { url 'https://artifact.bytedance.com/repository/pangle/' }                             // Pangle
         maven { url 'https://dl-maven-android.mintegral.com/repository/mbridge_android_sdk_oversea' } // AdMob bidding
         maven { url 'https://taboolapublic.jfrog.io/artifactory/mobile-release' }                     // Taboola
+        maven { url 'https://teads.jfrog.io/artifactory/SDKAndroid-maven-prod' }                      // Teads
         maven { url 'https://repo.premiumads.net/artifactory/mobile-ads-sdk/' }                       // PremiumAds
     }
 }
@@ -158,6 +159,7 @@ allprojects {
         maven { url = uri("https://artifact.bytedance.com/repository/pangle/") }                             // Pangle
         maven { url = uri("https://dl-maven-android.mintegral.com/repository/mbridge_android_sdk_oversea") } // AdMob bidding
         maven { url = uri("https://taboolapublic.jfrog.io/artifactory/mobile-release") }                     // Taboola
+        maven { url = uri("https://teads.jfrog.io/artifactory/SDKAndroid-maven-prod") }                      // Teads
         maven { url = uri("https://repo.premiumads.net/artifactory/mobile-ads-sdk/") }                       // PremiumAds
     }
 }
@@ -180,6 +182,7 @@ dependencies {
     implementation 'com.adop.sdk.adapter:pangle:8.1.0.3.0'     // Pangle
     implementation 'com.adop.sdk.adapter:premiumads:1.0.10.0'  // PremiumAds
     implementation 'com.adop.sdk.adapter:taboola:4.0.38.0'     // Taboola
+    implementation 'com.adop.sdk.adapter:teads:6.2.0.0'        // Teads
     implementation 'com.adop.sdk.adapter:unityads:4.19.0.0'    // Unity Ads
     implementation 'com.adop.sdk.adapter:vungle:7.7.7.0'       // Vungle (Liftoff)
 
@@ -264,7 +267,7 @@ end
 ```
 
 > [!NOTE]
-> The bundled sets were not identical across platforms. iOS ships AdMob and Google Ad Manager as separate pods, while Android serves Google demand through the single `admob` adapter. Coupang is Android-only, and Teads was bundled on iOS only. Contact the **Techlabs Platform Operations Team** for any network not listed here.
+> The bundled sets were not identical across platforms. iOS ships AdMob and Google Ad Manager as separate pods, while Android serves Google demand through the single `admob` adapter. Coupang is Android-only, and Teads was bundled on iOS only; the Android Teads adapter in [1.4.2](#14-ad-network-adapters) is available but was never bundled. Contact the **Techlabs Platform Operations Team** for any network not listed here.
 
 ### 3. Using Plugin
 

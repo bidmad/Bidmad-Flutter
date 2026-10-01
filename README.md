@@ -141,6 +141,7 @@ allprojects {
         maven { url 'https://artifact.bytedance.com/repository/pangle/' }                             // Pangle
         maven { url 'https://dl-maven-android.mintegral.com/repository/mbridge_android_sdk_oversea' } // AdMob 비딩
         maven { url 'https://taboolapublic.jfrog.io/artifactory/mobile-release' }                     // Taboola
+        maven { url 'https://teads.jfrog.io/artifactory/SDKAndroid-maven-prod' }                      // Teads
         maven { url 'https://repo.premiumads.net/artifactory/mobile-ads-sdk/' }                       // PremiumAds
     }
 }
@@ -158,6 +159,7 @@ allprojects {
         maven { url = uri("https://artifact.bytedance.com/repository/pangle/") }                             // Pangle
         maven { url = uri("https://dl-maven-android.mintegral.com/repository/mbridge_android_sdk_oversea") } // AdMob 비딩
         maven { url = uri("https://taboolapublic.jfrog.io/artifactory/mobile-release") }                     // Taboola
+        maven { url = uri("https://teads.jfrog.io/artifactory/SDKAndroid-maven-prod") }                      // Teads
         maven { url = uri("https://repo.premiumads.net/artifactory/mobile-ads-sdk/") }                       // PremiumAds
     }
 }
@@ -180,6 +182,7 @@ dependencies {
     implementation 'com.adop.sdk.adapter:pangle:8.1.0.3.0'     // Pangle
     implementation 'com.adop.sdk.adapter:premiumads:1.0.10.0'  // PremiumAds
     implementation 'com.adop.sdk.adapter:taboola:4.0.38.0'     // Taboola
+    implementation 'com.adop.sdk.adapter:teads:6.2.0.0'        // Teads
     implementation 'com.adop.sdk.adapter:unityads:4.19.0.0'    // Unity Ads
     implementation 'com.adop.sdk.adapter:vungle:7.7.7.0'       // Vungle (Liftoff)
 
@@ -264,7 +267,7 @@ end
 ```
 
 > [!NOTE]
-> 플랫폼별로 포함되어 있던 구성이 완전히 동일하지는 않았습니다. iOS는 AdMob과 Google Ad Manager를 별도 파드로 제공하지만, Android는 `admob` 어댑터 하나로 Google 수요를 처리합니다. Coupang은 Android에만, Teads는 iOS에만 포함되어 있었습니다. 목록에 없는 네트워크는 **테크랩스 플랫폼 운영팀**으로 문의 부탁드립니다.
+> 플랫폼별로 포함되어 있던 구성이 완전히 동일하지는 않았습니다. iOS는 AdMob과 Google Ad Manager를 별도 파드로 제공하지만, Android는 `admob` 어댑터 하나로 Google 수요를 처리합니다. Coupang은 Android에만, Teads는 iOS에만 포함되어 있었습니다. [1.4.2](#14-광고-네트워크-어댑터)의 Android Teads 어댑터는 사용 가능하지만 플러그인에 포함된 적은 없습니다. 목록에 없는 네트워크는 **테크랩스 플랫폼 운영팀**으로 문의 부탁드립니다.
 
 ### 3. Using Plugin
 
