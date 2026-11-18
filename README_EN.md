@@ -177,14 +177,14 @@ dependencies {
     implementation 'com.adop.sdk.adapter:applovin:13.6.2.1'    // AppLovin
     implementation 'com.adop.sdk.adapter:coupang:1.0.0.7'      // Coupang
     implementation 'com.adop.sdk.adapter:fyber:8.4.6.0'        // Fyber (DT Exchange)
-    implementation 'com.adop.sdk.adapter:mobwith:2.0.3'        // MobWith
+    implementation 'com.adop.sdk.adapter:mobwith:2.0.4'        // MobWith
     implementation 'com.adop.sdk.adapter:ortb:1.0.3'           // oRTB
     implementation 'com.adop.sdk.adapter:pangle:8.1.0.3.0'     // Pangle
     implementation 'com.adop.sdk.adapter:premiumads:1.0.10.0'  // PremiumAds
     implementation 'com.adop.sdk.adapter:taboola:4.0.38.0'     // Taboola
     implementation 'com.adop.sdk.adapter:teads:6.2.0.0'        // Teads
     implementation 'com.adop.sdk.adapter:unityads:4.19.0.0'    // Unity Ads
-    implementation 'com.adop.sdk.adapter:vungle:7.7.7.0'       // Vungle (Liftoff)
+    implementation 'com.adop.sdk.adapter:vungle:7.7.7.1'       // Vungle (Liftoff)
 
     implementation 'com.adop.sdk.partners:admobbidding:1.1.6'  // AdMob bidding
 }
@@ -244,19 +244,19 @@ target 'Runner' do
 
   flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
 
-  pod 'BidmadAdFitAdapter', '3.18.3.14.1'            # AdFit
-  pod 'BidmadAppLovinAdapter', '13.6.2.14.1'         # AppLovin
-  pod 'BidmadFyberAdapter', '8.4.6.14.1'             # Fyber (DT Exchange)
-  pod 'BidmadGoogleAdManagerAdapter', '13.2.0.14.1'  # Google Ad Manager
-  pod 'BidmadGoogleAdMobAdapter', '13.2.0.14.1'      # AdMob
-  pod 'BidmadMobwithAdapter', '2.0.0.14.1'           # MobWith
-  pod 'BidmadORTBAdapter', '1.0.0.14.1'              # oRTB
-  pod 'BidmadPangleAdapter', '7.9.0.8.14.1'          # Pangle
-  pod 'BidmadPremiumAdsGoogleAdapter', '1.0.6.14.1'  # PremiumAds
-  pod 'BidmadTaboolaAdapter', '3.9.12.14.1'          # Taboola
-  pod 'BidmadTeadsAdapter', '6.1.0.14.1'             # Teads
-  pod 'BidmadUnityAdsAdapter', '4.17.0.14.1'         # Unity Ads
-  pod 'BidmadVungleAdapter', '7.7.2.14.1'            # Vungle (Liftoff)
+  pod 'BidmadAdFitAdapter', '3.18.3.15.0'            # AdFit
+  pod 'BidmadAppLovinAdapter', '13.6.2.15.0'         # AppLovin
+  pod 'BidmadFyberAdapter', '8.4.6.15.0'             # Fyber (DT Exchange)
+  pod 'BidmadGoogleAdManagerAdapter', '13.2.0.15.0'  # Google Ad Manager
+  pod 'BidmadGoogleAdMobAdapter', '13.2.0.15.0'      # AdMob
+  pod 'BidmadMobwithAdapter', '2.0.0.15.1'           # MobWith
+  pod 'BidmadORTBAdapter', '1.0.0.15.0'              # oRTB
+  pod 'BidmadPangleAdapter', '7.9.0.8.15.0'          # Pangle
+  pod 'BidmadPremiumAdsGoogleAdapter', '1.0.6.15.0'  # PremiumAds
+  pod 'BidmadTaboolaAdapter', '3.9.12.15.1'          # Taboola
+  pod 'BidmadTeadsAdapter', '6.1.0.15.0'             # Teads
+  pod 'BidmadUnityAdsAdapter', '4.17.0.15.0'         # Unity Ads
+  pod 'BidmadVungleAdapter', '7.7.2.15.0'            # Vungle (Liftoff)
 
   pod 'BidmadPartners/AdMobBidding', '1.0.13'        # AdMob bidding
 
@@ -767,3 +767,4 @@ Size? loadedBannerAdSize|The banner ad size that was actually loaded.
 #### References
 
 - [Coupang Network Ad-Block Interface Guide](https://github.com/bidmad/Bidmad-Flutter/wiki/%EC%BF%A0%ED%8C%A1-%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%81%AC-%EA%B4%91%EA%B3%A0-%EC%B0%A8%EB%8B%A8-%EC%9D%B8%ED%84%B0%ED%8E%98%EC%9D%B4%EC%8A%A4-%EA%B0%80%EC%9D%B4%EB%93%9C)
+- [Obfuscation Inspection Report Guide (Android)](https://github.com/bidmad/Bidmad-Android/wiki/Android-Obfuscation-Inspection-Report-Guide%5BENG%5D)

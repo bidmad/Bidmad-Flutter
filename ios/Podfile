@@ -35,19 +35,19 @@ target 'Runner' do
 
   # As of bidmad_plugin 1.14.0 the ad network adapters are declared by the app
   # rather than bundled with the plugin.
-  pod 'BidmadAdFitAdapter', '3.18.3.14.1'            # AdFit
-  pod 'BidmadAppLovinAdapter', '13.6.2.14.1'         # AppLovin
-  pod 'BidmadFyberAdapter', '8.4.6.14.1'             # Fyber (DT Exchange)
-  pod 'BidmadGoogleAdManagerAdapter', '13.2.0.14.1'  # Google Ad Manager
-  pod 'BidmadGoogleAdMobAdapter', '13.2.0.14.1'      # AdMob
-  pod 'BidmadMobwithAdapter', '2.0.0.14.1'           # MobWith
-  pod 'BidmadORTBAdapter', '1.0.0.14.1'              # oRTB
-  pod 'BidmadPangleAdapter', '7.9.0.8.14.1'          # Pangle
-  pod 'BidmadPremiumAdsGoogleAdapter', '1.0.6.14.1'  # PremiumAds
-  pod 'BidmadTaboolaAdapter', '3.9.12.14.1'          # Taboola
-  pod 'BidmadTeadsAdapter', '6.1.0.14.1'             # Teads
-  pod 'BidmadUnityAdsAdapter', '4.17.0.14.1'         # Unity Ads
-  pod 'BidmadVungleAdapter', '7.7.2.14.1'            # Vungle (Liftoff)
+  pod 'BidmadAdFitAdapter', '3.18.3.15.0'            # AdFit
+  pod 'BidmadAppLovinAdapter', '13.6.2.15.0'         # AppLovin
+  pod 'BidmadFyberAdapter', '8.4.6.15.0'             # Fyber (DT Exchange)
+  pod 'BidmadGoogleAdManagerAdapter', '13.2.0.15.0'  # Google Ad Manager
+  pod 'BidmadGoogleAdMobAdapter', '13.2.0.15.0'      # AdMob
+  pod 'BidmadMobwithAdapter', '2.0.0.15.1'           # MobWith
+  pod 'BidmadORTBAdapter', '1.0.0.15.0'              # oRTB
+  pod 'BidmadPangleAdapter', '7.9.0.8.15.0'          # Pangle
+  pod 'BidmadPremiumAdsGoogleAdapter', '1.0.6.15.0'  # PremiumAds
+  pod 'BidmadTaboolaAdapter', '3.9.12.15.1'          # Taboola
+  pod 'BidmadTeadsAdapter', '6.1.0.15.0'             # Teads
+  pod 'BidmadUnityAdsAdapter', '4.17.0.15.0'         # Unity Ads
+  pod 'BidmadVungleAdapter', '7.7.2.15.0'            # Vungle (Liftoff)
 
   pod 'BidmadPartners/AdMobBidding', '1.0.13'        # AdMob bidding
 
