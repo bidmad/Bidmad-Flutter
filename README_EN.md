@@ -55,12 +55,12 @@ On Android the plugin also stopped injecting the network-specific maven reposito
 #### Migration steps
 
 1. **Update the plugin.** Set `bidmad_plugin: ^1.14.0` in `pubspec.yaml` and run `flutter pub get`.
-2. **Android.** Add the network repositories and the adapters you serve — see [1.3 Ad Network Adapters](#13-ad-network-adapters).
+2. **Android.** Add the network repositories and the adapters you serve — see [1.4 Ad Network Adapters](#14-ad-network-adapters).
 3. **iOS (1.14.x only).** Add the adapter pods you serve to `ios/Podfile`, then run `pod install --repo-update` in the `ios` folder.
 4. **Verify.** Build both platforms, call `FlutterBidmadCommon().setDebugging(true)` before requesting an ad, and check that every ad network you expect appears in the debug log. A network missing from the log has no adapter declared.
 
 > [!TIP]
-> To make the Android upgrade behaviour-neutral, start by declaring the **full** list in [1.3](#13-ad-network-adapters) — that is exactly the set the plugin bundled through 1.13.x.
+> To make the Android upgrade behaviour-neutral, start by declaring the **full** list in [1.4](#14-ad-network-adapters) — that is exactly the set the plugin bundled through 1.13.x.
 
 ### Changes in 1.13.0
 
@@ -76,7 +76,14 @@ On Android the plugin also stopped injecting the network-specific maven reposito
 
 *If you are using a version lower than 1.0.0, please check [here](https://github.com/bidmad/Bidmad-Flutter/wiki/Flutter-Bidmad_Plugin-1.0.0-Migration-Guide%5BENG%5D) first before proceeding to the guide below.
 
-#### 1.1 Proguard Settings
+#### 1.1 gradle.properties Setting
+Add the options below to gradle.properties
+```java
+...
+android.enableDexingArtifactTransform=false
+```
+
+#### 1.2 Proguard Settings
 If you are using Proguard, add the rule below.
 ```java
 ...
@@ -120,7 +127,7 @@ public static final ** CREATOR;
 -keep class com.google.android.gms.ads.identifier.** { *; }
 ```
 
-#### 1.2 Admob Application ID Settings
+#### 1.3 Admob Application ID Settings
 Declare the code below under the application tag in AndroidManifest.xml inside the Android app module.([Guide](https://github.com/bidmad/SDK/wiki/Find-your-app-key%5BEN%5D#app-id-from-admob-dashboard))<br>
    *Check the value of com.google.android.gms.ads.APPLICATION_ID in the Admob dashboard.
 
@@ -132,10 +139,10 @@ Declare the code below under the application tag in AndroidManifest.xml inside t
 </application>
 ```
 
-#### 1.3 Ad Network Adapters
+#### 1.4 Ad Network Adapters
 As of 1.14.0 the plugin does not bundle ad network adapters. Declare the ad networks you serve in your own app. If you are upgrading from 1.13.x, read [Migrating to 1.14.0](#migrating-to-1140) first.
 
-**1.3.1 Repositories**<br>
+**1.4.1 Repositories**<br>
 Add the repositories your networks need to `allprojects.repositories` in `android/build.gradle`. `google()`, `mavenCentral()` and the Bidmad repository are already injected by the plugin, so only the network-specific entries are required.
 
 ```groovy
@@ -173,7 +180,7 @@ allprojects {
 
 </details>
 
-**1.3.2 Adapters**<br>
+**1.4.2 Adapters**<br>
 Add the ad networks you serve to `dependencies` in `android/app/build.gradle`. On newer Flutter templates the file is `android/app/build.gradle.kts`, where the same entries are written as `implementation("com.adop.sdk.adapter:admob:25.4.0.0")`.
 
 ```groovy
@@ -198,8 +205,8 @@ dependencies {
 
 > [!NOTE]
 > - **`compileSdk` 36.** `com.adop.sdk.partners:admobbidding` requires the app to compile against API 36. Recent Flutter templates already do, through `compileSdk = flutter.compileSdkVersion`. If your build fails with `requires libraries and applications that depend on it to compile against version 36 or later`, set `compileSdk 36` explicitly in `android/app/build.gradle`.
-> - **AdMob Application ID.** The `AndroidManifest.xml` entry in [1.2](#12-admob-application-id-settings) is required whenever you declare the AdMob adapter or AdMob bidding.
-> - **Proguard / R8.** The rules in [1.1](#11-proguard-settings) already cover `com.adop.sdk.adapter.**` and stay unchanged. Ad network SDKs also carry optional references to libraries they do not depend on, which R8 reports as `Missing class ...` when you build a release APK. Add the rules that the Android Gradle plugin writes to `build/app/outputs/mapping/release/missing_rules.txt` to your `proguard-rules.pro` — this is expected and does not mean an adapter is missing.
+> - **AdMob Application ID.** The `AndroidManifest.xml` entry in [1.3](#13-admob-application-id-settings) is required whenever you declare the AdMob adapter or AdMob bidding.
+> - **Proguard / R8.** The rules in [1.2](#12-proguard-settings) already cover `com.adop.sdk.adapter.**` and stay unchanged. Ad network SDKs also carry optional references to libraries they do not depend on, which R8 reports as `Missing class ...` when you build a release APK. Add the rules that the Android Gradle plugin writes to `build/app/outputs/mapping/release/missing_rules.txt` to your `proguard-rules.pro` — this is expected and does not mean an adapter is missing.
 
 ### 2. iOS Setting
 
