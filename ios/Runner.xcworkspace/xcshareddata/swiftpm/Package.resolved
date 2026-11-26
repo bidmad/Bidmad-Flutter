@@ -1,0 +1,401 @@
+{
+  "pins" : [
+    {
+      "identity" : "adapter-ios-spm-v2",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/premium-ads/adapter-ios-spm-v2.git",
+      "state" : {
+        "revision" : "773719f6e0c818f566261eb7620fe58a4f109e8b",
+        "version" : "1.0.6"
+      }
+    },
+    {
+      "identity" : "adfit-spm",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/adfit/adfit-spm.git",
+      "state" : {
+        "revision" : "31c7019d05140474793a8f77bbe4964dd0478c13",
+        "version" : "3.18.3"
+      }
+    },
+    {
+      "identity" : "adpie-ios-sdk",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/gomfactory/AdPie-iOS-SDK.git",
+      "state" : {
+        "revision" : "8bbfbb2e91374f9181bc46c43f87c8b0b14f4750",
+        "version" : "1.6.16"
+      }
+    },
+    {
+      "identity" : "adsglobalpackage",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/bytedance/AdsGlobalPackage.git",
+      "state" : {
+        "revision" : "a82f35751850c477e34666d96779ec09b2b80bb7",
+        "version" : "8.4.0-release.7"
+      }
+    },
+    {
+      "identity" : "applovin-max-swift-package",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/AppLovin/AppLovin-MAX-Swift-Package.git",
+      "state" : {
+        "revision" : "ddf923e9b9de295d1c2425053cf14b32735246a8",
+        "version" : "13.7.0"
+      }
+    },
+    {
+      "identity" : "bidmadadfitadapter-spm",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/bidmad/BidmadAdFitAdapter-SPM.git",
+      "state" : {
+        "revision" : "7671458d0941cc806eb3f9c07f4be108ab367bbf",
+        "version" : "7.2.0+3.18.3"
+      }
+    },
+    {
+      "identity" : "bidmadadpieadapter-spm",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/bidmad/BidmadAdpieAdapter-SPM.git",
+      "state" : {
+        "revision" : "c42c606955d2cec5585f33e3e49930d4bc76a6f0",
+        "version" : "7.2.0+1.6.16"
+      }
+    },
+    {
+      "identity" : "bidmadapplovinadapter-spm",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/bidmad/BidmadAppLovinAdapter-SPM.git",
+      "state" : {
+        "revision" : "1426404c2a4ba738224c2136d8967d0a09329f1c",
+        "version" : "7.2.0+13.7.0"
+      }
+    },
+    {
+      "identity" : "bidmadfyberadapter-spm",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/bidmad/BidmadFyberAdapter-SPM.git",
+      "state" : {
+        "revision" : "b3456dfc2777dba19af2d1539f9f2bb23310e264",
+        "version" : "7.2.0+8.5.1"
+      }
+    },
+    {
+      "identity" : "bidmadgoogleadmanageradapter-spm",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/bidmad/BidmadGoogleAdManagerAdapter-SPM.git",
+      "state" : {
+        "revision" : "9f38ee51386c3ad6d9144c73a1a5d16cf492f844",
+        "version" : "7.2.0+13.11.0"
+      }
+    },
+    {
+      "identity" : "bidmadgoogleadmobadapter-spm",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/bidmad/BidmadGoogleAdMobAdapter-SPM.git",
+      "state" : {
+        "revision" : "dbdeac0d46760e76215642bfb5a30d74cf52ca20",
+        "version" : "7.2.0+13.11.0"
+      }
+    },
+    {
+      "identity" : "bidmadmobwithadapter-spm",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/bidmad/BidmadMobwithAdapter-SPM.git",
+      "state" : {
+        "revision" : "697ef94174afe4fb36651fa2afd1ae2b777e7970",
+        "version" : "7.2.0"
+      }
+    },
+    {
+      "identity" : "bidmadortbadapter-spm",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/bidmad/BidmadORTBAdapter-SPM.git",
+      "state" : {
+        "revision" : "27298410b3c9bcffccf7ea03905f42f84d97fd10",
+        "version" : "7.2.0"
+      }
+    },
+    {
+      "identity" : "bidmadpangleadapter-spm",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/bidmad/BidmadPangleAdapter-SPM.git",
+      "state" : {
+        "revision" : "f4e004a9ea6eabfbc1ccdbb753f4aebe94992b5a",
+        "version" : "7.2.0+8.4.0-release.7"
+      }
+    },
+    {
+      "identity" : "bidmadpartnersadmobbidding-spm",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/bidmad/BidmadPartnersAdMobBidding-SPM.git",
+      "state" : {
+        "revision" : "4b56b1d7a075c754cff646d7aad07a38fefae62a",
+        "version" : "7.2.0"
+      }
+    },
+    {
+      "identity" : "bidmadpremiumadsgoogleadapter-spm",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/bidmad/BidmadPremiumAdsGoogleAdapter-SPM.git",
+      "state" : {
+        "revision" : "201b20b01c34c801fa8b4c4195986d33c89b3aea",
+        "version" : "7.2.0+1.0.6"
+      }
+    },
+    {
+      "identity" : "bidmadsdk-spm",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/bidmad/BidmadSDK-SPM.git",
+      "state" : {
+        "revision" : "16662aa5852086d9e5a377f2e9a55b58a51bb706",
+        "version" : "7.2.0"
+      }
+    },
+    {
+      "identity" : "bidmadtaboolaadapter-spm",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/bidmad/BidmadTaboolaAdapter-SPM.git",
+      "state" : {
+        "revision" : "cfd6211ce8866346f023985e99b307580920dc5d",
+        "version" : "7.2.0+3.9.12"
+      }
+    },
+    {
+      "identity" : "bidmadteadsadapter-spm",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/bidmad/BidmadTeadsAdapter-SPM.git",
+      "state" : {
+        "revision" : "61d1d75156731e3574ecb5bfdadac6453dc4344f",
+        "version" : "7.2.0+6.1.0"
+      }
+    },
+    {
+      "identity" : "bidmadunityadsadapter-spm",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/bidmad/BidmadUnityAdsAdapter-SPM.git",
+      "state" : {
+        "revision" : "31f9ae66adaae826a7ef8d71f9a24f4788783dca",
+        "version" : "7.2.0+4.21.0"
+      }
+    },
+    {
+      "identity" : "bidmadvungleadapter-spm",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/bidmad/BidmadVungleAdapter-SPM.git",
+      "state" : {
+        "revision" : "02ed447bb65cae1f141eeb805bb44f3004d49074",
+        "version" : "7.2.0+7.7.8"
+      }
+    },
+    {
+      "identity" : "dtexchangesdk-ios-spm",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/inner-active/DTExchangeSDK-iOS-SPM.git",
+      "state" : {
+        "revision" : "27f75bc8ce1909cba59849647e589d8dd05b8c91",
+        "version" : "8.5.1"
+      }
+    },
+    {
+      "identity" : "fbaudiencenetwork",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/facebook/FBAudienceNetwork.git",
+      "state" : {
+        "revision" : "4a7051592f50bb276c7346d5751967cdbbd64ac6",
+        "version" : "6.22.1"
+      }
+    },
+    {
+      "identity" : "googleads-mobile-ios-mediation-applovin",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/googleads/googleads-mobile-ios-mediation-applovin.git",
+      "state" : {
+        "revision" : "5a50776a706e62006135c6ee2dcc70b90c669aee",
+        "version" : "13.7.0"
+      }
+    },
+    {
+      "identity" : "googleads-mobile-ios-mediation-dtexchange",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/googleads/googleads-mobile-ios-mediation-dtexchange.git",
+      "state" : {
+        "revision" : "6175f4eb57265cf78223b8348978c3dfdbb0860a",
+        "version" : "8.5.100"
+      }
+    },
+    {
+      "identity" : "googleads-mobile-ios-mediation-inmobi",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/googleads/googleads-mobile-ios-mediation-inmobi.git",
+      "state" : {
+        "revision" : "23665bf94bbba44b19a9072e3d1f4519b0e32cd2",
+        "version" : "11.5.0"
+      }
+    },
+    {
+      "identity" : "googleads-mobile-ios-mediation-liftoffmonetize",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/googleads/googleads-mobile-ios-mediation-liftoffmonetize.git",
+      "state" : {
+        "revision" : "466e63974937e07a38c14c18e93fe92cfc31c567",
+        "version" : "7.7.800"
+      }
+    },
+    {
+      "identity" : "googleads-mobile-ios-mediation-line",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/googleads/googleads-mobile-ios-mediation-line.git",
+      "state" : {
+        "revision" : "3da968b50280983282e5ddb6042e852e86a17f05",
+        "version" : "3.1.100"
+      }
+    },
+    {
+      "identity" : "googleads-mobile-ios-mediation-meta",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/googleads/googleads-mobile-ios-mediation-meta.git",
+      "state" : {
+        "revision" : "1b27e078d5bbce9ee28ab102af6a113b2e95942d",
+        "version" : "6.22.100"
+      }
+    },
+    {
+      "identity" : "googleads-mobile-ios-mediation-mintegral",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/googleads/googleads-mobile-ios-mediation-mintegral.git",
+      "state" : {
+        "revision" : "28b32a80d771008b294a07e144aace758ef52616",
+        "version" : "8.1.800"
+      }
+    },
+    {
+      "identity" : "googleads-mobile-ios-mediation-moloco",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/googleads/googleads-mobile-ios-mediation-moloco.git",
+      "state" : {
+        "revision" : "57f3bdf2b1e7d456deed201079afaf50e3f79355",
+        "version" : "4.11.100"
+      }
+    },
+    {
+      "identity" : "googleads-mobile-ios-mediation-pangle",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/googleads/googleads-mobile-ios-mediation-pangle.git",
+      "state" : {
+        "revision" : "e98321929e3216a1f5102b5840e0478baa58dd4d",
+        "version" : "8.4.700"
+      }
+    },
+    {
+      "identity" : "googleads-mobile-ios-mediation-unity",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/googleads/googleads-mobile-ios-mediation-unity.git",
+      "state" : {
+        "revision" : "188967a5c062987496cd276b83dc25e84f87d9a6",
+        "version" : "4.21.0"
+      }
+    },
+    {
+      "identity" : "inmobisdk-swift-package",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/InMobi/InMobiSDK-Swift-Package.git",
+      "state" : {
+        "revision" : "5f05204ee19eb85625727cba50f47d9bd48f376e",
+        "version" : "11.5.0"
+      }
+    },
+    {
+      "identity" : "mintegraladsdk-swift-package",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Mintegral-official/MintegralAdSDK-Swift-Package.git",
+      "state" : {
+        "revision" : "ecc695794847e1ca44ee25f6cacb4d167177a915",
+        "version" : "8.1.8"
+      }
+    },
+    {
+      "identity" : "moloco-sdk-ios-spm",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/moloco/moloco-sdk-ios-spm.git",
+      "state" : {
+        "revision" : "f279a5fa1b3cdc80fa7f4a9c44d420648cf9b226",
+        "version" : "4.11.1"
+      }
+    },
+    {
+      "identity" : "prebid-mobile-ios",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/prebid/prebid-mobile-ios.git",
+      "state" : {
+        "revision" : "2d07f25ea964ac4e027beed9164ce8d2ab7a98d4",
+        "version" : "3.4.1"
+      }
+    },
+    {
+      "identity" : "swift-package-manager-fivead",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/ly-ads-network/swift-package-manager-fivead.git",
+      "state" : {
+        "revision" : "8b03d98842197affbf9a43e169773eeaf3356625",
+        "version" : "3.1.1"
+      }
+    },
+    {
+      "identity" : "swift-package-manager-google-mobile-ads",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/googleads/swift-package-manager-google-mobile-ads.git",
+      "state" : {
+        "revision" : "d1fa1f5c1dfe3b43d56c73f4de388ad3316618bc",
+        "version" : "13.11.0"
+      }
+    },
+    {
+      "identity" : "swift-package-manager-google-user-messaging-platform",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/googleads/swift-package-manager-google-user-messaging-platform.git",
+      "state" : {
+        "revision" : "13b248eaa73b7826f0efb1bcf455e251d65ecb1b",
+        "version" : "3.1.0"
+      }
+    },
+    {
+      "identity" : "taboola-spm-ios-sdk",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/taboola/taboola-spm-ios-sdk.git",
+      "state" : {
+        "revision" : "7a181a8c955c34f8e1ced136838028c27163db23",
+        "version" : "3.9.12"
+      }
+    },
+    {
+      "identity" : "teadssdk-ios",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/teads/TeadsSDK-iOS.git",
+      "state" : {
+        "revision" : "c30e67b876ecf7e8c15af86d9aeb449d8327365e",
+        "version" : "6.1.0"
+      }
+    },
+    {
+      "identity" : "unity-ads-swift-package",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Unity-Technologies/Unity-Ads-Swift-Package.git",
+      "state" : {
+        "revision" : "09bdf0e27186667f381196f57ceece714c8917a2",
+        "version" : "4.21.0"
+      }
+    },
+    {
+      "identity" : "vungleadssdk-swiftpackagemanager",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Vungle/VungleAdsSDK-SwiftPackageManager.git",
+      "state" : {
+        "revision" : "5db4a9115ab3d8353c1143cb67a4b76122b415b7",
+        "version" : "7.7.8"
+      }
+    }
+  ],
+  "version" : 2
+}

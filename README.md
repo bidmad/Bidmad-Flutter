@@ -1,19 +1,9 @@
 > [!IMPORTANT]
-> 1.11.0 버전부터 기존에 사용하던 Appkey가 AppDomain으로 변경되었습니다.<br>
-> **AppDomain은 기존 Appkey와 호환되지 않으므로, 초기화를 위해서는 새로운 AppDomain을 발급받아야 합니다.**<br>
-> 1.11.0 버전으로 업데이트하시는 경우 **테크랩스 플랫폼 운영팀**으로 문의 부탁드립니다.<br>
->
-> **⚠️ 1.14.0 변경사항**
->
-> - 광고 네트워크 어댑터, AdMob 비딩, `BidmadPartners`가 **더 이상 플러그인에 포함되지 않습니다.** 이제 게재하실 광고 네트워크를 앱에서 직접 선언하셔야 합니다. Dart 인터페이스는 변경되지 않았으므로 Flutter 코드를 수정하실 필요는 없으나, 어댑터를 선언하지 않고 업그레이드하신 앱은 **입찰에 참여할 광고 네트워크가 없는 상태**가 됩니다. [1.14.0 마이그레이션 가이드](#1140-마이그레이션-가이드)를 확인하시고 네이티브 설정을 함께 반영해 주십시오.
->
-> **⚠️ 1.13.0 변경사항**
->
-> - `BidmadBannerRefinedWidget`은 이제 항상 부모 제약조건의 **너비를 가득 채워** 광고를 표기합니다. 높이를 지정해도 더 이상 광고가 축소되지 않고, 높이를 넘어가는 부분이 잘립니다. 기준은 다음과 같습니다. **너비가 가변적이라면 높이를 지정하지 마시고** 위젯이 스스로 높이를 계산하도록 하십시오. **너비가 고정되어 있다면 높이를 지정해도 무방합니다.** 예를 들어 너비를 320dp로 고정한 경우 `height: 50`으로도 320x50 소재가 온전히 표기됩니다.
->
->   ![1.13.0 전후 비교: 기존에는 광고가 높이가 정의된 컨테이너 내부에 위치해 좌우에 빈 공간이 생겼으나, 이제는 컨테이너 가로폭에 맞게 광고 크기를 키우고 하단이 컨테이너 높이에 맞게 잘립니다](https://i.imgur.com/poyKWyT.jpg)
->
-> - 모든 `onFailAd` 콜백이 두 번째 인자로 에러 코드를 전달받습니다. 시그니처가 `void Function(String errorMsg)` 에서 `void Function(String errorMsg, int errorCode)` 로 변경되었으며, 배너 / 리파인드 배너 / 전면 / 보상형 / 네이티브 광고에 모두 적용됩니다. 기존 시그니처로 작성된 핸들러는 컴파일되지 않으므로, 업그레이드 시 두 번째 파라미터를 추가해 주십시오.
+> 1.15.0 부터 iOS 는 **Swift Package Manager** 로만 연동됩니다.<br>
+> Flutter 3.41 이상, iOS 15.0 이상이 필요합니다.<br>
+> 1.11.0 부터 AppKey 대신 AppDomain 을 사용합니다.<br>
+> **SDK를 초기화하려면 새 AppDomain을 발급받아야 합니다.**<br>
+> 이전 버전에서 업데이트하신다면 [마이그레이션 가이드](#마이그레이션-가이드)를 확인해 주십시오.
 
 ## Introduce
 BidmadPlugin은 모바일 앱 광고 SDK인 Bidmad를 Flutter에서 사용하기 위한 Plugin입니다.<br>
@@ -22,20 +12,40 @@ Plugin을 사용하여 Flutter 모바일 앱에서 배너 / 전면 / 보상형 �
 [Bidmad Flutter Plugin Pub.dev](https://pub.dev/packages/bidmad_plugin)<br>
 [Flutter 샘플 다운로드](https://github.com/bidmad/Bidmad-Flutter)
 
-## 1.14.0 마이그레이션 가이드
+## 마이그레이션 가이드
+
+| 업데이트 | 변경 사항 | 참고 |
+| --- | --- | --- |
+| 1.15.0 | iOS 가 Swift Package Manager 로 전환, Flutter 3.41·iOS 15.0 이상 필요 | [1.15.0 마이그레이션 가이드](#1150-마이그레이션-가이드) |
+| 1.14.0 | 광고 네트워크 어댑터를 앱에서 직접 선언 | [1.14.0 마이그레이션 가이드](#1140-마이그레이션-가이드) |
+| 1.13.0 | `BidmadBannerRefinedWidget` 너비 채움, `onFailAd` 에 에러 코드 인자 추가 | [1.13.0 변경사항](#1130-변경사항) |
+| 1.11.0 | AppKey → AppDomain | **테크랩스 플랫폼 운영팀** 문의 |
+
+### 1.15.0 마이그레이션 가이드
+
+1.15.0 부터 플러그인의 iOS 의존성은 **Swift Package Manager(SPM)** 로만 배포됩니다. BidmadSDK 7.2.0 이상은 CocoaPods 에 배포되지 않습니다. Android 와 Dart 인터페이스는 변경되지 않았습니다.
+
+1. **Flutter 확인.** Flutter 3.41 이상을 사용해 주십시오. 이전 버전에서는 `flutter pub get` 이 실패합니다.
+2. **플러그인 업데이트.** `pubspec.yaml` 에 `bidmad_plugin: ^1.15.0` 을 지정하시고 `flutter pub get` 을 실행합니다.
+3. **SPM 활성화 및 iOS 15.0 설정.** [2.2 Swift Package Manager](#22-swift-package-manager)를 참고해 주십시오.
+4. **Bidmad 파드 제거.** `ios/Podfile` 에서 `pod 'Bidmad*'` 줄을 모두 삭제합니다.
+5. **광고 네트워크 어댑터를 Swift 패키지로 추가.** [2.5 광고 네트워크 어댑터](#25-광고-네트워크-어댑터)를 참고해 주십시오.
+6. **확인.** 빌드하신 뒤 광고 요청 전에 `FlutterBidmadCommon().setDebugging(true)` 를 호출하시고, 기대하시는 광고 네트워크가 디버그 로그에 모두 표기되는지 확인해 주십시오.
+
+### 1.14.0 마이그레이션 가이드
 
 1.13.x까지는 모든 광고 네트워크 어댑터와 AdMob 비딩, `BidmadPartners`가 플러그인에 포함되어 있었습니다. 1.14.0부터 플러그인은 **코어만** 제공하며, 게재하실 어댑터는 앱에서 직접 선언하시게 됩니다. 이를 통해 광고 네트워크 구성을 직접 결정하실 수 있고, 게재하지 않는 네트워크가 빌드에 포함되지 않으며, 플러그인 릴리스를 기다리지 않고 개별 어댑터를 업데이트하실 수 있습니다.
 
 **Dart 인터페이스는 변경되지 않았습니다.** Dart / Flutter 코드는 수정하실 필요가 없으며, 마이그레이션은 모두 네이티브 빌드 파일에서 진행됩니다.
 
-### 플러그인이 계속 제공하는 항목
+#### 플러그인이 계속 제공하는 항목
 
 | 플랫폼 | 플러그인에 유지되는 의존성 |
 | --- | --- |
 | Android | `ad.helper.openbidding:admob-obh`, `com.adop.sdk:bidmad-androidx` |
 | iOS | `BidmadSDK`, `OpenBiddingHelper`, `BidmadFlutterBridge`, `BidmadGoogleGDPRAdapter` |
 
-### 앱으로 이동된 항목
+#### 앱으로 이동된 항목
 
 | | Android | iOS |
 | --- | --- | --- |
@@ -44,7 +54,7 @@ Plugin을 사용하여 Flutter 모바일 앱에서 배너 / 전면 / 보상형 �
 
 Android의 경우 플러그인이 네트워크별 maven 저장소(Kakao, Pangle, Mintegral, Taboola, PremiumAds)를 프로젝트에 주입하지 않도록 변경되었습니다. 코어 의존성에 필요한 `google()`, `mavenCentral()`, Bidmad 저장소는 플러그인이 계속 주입합니다.
 
-### 마이그레이션 절차
+#### 마이그레이션 절차
 
 1. **플러그인 업데이트.** `pubspec.yaml`에 `bidmad_plugin: ^1.14.0`을 지정하시고 `flutter pub get`을 실행합니다.
 2. **Android.** 필요한 저장소와 게재하실 어댑터를 추가합니다. [1.4 광고 네트워크 어댑터](#14-광고-네트워크-어댑터)를 참고해 주십시오.
@@ -53,6 +63,14 @@ Android의 경우 플러그인이 네트워크별 maven 저장소(Kakao, Pangle,
 
 > [!TIP]
 > 업그레이드 전후 동작을 동일하게 유지하시려면, 먼저 [1.4](#14-광고-네트워크-어댑터) / [2.5](#25-광고-네트워크-어댑터)의 **전체 목록**을 그대로 선언해 주십시오. 이는 1.13.x에 포함되어 있던 구성과 정확히 동일합니다. 광고가 정상적으로 게재되는 것을 확인하신 후 게재하지 않는 네트워크를 제거하시는 것을 권장합니다.
+
+### 1.13.0 변경사항
+
+- `BidmadBannerRefinedWidget`은 이제 항상 부모 제약조건의 **너비를 가득 채워** 광고를 표기합니다. 높이를 지정해도 더 이상 광고가 축소되지 않고, 높이를 넘어가는 부분이 잘립니다. 기준은 다음과 같습니다. **너비가 가변적이라면 높이를 지정하지 마시고** 위젯이 스스로 높이를 계산하도록 하십시오. **너비가 고정되어 있다면 높이를 지정해도 무방합니다.** 예를 들어 너비를 320dp로 고정한 경우 `height: 50`으로도 320x50 소재가 온전히 표기됩니다.
+
+  ![1.13.0 전후 비교: 기존에는 광고가 높이가 정의된 컨테이너 내부에 위치해 좌우에 빈 공간이 생겼으나, 이제는 컨테이너 가로폭에 맞게 광고 크기를 키우고 하단이 컨테이너 높이에 맞게 잘립니다](https://i.imgur.com/poyKWyT.jpg)
+
+- 모든 `onFailAd` 콜백이 두 번째 인자로 에러 코드를 전달받습니다. 시그니처가 `void Function(String errorMsg)` 에서 `void Function(String errorMsg, int errorCode)` 로 변경되었으며, 배너 / 리파인드 배너 / 전면 / 보상형 / 네이티브 광고에 모두 적용됩니다. 기존 시그니처로 작성된 핸들러는 컴파일되지 않으므로, 업그레이드 시 두 번째 파라미터를 추가해 주십시오.
 
 ## Programming Guide
 
@@ -197,21 +215,28 @@ dependencies {
 
 ### 2. iOS Setting
 
-#### 2.1 Xcode 버전 & Privacy Manifest
+#### 2.1 요구 사항 & Privacy Manifest
+- Flutter 3.41 이상, iOS Deployment Target 15.0 이상이 필요합니다.
 - 앱 빌드 및 배포 시 Xcode 26.0 이상을 사용해 주십시오.
 - App Store에 애플리케이션을 제출할 때에는 아래 가이드를 참고해 개인정보 설문을 올바르게 설정해 주십시오: [Privacy Manifest & Privacy Survey 가이드](https://github.com/bidmad/Bidmad-iOS/wiki/Guide-for-Privacy-Manifest-&-Privacy-Survey-%5BKOR%5D)
 
-#### 2.2 import BidmadSDK-iOS CocoaPods
-"flutter pub get"으로 플러그인을 앱으로 가져오면 프로젝트의 iOS 폴더에 "Podfile"이 생성됩니다. <br>
-1.  Podfile에서 플랫폼 요구 사항을 iOS 14로 설정하세요.<br>
-    ![Bidmad-Guide-Flutter-1](https://i.imgur.com/1uXp8jR.png)<br>
-2.  "pod install" 명령으로 CocoaPods iOS 프레임워크를 설치합니다.<br>
-    ![Bidmad-Guide-Flutter-2](https://i.imgur.com/BgmCdA3.png)<br>
-3.  이제 "Runner.xcworkspace"라는 이름의 Xcode Workspace 파일을 열고 아래 가이드 2.3을 진행합니다.
-    ![Bidmad-Guide-Flutter-3](https://i.imgur.com/UClvij3.png)<br>
+#### 2.2 Swift Package Manager
+1.15.0 부터 플러그인은 BidmadSDK 를 **Swift Package Manager(SPM)** 로 가져옵니다.
+
+1. 앱의 `pubspec.yaml` 에서 SPM 을 활성화합니다. Flutter 3.44 부터는 기본으로 켜져 있으며, 이 설정은 `flutter config --no-enable-swift-package-manager` 보다 우선합니다.
+
+    ```yaml
+    flutter:
+      config:
+        enable-swift-package-manager: true
+    ```
+
+    SPM 이 꺼져 있으면 `pod install` 이 이 절차를 안내하는 오류와 함께 중단됩니다.
+2. **Runner › General › Minimum Deployments** 를 iOS 15.0 으로 설정합니다. `ios/Podfile` 을 유지하신다면 `platform :ios, '15.0'` 도 함께 설정해 주십시오.
+3. `ios/Podfile` 에서 `pod 'Bidmad*'` 줄을 모두 삭제합니다.
 
 #### 2.3 Xcode Build Setting
-빌드 설정에서 비트코드 활성화에 대해 "아니요"를 선택합니다.
+Runner 타깃의 **Build Settings › Other Linker Flags** 에 `-ObjC` 를 추가합니다. [2.5](#25-광고-네트워크-어댑터)의 6단계를 참고해 주십시오.
 
 #### 2.4 Info.plist 설정
 - 광고 네트워크가 UI를 정상적으로 제어할 수 있도록, Info.plist에 아래 key / value를 추가해 주십시오.
@@ -234,40 +259,75 @@ dependencies {
 ```
 
 #### 2.5 광고 네트워크 어댑터
-1.14.0부터 플러그인은 광고 네트워크 어댑터를 포함하지 않습니다. `ios/Podfile`의 `target 'Runner'` 안에 게재하실 광고 네트워크를 선언하신 뒤, `ios` 폴더에서 `pod install --repo-update`를 실행해 주십시오. 1.13.x에서 업그레이드하시는 경우 [1.14.0 마이그레이션 가이드](#1140-마이그레이션-가이드)를 먼저 확인 부탁드립니다.
+플러그인은 광고 네트워크 어댑터를 포함하지 않습니다. 아래 순서에 따라 `Runner.xcodeproj` 옆에 로컬 Swift 패키지를 만들어 필요한 어댑터를 한 번에 추가할 수 있습니다. 샘플 저장소의 [`ios/BidmadPackages`](https://github.com/bidmad/Bidmad-Flutter/tree/main/ios/BidmadPackages) 폴더를 복사해 사용해도 됩니다.
 
-모든 Bidmad 어댑터 파드는 공개 CocoaPods trunk에 배포되어 있으므로 별도의 `source` 선언은 필요하지 않습니다.
+1. `ios` 폴더 안에 다음 이미지처럼 폴더와 파일을 만듭니다.
+    - `BidmadPackages` > `Package.swift`
+    - `BidmadPackages` > `Sources` > `BidmadPackages` > `BidmadPackages.swift`
 
-```ruby
-target 'Runner' do
-  use_frameworks!
+    ![BidmadPackages 폴더 구조](https://raw.githubusercontent.com/bidmad/Bidmad-Flutter/main/images/spm/00-folder-structure.png)
 
-  flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
+    - `BidmadPackages.swift` 는 내용을 비워 두어도 되지만, 파일은 반드시 있어야 합니다. **이 파일들은 앱 타깃에 추가하지 마십시오.**<br>
+      ![Target Membership 비어 있음](https://raw.githubusercontent.com/bidmad/Bidmad-Flutter/main/images/spm/09-target-membership.png)
 
-  pod 'BidmadAdFitAdapter', '3.18.3.15.0'            # AdFit
-  pod 'BidmadAppLovinAdapter', '13.6.2.15.0'         # AppLovin
-  pod 'BidmadFyberAdapter', '8.4.6.15.0'             # Fyber (DT Exchange)
-  pod 'BidmadGoogleAdManagerAdapter', '13.2.0.15.0'  # Google Ad Manager
-  pod 'BidmadGoogleAdMobAdapter', '13.2.0.15.0'      # AdMob
-  pod 'BidmadMobwithAdapter', '2.0.0.15.1'           # MobWith
-  pod 'BidmadORTBAdapter', '1.0.0.15.0'              # oRTB
-  pod 'BidmadPangleAdapter', '7.9.0.8.15.0'          # Pangle
-  pod 'BidmadPremiumAdsGoogleAdapter', '1.0.6.15.0'  # PremiumAds
-  pod 'BidmadTaboolaAdapter', '3.9.12.15.1'          # Taboola
-  pod 'BidmadTeadsAdapter', '6.1.0.15.0'             # Teads
-  pod 'BidmadUnityAdsAdapter', '4.17.0.15.0'         # Unity Ads
-  pod 'BidmadVungleAdapter', '7.7.2.15.0'            # Vungle (Liftoff)
+2. `Package.swift` 에 다음 내용을 작성합니다. `BidmadSDK` 는 플러그인이 이미 제공하므로 여기에 적지 않습니다.
 
-  pod 'BidmadPartners/AdMobBidding', '1.0.13'        # AdMob 비딩
+    ```swift
+    // swift-tools-version:5.9
+    import PackageDescription
 
-  target 'RunnerTests' do
-    inherit! :search_paths
-  end
-end
-```
+    let bidmad: [(repository: String, version: Version, products: [String])] = [
+        ("BidmadGoogleAdMobAdapter-SPM",      "7.2.0+13.11.0",         ["BidmadGoogleAdMobAdapter"]),
+        ("BidmadGoogleAdManagerAdapter-SPM",  "7.2.0+13.11.0",         ["BidmadGoogleAdManagerAdapter"]),
+        ("BidmadAppLovinAdapter-SPM",         "7.2.0+13.7.0",          ["BidmadAppLovinAdapter"]),
+        ("BidmadUnityAdsAdapter-SPM",         "7.2.0+4.21.0",          ["BidmadUnityAdsAdapter"]),
+        ("BidmadPangleAdapter-SPM",           "7.2.0+8.4.0-release.7", ["BidmadPangleAdapter"]),
+        ("BidmadFyberAdapter-SPM",            "7.2.0+8.5.1",           ["BidmadFyberAdapter"]),
+        ("BidmadVungleAdapter-SPM",           "7.2.0+7.7.8",           ["BidmadVungleAdapter"]),
+        ("BidmadTeadsAdapter-SPM",            "7.2.0+6.1.0",           ["BidmadTeadsAdapter"]),
+        ("BidmadAdFitAdapter-SPM",            "7.2.0+3.18.3",          ["BidmadAdFitAdapter"]),
+        ("BidmadAdpieAdapter-SPM",            "7.2.0+1.6.16",          ["BidmadAdpieAdapter"]),
+        ("BidmadTaboolaAdapter-SPM",          "7.2.0+3.9.12",          ["BidmadTaboolaAdapter"]),
+        ("BidmadPremiumAdsGoogleAdapter-SPM", "7.2.0+1.0.6",           ["BidmadPremiumAdsGoogleAdapter"]),
+        ("BidmadMobwithAdapter-SPM",          "7.2.0",                 ["BidmadMobwithAdapter"]),
+        ("BidmadORTBAdapter-SPM",             "7.2.0",                 ["BidmadORTBAdapter"]),
+        ("BidmadPartnersAdMobBidding-SPM",    "7.2.0",                 ["BidmadPartnersAdMobBidding", "BidmadPartnersAdMobBiddingDynamicSDKs"]),
+    ]
 
-> [!NOTE]
-> 플랫폼별로 포함되어 있던 구성이 완전히 동일하지는 않았습니다. iOS는 AdMob과 Google Ad Manager를 별도 파드로 제공하지만, Android는 `admob` 어댑터 하나로 Google 수요를 처리합니다. Coupang은 Android에만, Teads는 iOS에만 포함되어 있었습니다. [1.4.2](#14-광고-네트워크-어댑터)의 Android Teads 어댑터는 사용 가능하지만 플러그인에 포함된 적은 없습니다. 목록에 없는 네트워크는 **테크랩스 플랫폼 운영팀**으로 문의 부탁드립니다.
+    let package = Package(
+        name: "BidmadPackages",
+        platforms: [.iOS(.v15)],
+        products: [.library(name: "BidmadPackages", targets: ["BidmadPackages"])],
+        dependencies: bidmad.map { .package(url: "https://github.com/bidmad/\($0.repository).git", exact: $0.version) },
+        targets: [
+            .target(
+                name: "BidmadPackages",
+                dependencies: bidmad.flatMap { entry in entry.products.map { .product(name: $0, package: entry.repository) } }
+            )
+        ]
+    )
+    ```
+
+3. Xcode 에서 `ios/Runner.xcworkspace` 를 열고 메뉴에서 **File › Add Package Dependencies…** 를 선택합니다.<br>
+    ![Add Package Dependencies](https://raw.githubusercontent.com/bidmad/Bidmad-Flutter/main/images/spm/01-add-package-menu.png)
+
+4. 창 아래의 **Add Local…** 을 누르고 `BidmadPackages` 폴더를 선택합니다.<br>
+    ![Add Local](https://raw.githubusercontent.com/bidmad/Bidmad-Flutter/main/images/spm/02-add-local.png)<br>
+    ![BidmadPackages 폴더 선택](https://raw.githubusercontent.com/bidmad/Bidmad-Flutter/main/images/spm/03-choose-folder.png)
+
+5. `BidmadPackages` 제품을 Runner 타깃에 추가합니다 (**Add to Target** 에서 **Runner** 선택 후 **Add Package**).<br>
+    ![제품 선택](https://raw.githubusercontent.com/bidmad/Bidmad-Flutter/main/images/spm/04-choose-product.png)<br>
+    추가되면 타깃의 **General › Frameworks, Libraries, and Embedded Content** 에 `BidmadPackages` 가 보입니다.<br>
+    ![Frameworks, Libraries, and Embedded Content](https://raw.githubusercontent.com/bidmad/Bidmad-Flutter/main/images/spm/05-frameworks.png)
+
+6. **Build Settings › Other Linker Flags** 에 `-ObjC` 를 추가합니다.<br>
+    ![Other Linker Flags](https://raw.githubusercontent.com/bidmad/Bidmad-Flutter/main/images/spm/06-other-linker-flags.png)
+
+7. 빌드합니다. 프로젝트 네비게이터의 **Package Dependencies** 에서 각 패키지가 지정한 버전으로 받아졌는지 확인할 수 있습니다.<br>
+    <img src="https://raw.githubusercontent.com/bidmad/Bidmad-Flutter/main/images/spm/07-package-dependencies.png" alt="Package Dependencies" width="360">
+
+어댑터 버전을 바꾸려면 `BidmadPackages/Package.swift` 에서 해당 패키지의 버전만 고친 뒤, **File › Packages › Resolve Package Versions** 를 실행합니다.<br>
+![Resolve Package Versions](https://raw.githubusercontent.com/bidmad/Bidmad-Flutter/main/images/spm/08-resolve-package-versions.png)
 
 ### 3. Using Plugin
 

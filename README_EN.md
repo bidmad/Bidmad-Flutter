@@ -1,19 +1,9 @@
 > [!IMPORTANT]
-> Starting with version 1.11.0, the previously used Appkey has been changed to AppDomain.<br>
-> **AppDomain is not compatible with existing Appkeys, so a new AppDomain must be issued to initiaize.**<br>
-> If you are updating to version 1.11.0, please contact **Techlabs Platform Operations Team.**<br>
->
-> **⚠️ Changed in 1.14.0**
->
-> - Ad network adapters, AdMob bidding and `BidmadPartners` are **no longer bundled with the plugin** — your app now declares the ad networks it serves. The Dart API is unchanged and no Flutter code needs editing, but an app upgraded without declaring adapters has **no ad network to fill from**. Please read [Migrating to 1.14.0](#migrating-to-1140) and apply the native changes in the same upgrade.
->
-> **⚠️ Changed in 1.13.0**
->
-> - `BidmadBannerRefinedWidget` now always renders the ad at the **full width** of its parent constraint. A height no longer shrinks the ad to fit; it only clips whatever does not fit. The rule is: **if the width is dynamic, do not set a height** and let the widget derive its own height; **if the width is decided, you may set a height.** For example, a fixed 320dp-wide box with `height: 50` still renders a 320x50 creative in full.
->
->   ![Before and after 1.13.0: previously the ad was nested inside the container, shrunk to fit and leaving empty space at both ends; now it scales to the width of the container and the bottom is clipped by the height of the container](https://i.imgur.com/0b9FgSr.jpg)
->
-> - Every `onFailAd` callback now receives an error code as its second argument. The signature changed from `void Function(String errorMsg)` to `void Function(String errorMsg, int errorCode)`, and this applies to banner, refined banner, interstitial, reward and native ads. Handlers written against the previous signature will no longer compile, so add the second parameter when upgrading.
+> From 1.15.0, iOS uses **Swift Package Manager** only.<br>
+> It requires Flutter 3.41+ and iOS 15.0+.<br>
+> From 1.11.0, AppDomain replaces AppKey.<br>
+> **Issue a new AppDomain to initialize the SDK.**<br>
+> Updating? See the [Migration Guide](#migration-guide).
 
 ## Introduce
 BidmadPlugin is a plugin for using Bidmad, a mobile app advertisement SDK, in Flutter.<br>
@@ -22,20 +12,40 @@ You can use the plugin to serve banner/interstitial/reward ads in your flutter m
 [Bidmad Flutter Plugin Pub.dev](https://pub.dev/packages/bidmad_plugin)<br>
 [Flutter Sample Download](https://github.com/bidmad/Bidmad-Flutter)
 
-## Migrating to 1.14.0
+## Migration Guide
+
+| Update | Changes | See |
+| --- | --- | --- |
+| 1.15.0 | iOS moves to Swift Package Manager; requires Flutter 3.41+ and iOS 15.0+ | [Migrating to 1.15.0](#migrating-to-1150) |
+| 1.14.0 | Ad network adapters are declared by the app | [Migrating to 1.14.0](#migrating-to-1140) |
+| 1.13.0 | `BidmadBannerRefinedWidget` fills the parent width; `onFailAd` gains an error code | [Changes in 1.13.0](#changes-in-1130) |
+| 1.11.0 | AppKey → AppDomain | Contact the **Techlabs Platform Operations Team** |
+
+### Migrating to 1.15.0
+
+From 1.15.0 the iOS side of the plugin ships through **Swift Package Manager (SPM)** only, because BidmadSDK 7.2.0 and later are not published to CocoaPods. Android and the Dart API are unchanged.
+
+1. **Check Flutter.** Use Flutter 3.41 or later. `flutter pub get` refuses older versions.
+2. **Update the plugin.** Set `bidmad_plugin: ^1.15.0` in `pubspec.yaml` and run `flutter pub get`.
+3. **Turn on SPM and set iOS 15.0** — see [2.2 Swift Package Manager](#22-swift-package-manager).
+4. **Remove the Bidmad pods.** Delete every `pod 'Bidmad*'` line from `ios/Podfile`.
+5. **Add the ad network adapters as Swift packages** — see [2.5 Ad Network Adapters](#25-ad-network-adapters).
+6. **Verify.** Build, call `FlutterBidmadCommon().setDebugging(true)` before requesting an ad, and check that every ad network you expect appears in the debug log.
+
+### Migrating to 1.14.0
 
 Through 1.13.x the plugin bundled every ad network adapter, AdMob bidding and `BidmadPartners`. From 1.14.0 the plugin ships **core only**, and your app declares the adapters it serves. This lets you choose your own ad network list, keeps networks you never serve out of your build, and lets you update a single adapter without waiting for a plugin release.
 
 **The Dart API has not changed.** No Dart or Flutter code needs editing — the whole migration happens in your native build files.
 
-### What the plugin still provides
+#### What the plugin still provides
 
 | Platform | Kept in the plugin |
 | --- | --- |
 | Android | `ad.helper.openbidding:admob-obh`, `com.adop.sdk:bidmad-androidx` |
 | iOS | `BidmadSDK`, `OpenBiddingHelper`, `BidmadFlutterBridge`, `BidmadGoogleGDPRAdapter` |
 
-### What moved into your app
+#### What moved into your app
 
 | | Android | iOS |
 | --- | --- | --- |
@@ -44,7 +54,7 @@ Through 1.13.x the plugin bundled every ad network adapter, AdMob bidding and `B
 
 On Android the plugin also stopped injecting the network-specific maven repositories (Kakao, Pangle, Mintegral, Taboola, PremiumAds) into your project. It still injects `google()`, `mavenCentral()` and the Bidmad repository, which its own core dependencies need.
 
-### Migration steps
+#### Migration steps
 
 1. **Update the plugin.** Set `bidmad_plugin: ^1.14.0` in `pubspec.yaml` and run `flutter pub get`.
 2. **Android.** Add the network repositories and the adapters you serve — see [1.4 Ad Network Adapters](#14-ad-network-adapters).
@@ -53,6 +63,14 @@ On Android the plugin also stopped injecting the network-specific maven reposito
 
 > [!TIP]
 > To make the upgrade behaviour-neutral, start by declaring the **full** list in [1.4](#14-ad-network-adapters) / [2.5](#25-ad-network-adapters) — that is exactly the set the plugin bundled through 1.13.x. Once you have confirmed that ads still fill, delete the networks you do not serve.
+
+### Changes in 1.13.0
+
+- `BidmadBannerRefinedWidget` now always renders the ad at the **full width** of its parent constraint. A height no longer shrinks the ad to fit; it only clips whatever does not fit. The rule is: **if the width is dynamic, do not set a height** and let the widget derive its own height; **if the width is decided, you may set a height.** For example, a fixed 320dp-wide box with `height: 50` still renders a 320x50 creative in full.
+
+  ![Before and after 1.13.0: previously the ad was nested inside the container, shrunk to fit and leaving empty space at both ends; now it scales to the width of the container and the bottom is clipped by the height of the container](https://i.imgur.com/0b9FgSr.jpg)
+
+- Every `onFailAd` callback now receives an error code as its second argument. The signature changed from `void Function(String errorMsg)` to `void Function(String errorMsg, int errorCode)`, and this applies to banner, refined banner, interstitial, reward and native ads. Handlers written against the previous signature will no longer compile, so add the second parameter when upgrading.
 
 ## Programming Guide
 
@@ -197,21 +215,28 @@ dependencies {
 
 ### 2. iOS Setting
 
-#### 2.1 Xcode Version & Privacy Manifest
+#### 2.1 Requirements & Privacy Manifest
+- Flutter 3.41 or later, iOS Deployment Target 15.0 or later.
 - Please use Xcode 26.0 or higher for app builds & distribution.
 - When submitting your application to the App Store, use the following guide to properly set up your privacy survey: [Guide for Privacy Manifest & Privacy Survey](https://github.com/bidmad/Bidmad-iOS/wiki/Guide-for-Privacy-Manifest-&-Privacy-Survey-%5BEN%5D)
 
-#### 2.2 import BidmadSDK-iOS CocoaPods
-After fetching our plugin into your app by "flutter pub get", a "Podfile" will be generated in your project's iOS Folder. <br>
-1.  In Podfile, set the platform requirement to iOS 14.<br>
-    ![Bidmad-Guide-Flutter-1](https://i.imgur.com/1uXp8jR.png)<br>
-2.  Install our CocoaPods iOS Framework with command "pod install"<br>
-    ![Bidmad-Guide-Flutter-2](https://i.imgur.com/BgmCdA3.png)<br>
-3.  Now, open the Xcode Workspace file with the name "Runner.xcworkspace" and proceed to guide 2.2 below.
-    ![Bidmad-Guide-Flutter-3](https://i.imgur.com/UClvij3.png)<br>
+#### 2.2 Swift Package Manager
+From 1.15.0 the plugin brings BidmadSDK through **Swift Package Manager (SPM)**.
+
+1. Turn on SPM in your app's `pubspec.yaml`. It is on by default from Flutter 3.44, and this setting also overrides `flutter config --no-enable-swift-package-manager`.
+
+    ```yaml
+    flutter:
+      config:
+        enable-swift-package-manager: true
+    ```
+
+    With SPM off, `pod install` stops with an error that explains these steps.
+2. Set **Runner › General › Minimum Deployments** to iOS 15.0. If you keep an `ios/Podfile`, set `platform :ios, '15.0'` there too.
+3. Delete every `pod 'Bidmad*'` line from `ios/Podfile`.
 
 #### 2.3 Xcode Build Setting
-Select "No" for Enable Bitcode under your Build Setting.
+Add `-ObjC` to **Build Settings › Other Linker Flags** of the Runner target — see step 6 of [2.5](#25-ad-network-adapters).
 
 #### 2.4 Info.plist Settings
 - In order for ad networks to properly control the UI, please add the following key / value to Info.plist settings
@@ -234,40 +259,75 @@ Select "No" for Enable Bitcode under your Build Setting.
 ```
 
 #### 2.5 Ad Network Adapters
-As of 1.14.0 the plugin does not bundle ad network adapters. Declare the ad networks you serve inside `target 'Runner'` in `ios/Podfile`, then run `pod install --repo-update` in the `ios` folder. If you are upgrading from 1.13.x, read [Migrating to 1.14.0](#migrating-to-1140) first.
+The plugin does not bundle ad network adapters. The following steps add every adapter at once as a local Swift package next to `Runner.xcodeproj`. You may also copy the [`ios/BidmadPackages`](https://github.com/bidmad/Bidmad-Flutter/tree/main/ios/BidmadPackages) folder from the sample repository.
 
-Every Bidmad adapter pod is published on the public CocoaPods trunk, so no extra `source` line is needed.
+1. Create the folders and files as in the following image, inside the `ios` folder.
+    - `BidmadPackages` > `Package.swift`
+    - `BidmadPackages` > `Sources` > `BidmadPackages` > `BidmadPackages.swift`
 
-```ruby
-target 'Runner' do
-  use_frameworks!
+    ![BidmadPackages folder structure](https://raw.githubusercontent.com/bidmad/Bidmad-Flutter/main/images/spm/00-folder-structure.png)
 
-  flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
+    - `BidmadPackages.swift` can be left empty, but the file must exist. **Do not add these files to the app target.**<br>
+      ![Target Membership empty](https://raw.githubusercontent.com/bidmad/Bidmad-Flutter/main/images/spm/09-target-membership.png)
 
-  pod 'BidmadAdFitAdapter', '3.18.3.15.0'            # AdFit
-  pod 'BidmadAppLovinAdapter', '13.6.2.15.0'         # AppLovin
-  pod 'BidmadFyberAdapter', '8.4.6.15.0'             # Fyber (DT Exchange)
-  pod 'BidmadGoogleAdManagerAdapter', '13.2.0.15.0'  # Google Ad Manager
-  pod 'BidmadGoogleAdMobAdapter', '13.2.0.15.0'      # AdMob
-  pod 'BidmadMobwithAdapter', '2.0.0.15.1'           # MobWith
-  pod 'BidmadORTBAdapter', '1.0.0.15.0'              # oRTB
-  pod 'BidmadPangleAdapter', '7.9.0.8.15.0'          # Pangle
-  pod 'BidmadPremiumAdsGoogleAdapter', '1.0.6.15.0'  # PremiumAds
-  pod 'BidmadTaboolaAdapter', '3.9.12.15.1'          # Taboola
-  pod 'BidmadTeadsAdapter', '6.1.0.15.0'             # Teads
-  pod 'BidmadUnityAdsAdapter', '4.17.0.15.0'         # Unity Ads
-  pod 'BidmadVungleAdapter', '7.7.2.15.0'            # Vungle (Liftoff)
+2. Write the following in `Package.swift`. The plugin already provides `BidmadSDK`, so it is not listed here.
 
-  pod 'BidmadPartners/AdMobBidding', '1.0.13'        # AdMob bidding
+    ```swift
+    // swift-tools-version:5.9
+    import PackageDescription
 
-  target 'RunnerTests' do
-    inherit! :search_paths
-  end
-end
-```
+    let bidmad: [(repository: String, version: Version, products: [String])] = [
+        ("BidmadGoogleAdMobAdapter-SPM",      "7.2.0+13.11.0",         ["BidmadGoogleAdMobAdapter"]),
+        ("BidmadGoogleAdManagerAdapter-SPM",  "7.2.0+13.11.0",         ["BidmadGoogleAdManagerAdapter"]),
+        ("BidmadAppLovinAdapter-SPM",         "7.2.0+13.7.0",          ["BidmadAppLovinAdapter"]),
+        ("BidmadUnityAdsAdapter-SPM",         "7.2.0+4.21.0",          ["BidmadUnityAdsAdapter"]),
+        ("BidmadPangleAdapter-SPM",           "7.2.0+8.4.0-release.7", ["BidmadPangleAdapter"]),
+        ("BidmadFyberAdapter-SPM",            "7.2.0+8.5.1",           ["BidmadFyberAdapter"]),
+        ("BidmadVungleAdapter-SPM",           "7.2.0+7.7.8",           ["BidmadVungleAdapter"]),
+        ("BidmadTeadsAdapter-SPM",            "7.2.0+6.1.0",           ["BidmadTeadsAdapter"]),
+        ("BidmadAdFitAdapter-SPM",            "7.2.0+3.18.3",          ["BidmadAdFitAdapter"]),
+        ("BidmadAdpieAdapter-SPM",            "7.2.0+1.6.16",          ["BidmadAdpieAdapter"]),
+        ("BidmadTaboolaAdapter-SPM",          "7.2.0+3.9.12",          ["BidmadTaboolaAdapter"]),
+        ("BidmadPremiumAdsGoogleAdapter-SPM", "7.2.0+1.0.6",           ["BidmadPremiumAdsGoogleAdapter"]),
+        ("BidmadMobwithAdapter-SPM",          "7.2.0",                 ["BidmadMobwithAdapter"]),
+        ("BidmadORTBAdapter-SPM",             "7.2.0",                 ["BidmadORTBAdapter"]),
+        ("BidmadPartnersAdMobBidding-SPM",    "7.2.0",                 ["BidmadPartnersAdMobBidding", "BidmadPartnersAdMobBiddingDynamicSDKs"]),
+    ]
 
-> [!NOTE]
-> The bundled sets were not identical across platforms. iOS ships AdMob and Google Ad Manager as separate pods, while Android serves Google demand through the single `admob` adapter. Coupang is Android-only, and Teads was bundled on iOS only; the Android Teads adapter in [1.4.2](#14-ad-network-adapters) is available but was never bundled. Contact the **Techlabs Platform Operations Team** for any network not listed here.
+    let package = Package(
+        name: "BidmadPackages",
+        platforms: [.iOS(.v15)],
+        products: [.library(name: "BidmadPackages", targets: ["BidmadPackages"])],
+        dependencies: bidmad.map { .package(url: "https://github.com/bidmad/\($0.repository).git", exact: $0.version) },
+        targets: [
+            .target(
+                name: "BidmadPackages",
+                dependencies: bidmad.flatMap { entry in entry.products.map { .product(name: $0, package: entry.repository) } }
+            )
+        ]
+    )
+    ```
+
+3. Open `ios/Runner.xcworkspace` in Xcode and choose **File › Add Package Dependencies…**.<br>
+    ![Add Package Dependencies](https://raw.githubusercontent.com/bidmad/Bidmad-Flutter/main/images/spm/01-add-package-menu.png)
+
+4. Click **Add Local…** at the bottom of the window and choose the `BidmadPackages` folder.<br>
+    ![Add Local](https://raw.githubusercontent.com/bidmad/Bidmad-Flutter/main/images/spm/02-add-local.png)<br>
+    ![Choose the BidmadPackages folder](https://raw.githubusercontent.com/bidmad/Bidmad-Flutter/main/images/spm/03-choose-folder.png)
+
+5. Add the `BidmadPackages` product to the Runner target (choose **Runner** under **Add to Target**, then **Add Package**).<br>
+    ![Choose the product](https://raw.githubusercontent.com/bidmad/Bidmad-Flutter/main/images/spm/04-choose-product.png)<br>
+    `BidmadPackages` then appears in the target's **General › Frameworks, Libraries, and Embedded Content**.<br>
+    ![Frameworks, Libraries, and Embedded Content](https://raw.githubusercontent.com/bidmad/Bidmad-Flutter/main/images/spm/05-frameworks.png)
+
+6. Add `-ObjC` to **Build Settings › Other Linker Flags**.<br>
+    ![Other Linker Flags](https://raw.githubusercontent.com/bidmad/Bidmad-Flutter/main/images/spm/06-other-linker-flags.png)
+
+7. Build. Under **Package Dependencies** in the project navigator you can check that every package was fetched at the version you set.<br>
+    <img src="https://raw.githubusercontent.com/bidmad/Bidmad-Flutter/main/images/spm/07-package-dependencies.png" alt="Package Dependencies" width="360">
+
+To update an adapter, change only its version in `BidmadPackages/Package.swift`, then run **File › Packages › Resolve Package Versions**.<br>
+![Resolve Package Versions](https://raw.githubusercontent.com/bidmad/Bidmad-Flutter/main/images/spm/08-resolve-package-versions.png)
 
 ### 3. Using Plugin
 
