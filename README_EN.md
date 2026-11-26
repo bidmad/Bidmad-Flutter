@@ -60,7 +60,7 @@ On Android the plugin also stopped injecting the network-specific maven reposito
 4. **Verify.** Build both platforms, call `FlutterBidmadCommon().setDebugging(true)` before requesting an ad, and check that every ad network you expect appears in the debug log. A network missing from the log has no adapter declared.
 
 > [!TIP]
-> To make the Android upgrade behaviour-neutral, start by declaring the **full** list in [1.3](#13-ad-network-adapters) — that is exactly the set the plugin bundled through 1.13.x. Once you have confirmed that ads still fill, delete the networks you do not serve.
+> To make the Android upgrade behaviour-neutral, start by declaring the **full** list in [1.3](#13-ad-network-adapters) — that is exactly the set the plugin bundled through 1.13.x.
 
 ### Changes in 1.13.0
 
