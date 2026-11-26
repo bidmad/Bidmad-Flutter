@@ -55,12 +55,12 @@ Android의 경우 플러그인이 네트워크별 maven 저장소(Kakao, Pangle,
 #### 마이그레이션 절차
 
 1. **플러그인 업데이트.** `pubspec.yaml`에 `bidmad_plugin: ^1.14.0`을 지정하시고 `flutter pub get`을 실행합니다.
-2. **Android.** 필요한 저장소와 게재하실 어댑터를 추가합니다. [1.4 광고 네트워크 어댑터](#14-광고-네트워크-어댑터)를 참고해 주십시오.
+2. **Android.** 필요한 저장소와 게재하실 어댑터를 추가합니다. [1.3 광고 네트워크 어댑터](#13-광고-네트워크-어댑터)를 참고해 주십시오.
 3. **iOS (1.14.x 전용).** 게재하실 어댑터 파드를 `ios/Podfile`에 추가하신 후, `ios` 폴더에서 `pod install --repo-update`를 실행합니다.
 4. **확인.** 양 플랫폼을 빌드하신 뒤 광고 요청 전에 `FlutterBidmadCommon().setDebugging(true)`를 호출하시고, 기대하시는 광고 네트워크가 디버그 로그에 모두 표기되는지 확인해 주십시오. 로그에 표기되지 않는 네트워크는 어댑터가 선언되지 않은 상태입니다.
 
 > [!TIP]
-> Android 업그레이드 전후 동작을 동일하게 유지하시려면, 먼저 [1.4](#14-광고-네트워크-어댑터)의 **전체 목록**을 그대로 선언해 주십시오. 이는 1.13.x에 포함되어 있던 구성과 정확히 동일합니다.
+> Android 업그레이드 전후 동작을 동일하게 유지하시려면, 먼저 [1.3](#13-광고-네트워크-어댑터)의 **전체 목록**을 그대로 선언해 주십시오. 이는 1.13.x에 포함되어 있던 구성과 정확히 동일합니다.
 
 ### 1.13.0 변경사항
 
@@ -76,14 +76,7 @@ Android의 경우 플러그인이 네트워크별 maven 저장소(Kakao, Pangle,
 
 *1.0.0 이하 버전을 사용 중이시라면 [마이그레이션 가이드](https://github.com/bidmad/Bidmad-Flutter/wiki/Flutter-Bidmad_Plugin-1.0.0-Migration-Guide%5BKOR%5D)를 확인 부탁드립니다.
 
-#### 1.1 gradle.properties Setting
-gradle.properties에 아래 옵션을 추가합니다.
-```java
-...
-android.enableDexingArtifactTransform=false
-```
-
-#### 1.2 Proguard Settings
+#### 1.1 Proguard Settings
 Proguard를 사용하는 경우 아래 규칙을 추가합니다.
 ```java
 ...
@@ -127,7 +120,7 @@ public static final ** CREATOR;
 -keep class com.google.android.gms.ads.identifier.** { *; }
 ```
 
-#### 1.3 Admob Application ID Settings
+#### 1.2 Admob Application ID Settings
 Android 앱 모듈 내 AndroidManifest.xml의 application 태그 안에 아래 코드를 선언합니다([가이드](https://github.com/bidmad/SDK/wiki/Find-your-app-key%5BKR%5D))<br>
    *com.google.android.gms.ads.APPLICATION_ID의 value는 Admob 대시보드에서 확인 바랍니다.
 
@@ -139,10 +132,10 @@ Android 앱 모듈 내 AndroidManifest.xml의 application 태그 안에 아래 �
 </application>
 ```
 
-#### 1.4 광고 네트워크 어댑터
+#### 1.3 광고 네트워크 어댑터
 1.14.0부터 플러그인은 광고 네트워크 어댑터를 포함하지 않습니다. 게재하실 광고 네트워크를 앱에서 직접 선언해 주십시오. 1.13.x에서 업그레이드하시는 경우 [1.14.0 마이그레이션 가이드](#1140-마이그레이션-가이드)를 먼저 확인 부탁드립니다.
 
-**1.4.1 저장소 설정**<br>
+**1.3.1 저장소 설정**<br>
 `android/build.gradle`의 `allprojects.repositories`에 사용하실 네트워크의 저장소를 추가합니다. `google()`, `mavenCentral()`, Bidmad 저장소는 플러그인이 이미 주입하므로 네트워크별 항목만 추가하시면 됩니다.
 
 ```groovy
@@ -180,7 +173,7 @@ allprojects {
 
 </details>
 
-**1.4.2 어댑터 설정**<br>
+**1.3.2 어댑터 설정**<br>
 `android/app/build.gradle`의 `dependencies`에 게재하실 광고 네트워크를 추가합니다. 최신 Flutter 템플릿에서는 해당 파일이 `android/app/build.gradle.kts`이며, 동일한 항목을 `implementation("com.adop.sdk.adapter:admob:25.4.0.0")` 형식으로 작성합니다.
 
 ```groovy
@@ -205,8 +198,8 @@ dependencies {
 
 > [!NOTE]
 > - **`compileSdk` 36.** `com.adop.sdk.partners:admobbidding`은 앱이 API 36으로 컴파일되어야 합니다. 최신 Flutter 템플릿은 `compileSdk = flutter.compileSdkVersion`을 통해 이미 36을 사용합니다. 빌드 시 `requires libraries and applications that depend on it to compile against version 36 or later` 오류가 발생하는 경우 `android/app/build.gradle`에 `compileSdk 36`을 명시해 주십시오.
-> - **AdMob Application ID.** AdMob 어댑터 또는 AdMob 비딩을 선언하시는 경우 [1.3](#13-admob-application-id-settings)의 `AndroidManifest.xml` 설정이 반드시 필요합니다.
-> - **Proguard / R8.** [1.2](#12-proguard-settings)의 규칙에 `com.adop.sdk.adapter.**`가 이미 포함되어 있으며 변경 사항은 없습니다. 한편 광고 네트워크 SDK는 의존하지 않는 라이브러리를 선택적으로 참조하는 경우가 있어, release APK 빌드 시 R8이 `Missing class ...` 오류를 보고할 수 있습니다. 이 경우 Android Gradle 플러그인이 `build/app/outputs/mapping/release/missing_rules.txt`에 생성한 규칙을 `proguard-rules.pro`에 추가해 주십시오. 정상적인 동작이며 어댑터가 누락된 것은 아닙니다.
+> - **AdMob Application ID.** AdMob 어댑터 또는 AdMob 비딩을 선언하시는 경우 [1.2](#12-admob-application-id-settings)의 `AndroidManifest.xml` 설정이 반드시 필요합니다.
+> - **Proguard / R8.** [1.1](#11-proguard-settings)의 규칙에 `com.adop.sdk.adapter.**`가 이미 포함되어 있으며 변경 사항은 없습니다. 한편 광고 네트워크 SDK는 의존하지 않는 라이브러리를 선택적으로 참조하는 경우가 있어, release APK 빌드 시 R8이 `Missing class ...` 오류를 보고할 수 있습니다. 이 경우 Android Gradle 플러그인이 `build/app/outputs/mapping/release/missing_rules.txt`에 생성한 규칙을 `proguard-rules.pro`에 추가해 주십시오. 정상적인 동작이며 어댑터가 누락된 것은 아닙니다.
 
 ### 2. iOS Setting
 
