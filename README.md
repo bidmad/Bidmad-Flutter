@@ -1,9 +1,8 @@
 > [!IMPORTANT]
-> 1.15.0 부터 iOS 는 **Swift Package Manager** 로만 연동됩니다.<br>
-> Flutter 3.41 이상, iOS 15.0 이상이 필요합니다.<br>
-> 1.11.0 부터 AppKey 대신 AppDomain 을 사용합니다.<br>
-> **SDK를 초기화하려면 새 AppDomain을 발급받아야 합니다.**<br>
-> 이전 버전에서 업데이트하신다면 [마이그레이션 가이드](#마이그레이션-가이드)를 확인해 주십시오.
+> - 1.15.0부터 iOS는 **Swift Package Manager**로만 연동됩니다.
+> - Flutter 3.41 이상, iOS 15.0 이상이 필요합니다.
+> - **SDK를 초기화하려면 AppKey 대신 새 AppDomain을 발급받아야 합니다.**
+> - 이전 버전에서 업데이트하신다면 [마이그레이션 가이드](#마이그레이션-가이드)를 확인해 주십시오.
 
 ## Introduce
 BidmadPlugin은 모바일 앱 광고 SDK인 Bidmad를 Flutter에서 사용하기 위한 Plugin입니다.<br>
@@ -16,21 +15,20 @@ Plugin을 사용하여 Flutter 모바일 앱에서 배너 / 전면 / 보상형 �
 
 | 업데이트 | 변경 사항 | 참고 |
 | --- | --- | --- |
-| 1.15.0 | iOS 가 Swift Package Manager 로 전환, Flutter 3.41·iOS 15.0 이상 필요 | [1.15.0 마이그레이션 가이드](#1150-마이그레이션-가이드) |
+| 1.15.0 | iOS가 Swift Package Manager로 전환, Flutter 3.41·iOS 15.0 이상 필요 | [1.15.0 마이그레이션 가이드](#1150-마이그레이션-가이드) |
 | 1.14.0 | 광고 네트워크 어댑터를 앱에서 직접 선언 | [1.14.0 마이그레이션 가이드](#1140-마이그레이션-가이드) |
-| 1.13.0 | `BidmadBannerRefinedWidget` 너비 채움, `onFailAd` 에 에러 코드 인자 추가 | [1.13.0 변경사항](#1130-변경사항) |
+| 1.13.0 | `BidmadBannerRefinedWidget` 너비 채움, `onFailAd`에 에러 코드 인자 추가 | [1.13.0 변경사항](#1130-변경사항) |
 | 1.11.0 | AppKey → AppDomain | **테크랩스 플랫폼 운영팀** 문의 |
 
 ### 1.15.0 마이그레이션 가이드
 
-1.15.0 부터 플러그인의 iOS 의존성은 **Swift Package Manager(SPM)** 로만 배포됩니다. BidmadSDK 7.2.0 이상은 CocoaPods 에 배포되지 않습니다. Android 와 Dart 인터페이스는 변경되지 않았습니다.
+1.15.0부터 플러그인의 iOS 의존성은 **Swift Package Manager(SPM)** 로만 배포됩니다. BidmadSDK 7.2.0 이상은 CocoaPods에 배포되지 않습니다. Android와 Dart 인터페이스는 변경되지 않았습니다.
 
-1. **Flutter 확인.** Flutter 3.41 이상을 사용해 주십시오. 이전 버전에서는 `flutter pub get` 이 실패합니다.
-2. **플러그인 업데이트.** `pubspec.yaml` 에 `bidmad_plugin: ^1.15.0` 을 지정하시고 `flutter pub get` 을 실행합니다.
-3. **SPM 활성화 및 iOS 15.0 설정.** [2.2 Swift Package Manager](#22-swift-package-manager)를 참고해 주십시오.
-4. **Bidmad 파드 제거.** `ios/Podfile` 에서 `pod 'Bidmad*'` 줄을 모두 삭제합니다.
-5. **광고 네트워크 어댑터를 Swift 패키지로 추가.** [2.5 광고 네트워크 어댑터](#25-광고-네트워크-어댑터)를 참고해 주십시오.
-6. **확인.** 빌드하신 뒤 광고 요청 전에 `FlutterBidmadCommon().setDebugging(true)` 를 호출하시고, 기대하시는 광고 네트워크가 디버그 로그에 모두 표기되는지 확인해 주십시오.
+1. **Flutter 확인.** Flutter 3.41 이상을 사용해 주십시오. 이전 버전에서는 `flutter pub get`이 실패합니다.
+2. **플러그인 업데이트.** `pubspec.yaml`에 `bidmad_plugin: ^1.15.0`을 지정하시고 `flutter pub get`을 실행합니다.
+3. **SPM 활성화, iOS 15.0 설정, Bidmad 파드 제거.** [2.2 Swift Package Manager](#22-swift-package-manager)를 참고해 주십시오.
+4. **광고 네트워크 어댑터를 Swift 패키지로 추가하고 `-ObjC` 추가.** [2.5 광고 네트워크 어댑터](#25-광고-네트워크-어댑터)를 참고해 주십시오.
+5. **확인.** 빌드하신 뒤 광고 요청 전에 `FlutterBidmadCommon().setDebugging(true)`를 호출하시고, 기대하시는 광고 네트워크가 디버그 로그에 모두 표기되는지 확인해 주십시오.
 
 ### 1.14.0 마이그레이션 가이드
 
@@ -57,12 +55,12 @@ Android의 경우 플러그인이 네트워크별 maven 저장소(Kakao, Pangle,
 #### 마이그레이션 절차
 
 1. **플러그인 업데이트.** `pubspec.yaml`에 `bidmad_plugin: ^1.14.0`을 지정하시고 `flutter pub get`을 실행합니다.
-2. **Android.** 필요한 저장소와 게재하실 어댑터를 추가합니다. [1.4 광고 네트워크 어댑터](#14-광고-네트워크-어댑터)를 참고해 주십시오.
-3. **iOS.** 게재하실 어댑터 파드를 추가하신 후([2.5 광고 네트워크 어댑터](#25-광고-네트워크-어댑터) 참고), `ios` 폴더에서 `pod install --repo-update`를 실행합니다.
+2. **Android.** 필요한 저장소와 게재하실 어댑터를 추가합니다. [1.3 광고 네트워크 어댑터](#13-광고-네트워크-어댑터)를 참고해 주십시오.
+3. **iOS (1.14.x 전용).** 게재하실 어댑터 파드를 `ios/Podfile`에 추가하신 후, `ios` 폴더에서 `pod install --repo-update`를 실행합니다.
 4. **확인.** 양 플랫폼을 빌드하신 뒤 광고 요청 전에 `FlutterBidmadCommon().setDebugging(true)`를 호출하시고, 기대하시는 광고 네트워크가 디버그 로그에 모두 표기되는지 확인해 주십시오. 로그에 표기되지 않는 네트워크는 어댑터가 선언되지 않은 상태입니다.
 
 > [!TIP]
-> 업그레이드 전후 동작을 동일하게 유지하시려면, 먼저 [1.4](#14-광고-네트워크-어댑터) / [2.5](#25-광고-네트워크-어댑터)의 **전체 목록**을 그대로 선언해 주십시오. 이는 1.13.x에 포함되어 있던 구성과 정확히 동일합니다. 광고가 정상적으로 게재되는 것을 확인하신 후 게재하지 않는 네트워크를 제거하시는 것을 권장합니다.
+> Android 업그레이드 전후 동작을 동일하게 유지하시려면, 먼저 [1.3](#13-광고-네트워크-어댑터)의 **전체 목록**을 그대로 선언해 주십시오. 이는 1.13.x에 포함되어 있던 구성과 정확히 동일합니다. 광고가 정상적으로 게재되는 것을 확인하신 후 게재하지 않는 네트워크를 제거하시는 것을 권장합니다.
 
 ### 1.13.0 변경사항
 
@@ -78,14 +76,7 @@ Android의 경우 플러그인이 네트워크별 maven 저장소(Kakao, Pangle,
 
 *1.0.0 이하 버전을 사용 중이시라면 [마이그레이션 가이드](https://github.com/bidmad/Bidmad-Flutter/wiki/Flutter-Bidmad_Plugin-1.0.0-Migration-Guide%5BKOR%5D)를 확인 부탁드립니다.
 
-#### 1.1 gradle.properties Setting
-gradle.properties에 아래 옵션을 추가합니다.
-```java
-...
-android.enableDexingArtifactTransform=false
-```
-
-#### 1.2 Proguard Settings
+#### 1.1 Proguard Settings
 Proguard를 사용하는 경우 아래 규칙을 추가합니다.
 ```java
 ...
@@ -110,9 +101,7 @@ Proguard를 사용하는 경우 아래 규칙을 추가합니다.
 -keep class com.bytedance.sdk.** { *; }
 -keep class com.bykv.vk.openvk.component.video.api.** { *; }
 
-# Tapjoy
--keep class com.tapjoy.** { *; }
--keep class com.moat.** { *; }
+# Google Play services
 -keepattributes JavascriptInterface
 -keepattributes *Annotation*
 -keep class * extends java.util.ListResourceBundle {
@@ -129,11 +118,10 @@ public static final *** NULL;
 public static final ** CREATOR;
 }
 -keep class com.google.android.gms.ads.identifier.** { *; }
--dontwarn com.tapjoy.**
 ```
 
-#### 1.3 Admob Application ID Settings
-Android 앱 모듈 내 AndroidManifest.xml의 application 태그 안에 아래 코드를 선언합니다([가이드](https://github.com/bidmad/SDK/wiki/Find-your-app-key%5BEN%5D#app-id-from-admob-dashboard))<br>
+#### 1.2 Admob Application ID Settings
+Android 앱 모듈 내 AndroidManifest.xml의 application 태그 안에 아래 코드를 선언합니다([가이드](https://github.com/bidmad/SDK/wiki/Find-your-app-key%5BKR%5D))<br>
    *com.google.android.gms.ads.APPLICATION_ID의 value는 Admob 대시보드에서 확인 바랍니다.
 
 ```xml
@@ -144,10 +132,10 @@ Android 앱 모듈 내 AndroidManifest.xml의 application 태그 안에 아래 �
 </application>
 ```
 
-#### 1.4 광고 네트워크 어댑터
+#### 1.3 광고 네트워크 어댑터
 1.14.0부터 플러그인은 광고 네트워크 어댑터를 포함하지 않습니다. 게재하실 광고 네트워크를 앱에서 직접 선언해 주십시오. 1.13.x에서 업그레이드하시는 경우 [1.14.0 마이그레이션 가이드](#1140-마이그레이션-가이드)를 먼저 확인 부탁드립니다.
 
-**1.4.1 저장소 설정**<br>
+**1.3.1 저장소 설정**<br>
 `android/build.gradle`의 `allprojects.repositories`에 사용하실 네트워크의 저장소를 추가합니다. `google()`, `mavenCentral()`, Bidmad 저장소는 플러그인이 이미 주입하므로 네트워크별 항목만 추가하시면 됩니다.
 
 ```groovy
@@ -185,7 +173,7 @@ allprojects {
 
 </details>
 
-**1.4.2 어댑터 설정**<br>
+**1.3.2 어댑터 설정**<br>
 `android/app/build.gradle`의 `dependencies`에 게재하실 광고 네트워크를 추가합니다. 최신 Flutter 템플릿에서는 해당 파일이 `android/app/build.gradle.kts`이며, 동일한 항목을 `implementation("com.adop.sdk.adapter:admob:25.4.0.0")` 형식으로 작성합니다.
 
 ```groovy
@@ -210,20 +198,20 @@ dependencies {
 
 > [!NOTE]
 > - **`compileSdk` 36.** `com.adop.sdk.partners:admobbidding`은 앱이 API 36으로 컴파일되어야 합니다. 최신 Flutter 템플릿은 `compileSdk = flutter.compileSdkVersion`을 통해 이미 36을 사용합니다. 빌드 시 `requires libraries and applications that depend on it to compile against version 36 or later` 오류가 발생하는 경우 `android/app/build.gradle`에 `compileSdk 36`을 명시해 주십시오.
-> - **AdMob Application ID.** AdMob 어댑터 또는 AdMob 비딩을 선언하시는 경우 [1.3](#13-admob-application-id-settings)의 `AndroidManifest.xml` 설정이 반드시 필요합니다.
-> - **Proguard / R8.** [1.2](#12-proguard-settings)의 규칙에 `com.adop.sdk.adapter.**`가 이미 포함되어 있으며 변경 사항은 없습니다. 한편 광고 네트워크 SDK는 의존하지 않는 라이브러리를 선택적으로 참조하는 경우가 있어, release APK 빌드 시 R8이 `Missing class ...` 오류를 보고할 수 있습니다. 이 경우 Android Gradle 플러그인이 `build/app/outputs/mapping/release/missing_rules.txt`에 생성한 규칙을 `proguard-rules.pro`에 추가해 주십시오. 정상적인 동작이며 어댑터가 누락된 것은 아닙니다.
+> - **AdMob Application ID.** AdMob 어댑터 또는 AdMob 비딩을 선언하시는 경우 [1.2](#12-admob-application-id-settings)의 `AndroidManifest.xml` 설정이 반드시 필요합니다.
+> - **Proguard / R8.** [1.1](#11-proguard-settings)의 규칙에 `com.adop.sdk.adapter.**`가 이미 포함되어 있으며 변경 사항은 없습니다. 한편 광고 네트워크 SDK는 의존하지 않는 라이브러리를 선택적으로 참조하는 경우가 있어, release APK 빌드 시 R8이 `Missing class ...` 오류를 보고할 수 있습니다. 이 경우 Android Gradle 플러그인이 `build/app/outputs/mapping/release/missing_rules.txt`에 생성한 규칙을 `proguard-rules.pro`에 추가해 주십시오. 정상적인 동작이며 어댑터가 누락된 것은 아닙니다.
 
 ### 2. iOS Setting
 
 #### 2.1 요구 사항 & Privacy Manifest
 - Flutter 3.41 이상, iOS Deployment Target 15.0 이상이 필요합니다.
 - 앱 빌드 및 배포 시 Xcode 26.0 이상을 사용해 주십시오.
-- App Store에 애플리케이션을 제출할 때에는 아래 가이드를 참고해 개인정보 설문을 올바르게 설정해 주십시오: [Privacy Manifest & Privacy Survey 가이드](https://github.com/bidmad/Bidmad-iOS/wiki/Guide-for-Privacy-Manifest-&-Privacy-Survey-%5BKOR%5D)
+- App Store에 애플리케이션을 제출할 때에는 아래 가이드를 참고해 개인정보 설문을 올바르게 설정해 주십시오: [Privacy Manifest & Privacy Survey 가이드](https://github.com/bidmad/Bidmad-iOS/wiki/Guide-for-Privacy-Manifest-&-Privacy-Survey-%5BKR%5D)
 
 #### 2.2 Swift Package Manager
-1.15.0 부터 플러그인은 BidmadSDK 를 **Swift Package Manager(SPM)** 로 가져옵니다.
+1.15.0부터 플러그인은 BidmadSDK를 **Swift Package Manager(SPM)** 로 가져옵니다.
 
-1. 앱의 `pubspec.yaml` 에서 SPM 을 활성화합니다. Flutter 3.44 부터는 기본으로 켜져 있으며, 이 설정은 `flutter config --no-enable-swift-package-manager` 보다 우선합니다.
+1. SPM을 활성화합니다. Flutter 3.44부터는 기본으로 켜져 있습니다. Flutter 3.41–3.43이거나 `flutter config --no-enable-swift-package-manager`로 SPM을 꺼 두셨다면, 앱의 `pubspec.yaml`에서 활성화합니다.
 
     ```yaml
     flutter:
@@ -231,12 +219,13 @@ dependencies {
         enable-swift-package-manager: true
     ```
 
-    SPM 이 꺼져 있으면 `pod install` 이 이 절차를 안내하는 오류와 함께 중단됩니다.
-2. **Runner › General › Minimum Deployments** 를 iOS 15.0 으로 설정합니다. `ios/Podfile` 을 유지하신다면 `platform :ios, '15.0'` 도 함께 설정해 주십시오.
-3. `ios/Podfile` 에서 `pod 'Bidmad*'` 줄을 모두 삭제합니다.
+    SPM이 꺼져 있으면 `pod install`이 이 절차를 안내하는 오류와 함께 중단됩니다.
+2. **Runner › General › Minimum Deployments**를 iOS 15.0으로 설정합니다. `ios/Podfile`을 유지하신다면 `platform :ios, '15.0'`도 함께 설정해 주십시오.
+3. `ios/Podfile`에서 `pod 'Bidmad*'` 줄을 모두 삭제합니다. 다른 플러그인의 파드는 그대로 둡니다.
+4. 한 번 빌드합니다 (`flutter build ios` 또는 앱 실행). Flutter가 Xcode 프로젝트에 Swift Package Manager 연동을 추가합니다.
 
 #### 2.3 Xcode Build Setting
-Runner 타깃의 **Build Settings › Other Linker Flags** 에 `-ObjC` 를 추가합니다. [2.5](#25-광고-네트워크-어댑터)의 6단계를 참고해 주십시오.
+Runner 타깃의 **Build Settings › Other Linker Flags**에 `-ObjC`를 추가합니다. [2.5](#25-광고-네트워크-어댑터)의 6단계를 참고해 주십시오.
 
 #### 2.4 Info.plist 설정
 - 광고 네트워크가 UI를 정상적으로 제어할 수 있도록, Info.plist에 아래 key / value를 추가해 주십시오.
@@ -244,6 +233,13 @@ Runner 타깃의 **Build Settings › Other Linker Flags** 에 `-ObjC` 를 추�
 ```
 <key>UIViewControllerBasedStatusBarAppearance</key>
 <true/>
+```
+
+- AdMob 대시보드에서 확인한 iOS용 AdMob 앱 ID를 추가합니다 ([App Key 찾기](https://github.com/bidmad/SDK/wiki/Find-your-app-key%5BKR%5D) 참고). 없으면 Google Mobile Ads SDK가 앱 실행 시 앱을 종료합니다.
+
+```xml
+<key>GADApplicationIdentifier</key>
+<string>ca-app-pub-xxxxxxxxxxxxxxxx~xxxxxxxxxx</string>
 ```
 
 - BidmadSDK에서 제공하는 AdNetworks를 사용하려면 SKAdNetworkIdentifier를 Info.plist에 추가해야 합니다. info.plist에 아래 SKAdNetworkItems를 추가하세요.
@@ -267,10 +263,10 @@ Runner 타깃의 **Build Settings › Other Linker Flags** 에 `-ObjC` 를 추�
 
     ![BidmadPackages 폴더 구조](https://raw.githubusercontent.com/bidmad/Bidmad-Flutter/main/images/spm/00-folder-structure.png)
 
-    - `BidmadPackages.swift` 는 내용을 비워 두어도 되지만, 파일은 반드시 있어야 합니다. **이 파일들은 앱 타깃에 추가하지 마십시오.**<br>
+    - `BidmadPackages.swift`는 내용을 비워 두어도 되지만, 파일은 반드시 있어야 합니다. **이 파일들은 앱 타깃에 추가하지 마십시오.**<br>
       ![Target Membership 비어 있음](https://raw.githubusercontent.com/bidmad/Bidmad-Flutter/main/images/spm/09-target-membership.png)
 
-2. `Package.swift` 에 다음 내용을 작성합니다. `BidmadSDK` 는 플러그인이 이미 제공하므로 여기에 적지 않습니다.
+2. `Package.swift`에 다음 내용을 작성합니다.
 
     ```swift
     // swift-tools-version:5.9
@@ -308,25 +304,25 @@ Runner 타깃의 **Build Settings › Other Linker Flags** 에 `-ObjC` 를 추�
     )
     ```
 
-3. Xcode 에서 `ios/Runner.xcworkspace` 를 열고 메뉴에서 **File › Add Package Dependencies…** 를 선택합니다.<br>
+3. Xcode에서 `ios/Runner.xcworkspace`를 열고 메뉴에서 **File › Add Package Dependencies…** 를 선택합니다.<br>
     ![Add Package Dependencies](https://raw.githubusercontent.com/bidmad/Bidmad-Flutter/main/images/spm/01-add-package-menu.png)
 
 4. 창 아래의 **Add Local…** 을 누르고 `BidmadPackages` 폴더를 선택합니다.<br>
     ![Add Local](https://raw.githubusercontent.com/bidmad/Bidmad-Flutter/main/images/spm/02-add-local.png)<br>
     ![BidmadPackages 폴더 선택](https://raw.githubusercontent.com/bidmad/Bidmad-Flutter/main/images/spm/03-choose-folder.png)
 
-5. `BidmadPackages` 제품을 Runner 타깃에 추가합니다 (**Add to Target** 에서 **Runner** 선택 후 **Add Package**).<br>
+5. `BidmadPackages` 제품을 Runner 타깃에 추가합니다 (**Add to Target**에서 **Runner** 선택 후 **Add Package**).<br>
     ![제품 선택](https://raw.githubusercontent.com/bidmad/Bidmad-Flutter/main/images/spm/04-choose-product.png)<br>
-    추가되면 타깃의 **General › Frameworks, Libraries, and Embedded Content** 에 `BidmadPackages` 가 보입니다.<br>
+    추가되면 타깃의 **General › Frameworks, Libraries, and Embedded Content**에 `BidmadPackages`가 보입니다.<br>
     ![Frameworks, Libraries, and Embedded Content](https://raw.githubusercontent.com/bidmad/Bidmad-Flutter/main/images/spm/05-frameworks.png)
 
-6. **Build Settings › Other Linker Flags** 에 `-ObjC` 를 추가합니다.<br>
+6. **Build Settings › Other Linker Flags**에 `-ObjC`를 추가합니다.<br>
     ![Other Linker Flags](https://raw.githubusercontent.com/bidmad/Bidmad-Flutter/main/images/spm/06-other-linker-flags.png)
 
-7. 빌드합니다. 프로젝트 네비게이터의 **Package Dependencies** 에서 각 패키지가 지정한 버전으로 받아졌는지 확인할 수 있습니다.<br>
+7. 빌드합니다. 프로젝트 네비게이터의 **Package Dependencies**에서 각 패키지가 지정한 버전으로 받아졌는지 확인할 수 있습니다.<br>
     <img src="https://raw.githubusercontent.com/bidmad/Bidmad-Flutter/main/images/spm/07-package-dependencies.png" alt="Package Dependencies" width="360">
 
-어댑터 버전을 바꾸려면 `BidmadPackages/Package.swift` 에서 해당 패키지의 버전만 고친 뒤, **File › Packages › Resolve Package Versions** 를 실행합니다.<br>
+업데이트하려면 `BidmadPackages/Package.swift`에서 해당 패키지의 버전만 고친 뒤, **File › Packages › Resolve Package Versions**를 실행합니다.<br>
 ![Resolve Package Versions](https://raw.githubusercontent.com/bidmad/Bidmad-Flutter/main/images/spm/08-resolve-package-versions.png)
 
 ### 3. Using Plugin
@@ -337,7 +333,10 @@ initializeSdk 메서드는 App Domain을 인자값으로 받습니다.<br>
 광고를 로드하기 전, 앱 실행 초기에 다음 예시와 같이 initializeSdk 메서드를 호출해주십시오.<br>
 (*App Domain 확인은 테크랩스 플랫폼 운영팀으로 문의 부탁드립니다.)
 
-```
+```dart
+import 'package:flutter/foundation.dart' as foundation;
+import 'package:bidmad_plugin/FlutterBidmadCommon.dart';
+
 if (foundation.defaultTargetPlatform == foundation.TargetPlatform.android) {
     FlutterBidmadCommon().initializeSdk("ANDROID APP Domain");
 } else if (foundation.defaultTargetPlatform == foundation.TargetPlatform.iOS) {
@@ -398,7 +397,7 @@ if (foundation.defaultTargetPlatform == foundation.TargetPlatform.android) {
     banner.load(300); //set Position Y(height)
 
 ....//Banner Remove
-    banner.removeAdView();
+    banner.removeBanner();
 ```
 ##### 3.1.2 Banner Widget
 ```dart
@@ -695,7 +694,6 @@ Future\<void> load(int y)|배너 광고를 요청합니다. 배너 광고가 노
 Future\<void> loadWidget()|배너 광고를 요청합니다. 함수가 제대로 작동하려면 BidmadBannerWidget 클래스를 통해 FlutterBaseBanner 객체를 가져와야 합니다.
 Future\<void> setInterval(int sec)|배너 새로고침 주기를 설정합니다.(60초~120초)
 Future\<void> setAdInfo(String zoneId)|발급받은 ZoneId를 셋팅합니다.
-Future\<void> setCUID(String cuid)|각 광고 유형의 CUID 속성을 설정합니다. sha256 이상을 사용하여 텍스트 암호화 권장합니다.
 Future\<void> hideBanner()|배너 View를 숨깁니다.
 Future\<void> showBanner()|배너 View를 노출시킵니다.
 Future\<void> removeBanner()|Load된 배너를 제거합니다.
@@ -716,7 +714,7 @@ void Function(FlutterBaseBanner) onBidmadBannerWidgetCreated|FlutterBaseBanner�
 
 Function|Description
 ---|---
-Future\<FlutterBaseBannerRefined> create(String channelNm, String zoneId)|ZoneID, 채널 이름을 초기화하는 클래스의 생성자.
+static Future\<FlutterBaseBannerRefined> create({required String channelNm, required String zoneId})|채널 이름과 ZoneId로 인스턴스를 생성합니다.
 void load()|"로드" 메서드를 호출합니다.
 void showBanner()|로드된 광고에서 "showBanner" 메소드를 호출합니다.
 void hideBanner()|로드된 광고에서 "hideBanner" 메소드를 호출합니다.
@@ -745,7 +743,6 @@ Future\<void> load()|전면 광고 요청합니다.
 Future\<void> show()|로드된 전면 광고를 송출합니다.
 Future\<bool> isLoaded()|광고 로드 여부를 반환합니다.
 Future\<void> setAdInfo(String zoneId)|발급받은 ZoneId를 셋팅합니다.
-Future\<void> setCUID(String cuid)|각 광고 유형의 CUID 속성을 설정합니다. sha256 이상을 사용하여 텍스트 암호화 권장합니다.
 void Function(BidmadInfo? info) onLoadAd|리스너가 등록되어 있으면 광고 로드 시 등록된 함수가 호출됩니다.
 void Function(BidmadInfo? info) onShowAd|리스너가 등록되어 있으면 광고 송출 시 등록된 함수가 호출됩니다.
 void Function(BidmadInfo? info, String errorMsg, int errorCode) onShowFailAd|리스너가 등록되어 있으면 로드된 광고의 송출에 실패한 경우 등록된 함수가 호출됩니다.
@@ -764,7 +761,6 @@ Future\<void> load()|보상형 광고 요청합니다.
 Future\<void> show()|로드된 보상형 광고를 노출합니다.
 Future\<bool> isLoaded()|광고 로드 여부를 반환합니다.
 Future\<void> setAdInfo(String zoneId)|발급받은 ZoneId를 셋팅합니다.
-Future\<void> setCUID(String cuid)|각 광고 유형의 CUID 속성을 설정합니다. sha256 이상을 사용하여 텍스트 암호화 권장합니다.
 void Function(BidmadInfo? info) onLoadAd|리스너가 등록되어 있으면 광고 로드 시 등록된 함수가 호출됩니다.
 void Function(BidmadInfo? info) onShowAd|리스너가 등록되어 있으면 광고 송출 시 등록된 함수가 호출됩니다.
 void Function(BidmadInfo? info, String errorMsg, int errorCode) onShowFailAd|리스너가 등록되어 있으면 로드된 광고의 송출에 실패한 경우 등록된 함수가 호출됩니다.
@@ -802,13 +798,14 @@ Function|Description
 FlutterBidmadCommon()|FlutterBidmadCommon 생성자입니다.
 Future\<void> setDebugging(bool isDebug)|디버깅 로그 출력합니다.
 Future\<void> initializeSdk(String appDomain)|BidmadSDK 지원 네트워크를 초기화합니다. <b>appDomain을 입력하지 않으면 광고가 송출되지 않습니다.
-Future\<void> setInitializeCallbackListener(onInitialized)|콜백 리스너를 세팅합니다.
+void setInitializeCallbackListener({void Function(bool isInitialized)? onInitialized})|초기화 콜백 리스너를 설정합니다.
 Future\<void> initializeSdkWithCallback(String appDomain)|BidmadSDK 지원 네트워크를 초기화합니다. 해당 메서드 실행 시 콜백을 받을 수 있습니다.
 Future\<void> setCUID(String cuid)|사용자 정의 ID를 입력합니다.
 Future\<String> initBannerChannel()|배너 광고 제어를 위한 채널을 생성합니다.
+Future\<String> initBannerRefinedChannel()|프리로드 배너(BannerRefined) 광고 제어를 위한 채널을 생성합니다.
 Future\<String> initInterstitialChannel()|전면 광고를 제어하기 위한 채널을 생성합니다.
 Future\<String> initRewardChannel()|리워드 광고 제어 채널을 생성합니다.
-Future\<void> setAdFreeEventListener(void Function(bool) onAdStatus)|쿠팡 광고네트워크에 의한 광고차단 상태 변경 정보를 받기 위해 콜백 함수를 설정합니다.
+Future\<void> setAdFreeEventListener({void Function(bool isAdFree)? onAdStatus})|쿠팡 광고네트워크에 의한 광고차단 상태 변경 정보를 받기 위해 콜백 함수를 설정합니다.
 Future\<bool> isAdFree()|쿠팡 광고네트워크에 의한 광고 차단 여부를 확인합니다.
 Future\<String> reqAdTrackingAuthorization()|BidmadSDK를 통해 사용자의 앱 추적 동의 팝업을 발생시킵니다.
 Future\<void> setAdvertiserTrackingEnabled(bool enable)|reqAdTrackingAuthorization 이외의 함수로 앱 추적 투명성 승인 요청 팝업 동의/거절을 얻는 경우 이에 대한 결과를 설정합니다.
